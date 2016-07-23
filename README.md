@@ -3,7 +3,7 @@
 ---------------------------------------------------------------
 <br/>
 
-<p><b>DarkN-CR</b> aims to provide a basic all-in-one rotation solution. One of the primary Goals is to have community built rotations that are optimized for High End Raiding content.</p>
+<p><b>DarkN-CR</b> aims to provide a basic all-in-one rotation solution. One of the primary Goals is to have community built rotations that are optimized for High End Raiding content. DarkN-CR provides a starting place for new-comers with basic rotations, some advance rotations and a well documented template file to help with new rotations!</p>
 
 <br/>
 <h2>Special Thanks:</h2>
@@ -17,7 +17,7 @@
 ---------------------------------------------------------------
 <br/>
 
-<p><b>NerdPack</b> is a engine/botbase/framework wich aims to be light and allow creating combat routines easly.</p>
+<p><b>NerdPack</b> is a engine/botbase/framework which aims to be light and allow creating combat routines easily.</p>
 <p><b>Donate Link</b>: http://goo.gl/yrctPO</p>
 <br/>
 
