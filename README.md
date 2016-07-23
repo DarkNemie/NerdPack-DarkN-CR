@@ -3,7 +3,7 @@
 ---------------------------------------------------------------
 <br/>
 
-<p><b>DarkN-CR</b> aims to provide a basic all-in-one rotation solution. One of the primary Gouls is to have community built rotations that are optimized for High End Raiding content.</p>
+<p><b>DarkN-CR</b> aims to provide a basic all-in-one rotation solution. One of the primary Goals is to have community built rotations that are optimized for High End Raiding content.</p>
 
 <br/>
 <h2>Special Thanks:</h2>
