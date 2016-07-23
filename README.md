@@ -1,3 +1,17 @@
+<h2 align="center"><b>DarkN-CR Rotation Module for NerdPack.</b></h2>
+
+---------------------------------------------------------------
+<br/>
+
+<p><b>DarkN-CR</b> aims to provide a basic all-in-one rotation solution. One of the primary Gouls is to have community built rotations that are optimized for High End Raiding content.</p>
+
+<br/>
+<h2>Special Thanks:</h2>
+<p><b>MrTheSoulz(MTS), Frobes, Rafaeldruid, NoCarrier, Jubalee </b></p>
+<br/>
+
+
+
 <h2 align="center"><b>NerdPack engine for World of Warcraft.</b></h2>
 
 ---------------------------------------------------------------
