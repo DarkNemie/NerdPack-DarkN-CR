@@ -31,7 +31,7 @@ local config = {
 		{type = 'header', text = 'Survival', align = 'center'},
 			
 		-- Survival Settings:
-		{type = 'spinner', text = 'Pet Slot to use: 1 - 5', key = 'petslot', default = 1, min = 1, max = 5},
+		{type = 'spinner', text = 'Pet Slot to use: 1 - 5', key = 'ptsltnum', default = 1, min = 1, max = 5},
 	
 	}
 }
@@ -56,12 +56,12 @@ end
 local healthstn = function() 
 	return dynEval('player.health <= ' .. PeFetch('DarkNConfigHunterSurv', 'Healthstone')) 
 end
---[[
-local petslotnum = function()
-	return PeFetch('DarkNConfigHunterSurv', 'petslot')
+
+local petnum = function()
+	return PeFetch('DarkNConfigHunterSurv', 'ptsltnum')
 end
 
-
+--[[
 local ptsltcall = function()
 	if petslotnum = 1 then
 		CastSpellByName(GetSpellInfo(883))
@@ -81,13 +81,12 @@ local ptsltcall = function()
 end	
 ]]--
 local petT = {
-    [1] = function() CastSpellByName(GetSpellInfo(883)) end),
-    [2] = function() CastSpellByName(GetSpellInfo(83242) end),
-    [3] = function() CastSpellByName(GetSpellInfo(83243)) end),
-    [4] = function() CastSpellByName(GetSpellInfo(83244)) end),
-    [5] = function() CastSpellByName(GetSpellInfo(83245)) end),
+    [1] = (function() CastSpellByName(GetSpellInfo(883)) end),
+    [2] = (function() CastSpellByName(GetSpellInfo(83242)) end),
+    [3] = (function() CastSpellByName(GetSpellInfo(83243)) end),
+    [4] = (function() CastSpellByName(GetSpellInfo(83244)) end),
+    [5] = (function() CastSpellByName(GetSpellInfo(83245)) end),
 }
-
 
 
 
@@ -100,8 +99,8 @@ local Buffs = {
 }
 
 local Pet = {
-{petT[(function() return Fetch('DarkNConfigHunterSurv', 'petslot')](), '!pet.exists'},
---	{petT[petslotnum](), '!pet.exists'},
+--{petT[(function() return Fetch('DarkNConfigHunterSurv', 'petslot')](), '!pet.exists'},
+	{petT[..petnum](), '!pet.exists'},
 --	{ptsltcall, '!pet.exists'},												-- Summon Pet
 	
   	{{ 																			-- Pet Dead
