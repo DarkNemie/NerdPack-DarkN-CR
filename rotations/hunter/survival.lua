@@ -100,7 +100,7 @@ local Buffs = {
 
 local Pet = {
 --{petT[(function() return Fetch('DarkNConfigHunterSurv', 'petslot')](), '!pet.exists'},
-	{petT[..petnum](), '!pet.exists'},
+	{petT[5](), '!pet.exists'},
 --	{ptsltcall, '!pet.exists'},												-- Summon Pet
 	
   	{{ 																			-- Pet Dead
