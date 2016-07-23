@@ -1,0 +1,42 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+  <!-- Core Files -->
+  <Script file="core.lua" />
+  
+  <!-- Rotations -->
+  <Script file="rotations\paladin\retribution.lua" />
+  <Script file="rotations\paladin\protection.lua" />
+  <Script file="rotations\paladin\holy.lua" />
+  <Script file="rotations\druid\resto.lua" />
+  <Script file="rotations\druid\guard.lua" />
+  <Script file="rotations\druid\feral.lua" />
+  <Script file="rotations\druid\balance.lua" />
+  <Script file="rotations\deathknight\blood.lua" />
+  <Script file="rotations\deathknight\frost.lua" />
+  <Script file="rotations\deathknight\unholy.lua" />
+  <Script file="rotations\monk\windwalker.lua" />
+  <Script file="rotations\monk\mistweaver.lua" />
+  <Script file="rotations\monk\brewmaster.lua" />
+  <Script file="rotations\warrior\fury.lua" />
+  <Script file="rotations\warrior\prot.lua" />
+  <Script file="rotations\warrior\arms.lua" />
+  <Script file="rotations\priest\disc.lua" />
+  <Script file="rotations\priest\shadow.lua" />
+  <Script file="rotations\priest\holy.lua" />
+  <Script file="rotations\warlock\destro.lua" />
+  <Script file="rotations\warlock\affliction.lua" />
+  <Script file="rotations\warlock\demonology.lua" />
+  <Script file="rotations\hunter\bm.lua" />
+  <Script file="rotations\hunter\mm.lua" />
+  <Script file="rotations\hunter\survival.lua" />
+  <Script file="rotations\mage\arcane.lua" />
+  <Script file="rotations\mage\frost.lua" />
+  <Script file="rotations\shaman\resto.lua" />
+  <Script file="rotations\shaman\ele.lua" />
+  <Script file="rotations\shaman\enh.lua" />
+  <Script file="rotations\rogue\sub.lua" />
+  <Script file="rotations\rogue\assassin.lua" />
+  <Script file="rotations\rogue\combat.lua" />
+
+</Ui>
