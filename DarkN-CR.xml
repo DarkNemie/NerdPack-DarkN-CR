@@ -2,7 +2,9 @@
 ..\FrameXML\UI.xsd">
 
   <!-- Core Files -->
-  <Script file="core.lua" />
+  <Script file="lib\custom_functions_lib.lua" />
+  <Script file="lib\specid_lib.lua" />
+  <Script file="lib\classmenu_lib.lua" />
   
   <!-- Rotations -->
   <Script file="rotations\paladin\retribution.lua" />
@@ -32,11 +34,16 @@
   <Script file="rotations\hunter\survival.lua" />
   <Script file="rotations\mage\arcane.lua" />
   <Script file="rotations\mage\frost.lua" />
+  <Script file="rotations\mage\fire.lua" />
   <Script file="rotations\shaman\resto.lua" />
   <Script file="rotations\shaman\ele.lua" />
   <Script file="rotations\shaman\enh.lua" />
   <Script file="rotations\rogue\sub.lua" />
   <Script file="rotations\rogue\assassin.lua" />
   <Script file="rotations\rogue\combat.lua" />
-
+  <Script file="rotations\demonhunter\havoc.lua" />
+  <Script file="rotations\demonhunter\vengeance.lua" />
+  
+  <!-- Add user Created Rotations here-->
+  
 </Ui>

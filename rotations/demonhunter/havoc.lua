@@ -1,8 +1,8 @@
 local myClass 	= DNCRlib.myClass
 local mySpec	= DNCRlib.mySpec
 local myCR 		= 'DarkNCR'									-- Change this to something Unique
-local myClass 	= 'Mage'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
-local mySpec 	= 'Fire'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+local myClass 	= 'DemonHunter'								-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Havoc'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
 local config 	= {

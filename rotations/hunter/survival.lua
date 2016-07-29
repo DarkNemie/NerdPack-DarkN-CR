@@ -1,7 +1,7 @@
 local dynEval = DarkNCR.dynEval
 local PeFetch = NeP.Interface.fetchKey
 
-local n = GetSpellInfo('5118')
+
 
 local config = {
 	key = 'DarkNConfigHunterSurv',
@@ -28,10 +28,10 @@ local config = {
 		{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 75},
 		
 		{type = 'spacer'},{ type = 'rule'},
-		{type = 'header', text = 'Survival', align = 'center'},
+		{type = 'header', text = 'Survival Hunter', align = 'center'},
 			
 		-- Survival Settings:
-		{type = 'spinner', text = 'Pet Slot to use: 1 - 5', key = 'ptsltnum', default = 1, min = 1, max = 5},
+		{type = 'spinner', text = 'Pet Slot to use: 1 - 5', key = 'ptsltnum', default = 1, min = 1 , max = 5 },
 	
 	}
 }
@@ -58,28 +58,10 @@ local healthstn = function()
 end
 
 local petnum = function()
-	return PeFetch('DarkNConfigHunterSurv', 'ptsltnum')
-end
+	return PeFetch('DarkNConfigHunterSurv', 'ptsltnum',1)
+end 
 
---[[
-local ptsltcall = function()
-	if petslotnum = 1 then
-		CastSpellByName(GetSpellInfo(883))
-	end 
-	if petslotnum = 2 then
-		CastSpellByName(GetSpellInfo(83242))
-	end 	
-	if petslotnum = 3 then
-		CastSpellByName(GetSpellInfo(83243))
-	end
-	if petslotnum = 4 then
-		CastSpellByName(GetSpellInfo(83244))
-	end 
-	if petslotnum = 5 then
-		CastSpellByName(GetSpellInfo(83245))
-	end 	
-end	
-]]--
+
 local petT = {
     [1] = (function() CastSpellByName(GetSpellInfo(883)) end),
     [2] = (function() CastSpellByName(GetSpellInfo(83242)) end),
@@ -88,9 +70,16 @@ local petT = {
     [5] = (function() CastSpellByName(GetSpellInfo(83245)) end),
 }
 
+local petcallnum = function() 
+	return petT[petnum()]() 
+end
 
-
-
+local configupdate = {
+	{trinket1},
+	{trinkset2},
+	{healthstn},
+	{petcallnum},
+}
 local Keybinds = {
 	{ '109248' , 'modifier.lcontrol', 'target.ground' }, 						-- Binding Shot
 }
@@ -99,10 +88,7 @@ local Buffs = {
 }
 
 local Pet = {
---{petT[(function() return Fetch('DarkNConfigHunterSurv', 'petslot')](), '!pet.exists'},
-	{petT[5](), '!pet.exists'},
---	{ptsltcall, '!pet.exists'},												-- Summon Pet
-	
+	{petcallnum, '!pet.exists'},												-- Summon Pet
   	{{ 																			-- Pet Dead
 		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
 		{'982'} 																-- Revive Pet
@@ -110,10 +96,10 @@ local Pet = {
 }
 
 local Pet_inCombat = {
-	{'53271', 'player.state.stun'}, 											-- Master's Call
-	{'53271', 'player.state.root'}, 											-- Master's Call
-	{'53271', { 'player.state.snare', '!player.debuff(Dazed)' }},				-- Master's Call
-	{'53271', 'player.state.disorient'}, 				 						-- Master's Call
+--	{'53271', 'player.state.stun'}, 											-- Master's Call
+--	{'53271', 'player.state.root'}, 											-- Master's Call
+--	{'53271', { 'player.state.snare', '!player.debuff(Dazed)' }},				-- Master's Call
+--	{'53271', 'player.state.disorient'}, 				 						-- Master's Call
 	{'136', { 'pet.health <= 75', '!pet.buff(136)' }},							-- Mend Pet
 }
 
@@ -169,20 +155,26 @@ local inCombat = {
 }
 
 local outCombat = {
+	{configupdate},
 	{Keybinds},
 	{Buffs},
 	{Pet}
 }
 
-NeP.Engine.registerRotation(255, '[|cff'..NeP.Interface.addonColor..'DarkNemie|r] Hunter - MM',
+NeP.Engine.registerRotation(255, '[|cff'..NeP.Interface.addonColor..'DarkNemie|r] Hunter - Survival',
 	{ 																			-- In-Combat
 		{'pause', 'player.buff(5384)'},											-- Pause for Feign Death
+		{configupdate},
 		{Keybinds},
 		{Buffs},
+		{Pet},
 		{Interrupts, 'target.interruptAt(5)'},
-		{{ 																		-- General Conditions
-			{Survival, 'player.health < 100'},
-			{Cooldowns, 'modifier.cooldowns'},
-			{inCombat, {'target.infront', 'target.range <= 45'}},
+		{	
+			{																	-- General Conditions
+				{Survival, 'player.health < 100'},
+				{Cooldowns, 'modifier.cooldowns'},
+				{Pet_inCombat},
+				{inCombat, {'target.infront', 'target.range <= 45'}
+			},
 		}, '!player.channeling'}
 	}, outCombat, lib)

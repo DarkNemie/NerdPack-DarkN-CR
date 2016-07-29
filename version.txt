@@ -1,0 +1,4 @@
+Module = 'NerdPack-DarkN-CR',
+Version = '0.2.0',
+Branch = 'Alpha',
+Author = 'Dark Nemie',
