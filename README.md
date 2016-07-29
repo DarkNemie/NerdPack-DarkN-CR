@@ -7,7 +7,7 @@
 
 <br/>
 <h2>Special Thanks:</h2>
-<p><b>MrTheSoulz(MTS), Frobes, Rafaeldruid, NoCarrier, Jubalee </b></p>
+<p><b>MrTheSoulz(MTS), Frobes, Rafaeldruid, NoCarrier, Jubalee,Rubim </b></p>
 <br/>
 
 
