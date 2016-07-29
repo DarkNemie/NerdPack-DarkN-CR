@@ -58,7 +58,7 @@ local Pet = {
 		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
 		{'982'} 																-- Revive Pet
 	}, {'pet.dead', 'toggle.ressPet'}},	
-	{'/cast Call Pet 5', {'!pet.exists','!pet.dead'}},							-- Summon Pet
+	{'/cast Call Pet 5', '!pet.exists'},										-- Summon Pet
 	{'/petassist'}
 }
 

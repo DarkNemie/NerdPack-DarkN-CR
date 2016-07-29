@@ -1,11 +1,4 @@
-DarkNCR = {
-	Version = '0.2.0',
-	Branch = 'BETA',
-	Interface = {
-		addonColor = '335FFF',
-		Logo = NeP.Interface.Logo -- Temp until i get my own logo
-	},
-}
+DarkNCR = {}
 NeP.Core.DebugMode = false
 local Parse = NeP.DSL.parse
 local Fetch = NeP.Interface.fetchKey
@@ -17,11 +10,6 @@ function DarkNCR.Splash()
 		'Interface\\Icons\\Ability_creature_cursed_05.png',
 		'Automated Dotting',
 		'Click here to dot all the things!')
-end
-
-function DarkNCR.ClassSetting(key)
-	local name = '|cff'..NeP.Core.classColor('player')..'Class Settings'
-	NeP.Interface.CreateSetting(name, function() NeP.Interface.ShowGUI(key) end)
 end
 
 function DarkNCR.dynEval(condition, spell)
@@ -180,32 +168,29 @@ NeP.library.register('DarkNCR', {
 })
 
 NeP.DSL.RegisterConditon("petinmelee", function(target)
-	if target then
-		if IsHackEnabled then 
-			return NeP.Engine.Distance('pet', target) < (UnitCombatReach('pet') + UnitCombatReach(target) + 1.5)
-		else
-			-- Unlockers wich dont have UnitCombatReach like functions...
-			return NeP.Engine.Distance('pet', target) < 5
-		end
+   if IsHackEnabled then 
+		return NeP.Engine.Distance('pet', target) < (UnitCombatReach('pet') + UnitCombatReach(target) + 1.5)
+	else
+		-- Unlockers wich dont have UnitCombatReach like functions...
+		return NeP.Engine.Distance('pet', target) < 5
 	end
-	return 0
 end)
 
 NeP.DSL.RegisterConditon("inMelee", function(target)
-	return NeP.Core.UnitAttackRange('player', target, 'melee')
+   return NeP.Core.UnitAttackRange('player', target, 'melee')
 end)
 
 NeP.DSL.RegisterConditon("inRanged", function(target)
-	return NeP.Core.UnitAttackRange('player', target, 'ranged')
+   return NeP.Core.UnitAttackRange('player', target, 'ranged')
 end)
 
 NeP.DSL.RegisterConditon("power.regen", function(target)
-	return select(2, GetPowerRegen(target))
+  return select(2, GetPowerRegen(target))
 end)
 
 NeP.DSL.RegisterConditon("casttime", function(target, spell)
-	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
-	return cast_time
+    local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
+    return cast_time
 end)
 
 NeP.DSL.RegisterConditon("castwithin", function(target, spell)
@@ -220,9 +205,9 @@ NeP.DSL.RegisterConditon("castwithin", function(target, spell)
 end)
 
 NeP.DSL.RegisterConditon('twohand', function(target)
-	return IsEquippedItemType("Two-Hand")
+  return IsEquippedItemType("Two-Hand")
 end)
 
 NeP.DSL.RegisterConditon('onehand', function(target)
-	return IsEquippedItemType("One-Hand")
+  return IsEquippedItemType("One-Hand")
 end)
