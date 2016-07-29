@@ -1,0 +1,7 @@
+## Title: |r[|cff0070deDarkN-CR|r] Combat Routines
+## Notes: Custom Combat Routines for NerdPack, original framework, and code samples contributed by MrTheSoulz
+## Interface: 70000
+## Dependencies: NerdPack
+## Author: DarkNemie
+
+DarkN-CR.xml
