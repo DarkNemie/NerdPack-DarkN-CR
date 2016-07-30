@@ -1,224 +1,110 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-	key = "NePConfigWarrProt",
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Warrior'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Protection'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick.." Config",
-	subtitle = "Warrior Protection Settings",
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
-		-- General
-		{ type = 'rule' },
-		{ 
-			type = 'header',
-			text = "General settings:", 
-			align = "center" 
-		},
-
-			-- NOTHING IN HERE YET...
-
-		{ type = "spacer" },
-		{ type = 'rule' },
-		{ 
-			type = "header", 
-			text = "Survival Settings", 
-			align = "center" 
-		},
-			
-			-- Survival Settings:
-			{
-				type = "spinner",
-				text = "Healthstone - HP",
-				key = "Healthstone",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 75,
-				step = 5
-			},
-			{
-				type = "spinner",
-				text = "Rallying Cry - HP",
-				key = "RallyingCry",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 10,
-				step = 5
-			},
-			{
-				type = "spinner",
-				text = "Last Stand - HP",
-				key = "LastStand",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 20,
-				step = 5
-			},
-			{
-				type = "spinner",
-				text = "Shield Wall - HP",
-				key = "ShieldWall",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 30,
-				step = 5
-			},
-			{
-				type = "spinner",
-				text = "Shield Barrier - Rage",
-				key = "ShieldBarrier",
-				width = 50,
-				min = 0,
-				max = 100,
-				default = 80,
-				step = 5
-			},
-
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfigWarrProt') end)
+	DarkNCR.ClassSetting(mKey)
 end
 
-local inCombat_Defensive = {
-	{ "Heroic Strike", {
-		"player.rage > 75", 
-		"target.health >=20"
-	}, "target"},
-	{ "Execute", {
-		"player.rage > 75", 
-		"target.health <=20"
-	}, "target"},
-	{ "Shield Slam"},
-	{ "Revenge"},
-	{ "Devastate"},
-	{ "Thunder Clap", "target.debuff(Deep Wounds).duration < 2" },	
-}
-
-local inCombat_Gladiator = {
-	{ "Shield Charge", "!player.buff(Shield Charge)" },
-	{ "Shield Charge", "spell(Shield Charge).charges >= 2" },
-	{ "Heroic Strike", "player.buff(Shield Charge)" },
-	{ "Heroic Strike", "player.buff(Ultimatum)" },
-	{ "Heroic Strike", "player.rage >= 95" },
-	{ "Shield Slam" },
-	{ "Revenge" },
-	{ "Execute" },
-	{ "Devastate" }
-}
-
-local Battle_Print = false
-
-local inCombat_Battle = {
-	{ "/run print('[MTS] This stance is not yet supported! :(')", 
-		(function() 
-			if Battle_Print == false then 
-				Battle_Print = true 
-				return true 
-			end
-			return false
-		end)
-	},
-	{"71", {
-		"player.stance != 2",
-		(function() 
-			Battle_Print = false 
-			return true
-		end)
-	}},
-}
-
-local AoE = {
-	{ "Thunder Clap" },
-}
-
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes: Need Spellids for spells , also need to check and see
+-- 	how many of the survival skills are still in 7.0.3
+--
+---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-	-- Def Cooldowns
-  	{ "Rallying Cry", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'RallyingCry')) end) },  
-  	{ "Last Stand", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'LastStand')) end) },
-  	{ "Shield Wall", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'ShieldWall')) end) },
-  	{ "Shield Block", "!player.buff(Shield Block)" },
-  	{ "Shield Barrier", { 
-  		"!player.buff(Shield Barrier)",
-  		(function() return dynEval("player.rage >= " .. PeFetch('NePConfigWarrProt', 'ShieldBarrier')) end)
-  	}},
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-  	-- Self Heals
-  	{ "Impending Victory", "player.health <= 85" },
-  	{ "Victory Rush", "player.health <= 85" },
-  	{ "#5512", (function() return dynEval("player.health <= " .. PeFetch('NePConfigWarrProt', 'Healthstone')) end) }, --Healthstone
+	{ '12975', (function() return E("player.health <= " .. F('LastStand')) end) },	-- Last Stand
+  	{ '871', (function() return E("player.health <= " .. F('ShieldWall')) end) },	-- Shield Wall
+  	{'103840', (function() return E('player.health <= '..F('IVT')) end)}, 			-- Impending Victory
+	{'#109223', 'player.health < 40'}, 												-- Healing Tonic
+	{'#5512', healthstn}, 															-- Health stone
+	{'#109223', 'player.health < 40'}, 												-- Healing Tonic
 }
 
 local Cooldowns = {
-	{ "Bloodbath" },
-  	{ "Avatar" },
-  	{ "Recklessness", "target.range <= 8" },
-  	{ "Skull Banner" },
-  	{ "Bladestorm", "target.range <= 8" },
-  	{ "Berserker Rage" },
-  	{ "#gloves" },
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
 }
 
-NeP.Engine.registerRotation(73, '[|cff'..NeP.Interface.addonColor..'NeP|r] Warrior - Protection', 
-	{-- In-Combat CR
-		{ "Battle Shout", {
-			"!player.buffs.attackpower",
-			"player.buff(156291)" -- Gladiator
-		}},
-		{ "Commanding Shout", {
-			"!player.buffs.stamina",
-			"!player.buff(156291)" -- Gladiator
-		}},
-		{ "6544", "modifier.shift", "ground" }, -- Heroic Leap
-  		{ "5246", "modifier.control" }, -- Intimidating Shout
-		{ "100", {  -- Charge
-			"modifier.alt", 
-			"target.spell(100).range" 
-		}, "target"},
-		{{-- Interrupts
-			{ "6552" }, -- Pummel
-	  		{ "Disrupting Shout", "target.range <= 8", "target" },
-	  		{ "114028" }, -- Mass Spell Reflection
-	  	}, "target.interruptAt(40)" },
-  		{ "Will of the Forsaken", "player.state.fear" },
-  		{ "Will of the Forsaken", "player.state.charm" },
-  		{ "Will of the Forsaken", "player.state.sleep" },
-		{ "Heroic Strike", "player.buff(Ultimatum)", "target" },
-  		{ "Shield Slam", "player.buff(Sword and Board)", "target" },
-  		{ Survival },
-  		{ Cooldowns, "modifier.cooldowns" },
-  		{ AoE, 'player.area(40).enemies >= 3'},
-		{{ -- Stance 1
-			{ inCombat_Gladiator, "talent(7,3)" },
-			{ inCombat_Battle, "!talent(7,3)" },
-		}, "player.stance = 1" },
-		{ inCombat_Defensive, "player.stance = 2" },
-		{ "57755", "player.range > 10", "target" } -- Heroic Throw
-	},
-	{-- Out-Combat CR
-		{ "Battle Shout", {
-			"!player.buffs.attackpower",
-			"player.buff(156291)" -- Gladiator
-		}},
-		{ "Commanding Shout", {
-			"!player.buffs.stamina",
-			"!player.buff(156291)" -- Gladiator
-		}},
-		{ "6544", "modifier.shift", "ground" }, -- Heroic Leap
-  		{ "5246", "modifier.control" }, -- Intimidating Shout
-		{ "100", { -- Charge
-			"modifier.alt", 
-			"target.spell(100).range" 
-		}, "target"}, 
-	}, exeOnLoad)
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
+}
+
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs while out of combat! 
+
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+
+}
+
+local ST = {
+
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
+	
+}
+
+local outCombat = {
+	{Keybinds},
+	{Buffs},
+	{Pet}
+}
+
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

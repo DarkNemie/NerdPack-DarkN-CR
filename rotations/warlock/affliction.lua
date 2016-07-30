@@ -1,104 +1,108 @@
-local config = {
-	key = 'NePConfWarlockAff',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Warlock'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Affliction'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Warlock Affliction Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		{type = 'text', text = 'Keybinds', align = 'center'},		
-			--stuff
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'text', text = 'DPS', align = 'center'},
-			--stuff
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'text', text = 'Survival', align = 'center'},
-			--stuff
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfWarlockAff') end)
+	DarkNCR.ClassSetting(mKey)
 end
 
-local Shared = {
-	-- Buff
-	{'Dark Intent', '!player.buff(Dark Intent)'},
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
+
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
 	
 }
 
-local Moving = {
-	
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs, while out of combat! 
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
 }
 
 local AoE = {
-	{{-- Against 4 or more enemies, 
-		-- you should start replacing Drain Soul with Seed of Corruption as your filler spell. 
-			-- FIXME: TO BE DONE
-		-- Use Soulburn Icon Soulburn+Seed of Corruption to apply Corruption and prioritise maintaining Agony over Unstable Affliction. 
-			-- FIXME: TO BE DONE
-		-- If you need burst AoE damage, you should simply spam Seed of Corruption, as DoTs will not have enough time to tick.
-			-- FIXME: TO BE DONE
-		-- If Cataclysm is your Tier 7 talent, then you need to use it on cooldown.
-		{'Cataclysm', nil, 'target.ground'},
-	}, 'player.area(40).enemies >= 4' },
-
-	{{-- Against 2 and 3 enemies, 
-		-- use your normal rotation on one of them and keep your DoTs up on the others.
-		{'Agony', '@DarkNCR.aDot(2)'},
-		{'Corruption', '@DarkNCR.aDot(2)'},
-		{'Unstable Affliction', '@DarkNCR.aDot(2)'},
-	}, 'player.area(40).enemies >= 2' },
+	-- AoE Rotation goes here.
+	
 }
 
-local inCombat = {
-	-- Apply Agony and refresh it when it has less than 7.2 seconds remaining.
-	{'Agony', 'target.debuff(Agony).duration <= 7.2', 'target'},
-	-- Apply Corruption and refresh it when it has less than 5.4 seconds remaining.
-	{'Corruption', 'target.debuff(Corruption).duration <= 5.4', 'target'},
-	-- Apply Unstable Affliction and refresh it when it has less than 4.2 seconds remaining.
-	{'Unstable Affliction', 'target.debuff(Unstable Affliction).duration <= 4.2', 'target'},
+local ST = {
+	-- Single target Rotation goes here
 	
-	{{ -- Cast Haunt Icon Haunt when: one of the following is true
-		-- you have a trinket proc;
-			-- FIXME: TO BE DONE
-		-- Dark Soul: Misery Icon Dark Soul: Misery is up;
-		{'Haunt', 'player.buff(Dark Soul: Misery)', 'target'},
-		-- the boss is approaching death;
-		{'Haunt', {
-			'target.boss',
-			'target.ttd < 15'
-		}, 'target'},
-		-- you have at least 3 Soul Shards (so that you have Soul Shards left when Dark Soul is up).
-		{'Haunt', 'player.soulshards >= 3', 'target'},
-	},{
-		{'!target.debuff(Haunt)'},
-		{'player.soulshards >= 4'},
-	}},
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
 	
-	-- Cast Drain Soul as a filler.
-	{'Drain Soul'},
 }
 
 local outCombat = {
-	{Shared},
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(265, '[|cff'..NeP.Interface.addonColor..'NeP|r] Warlock - Affliction',
-	{ -- In-Combat
-		{Shared},
-		{Moving, "player.moving"},
-		{{ -- Conditions
-			{Cooldowns, "modifier.cooldowns"},
-			{'Life Tap', {'player.mana < 20', '!player.health < 30'}},
-			{AoE},
-			{inCombat}
-		}, "!player.moving" },
-	},outCombat, exeOnLoad)
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

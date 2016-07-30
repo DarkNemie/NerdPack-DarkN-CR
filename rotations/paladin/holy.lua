@@ -1,97 +1,52 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-  key = 'NePConfPalaHoly',
-  profiles = true,
-  title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-  subtitle = 'Paladin Holy Settings',
-  color = NeP.Core.classColor('player'),
-  width = 250,
-  height = 500,
-  config = {
-    -- General
-    {type = 'rule'},
-    {type = 'header', text = 'General settings:', align = 'center'},
-		{type = 'checkbox', text = 'Run Faster', key = 'RunFaster', default = false},
-		{type = 'checkbox', text = 'Crusader Strike', key = 'CrusaderStrike', default = true ,},
-		{type = 'dropdown',
-		  	text = 'Buff:', key = 'Buff', 
-		  	list = {
-			    {text = 'Kings',key = 'Kings'},
-			    {text = 'Might',key = 'Might'}
-		   }, 
-			default = 'Kings', 
-			desc = 'Select What buff to use The moust...' 
-	   },
-		{type = 'dropdown', text = 'Seal:', key = 'seal', 
-		  	list = {
-			    {text = 'Insight',key = 'Insight'},
-			    {text = 'Command',key = 'Command'}
-			}, 
-			default = 'Insight', 
-			desc = 'Select What Seal to use...' 
-	   },
-		{type = 'spinner', text = 'Holy Light', key = 'HolyLightOCC', default = 100, desc = 'Holy Light when outside of combat.'},
-
-    -- Items
-    {type = 'rule'},
-    {type = 'header', text = 'Items settings:', align = 'center'},
-		{type = 'spinner', text = 'Healthstone', key = 'Healthstone', default = 50},
-		{type = 'spinner', text = 'Trinket 1', key = 'Trinket1', default = 85}, 
-		{type = 'spinner', text = 'Trinket 2', key = 'Trinket2',default = 85},
-
-    -- Survival
-    {type = 'rule'},
-    {type = 'header', text = 'Survival settings:', align = 'center'},
-		{type = 'spinner', text = 'Divine Protection', key = 'DivineProtection', default = 90},
-		{type = 'spinner', text = 'Divine Shield', key = 'DivineShield', default = 20},
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Paladin'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Holy'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
+	profiles = true,
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = {
+		-- General
 		{type = 'rule'},
-		{type = 'header', text = 'Proc\'s settings:', align = 'center'},
-		{type = 'text', text = 'Divine Purpose: ', align = 'center'},
-		{type = 'spinner', text = 'Word of Glory', key = 'WordofGloryDP', default = 80},
-		{type = 'spinner', text = 'Eternal Flame', key = 'EternalFlameDP', default = 85},
-		{type = 'text', text = 'Selfless Healer: ', align = 'center'},
-		{type = 'spinner', text = 'Flash of light', key = 'FlashofLightSH', default = 85},
-		{type = 'text', text = 'Infusion of Light: ', align = 'center'},
-		{type = 'spinner', text = 'Holy Light', key = 'HolyLightIL', default = 100},
+		{type = 'header', text = 'General:', align = 'center'},
+			--Trinket usage settings:
+			{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
+			{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
+			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 50},
+			
+		--Spec Specific settings
+		{type = 'spacer'},{ type = 'rule'},
+		{type = 'header', text = 'Class Specific Settings', align = 'center'},
+			
 
-    -- Tank/Focus
-    {type = 'rule'},
-    {type = 'header', text = 'Tank/Focus settings:', align = 'center'},
-		{type = 'spinner', text = 'Hand of Sacrifice', key = 'HandofSacrifice', default = 40},
-		{type = 'spinner', text = 'Lay on Hands', key = 'LayonHandsTank', default = 15},
-		{type = 'spinner', text = 'Flash of Light', key = 'FlashofLightTank', default = 40},
-		{type = 'spinner', text = 'Execution Sentence', key = 'ExecutionSentenceTank', default = 80},
-		{type = 'spinner', text = 'Eternal Flame', key = 'EternalFlameTank', default = 75, desc = 'With 3 Holy Power.'},
-		{type = 'spinner', text = 'Word of Glory', key = 'WordofGloryTank', default = 80, desc = 'With 3 Holy Power.'},
-		{type = 'spinner', text = 'Holy Shock', key = 'HolyShockTank', default = 100},
-		{type = 'spinner', text = 'Holy Prism', key = 'HolyPrismTank', default = 85},
-		{type = 'spinner', text = 'Sacred Shield', key = 'SacredShieldTank', default = 100, desc = 'With 1 charge or more.'},
-		{type = 'spinner', text = 'Holy Light', key = 'HolyLightTank', default = 100},
-
-    -- Raid/party
-    {type = 'rule'},
-    {type = 'header', text = 'Raid/Party settings:', align = 'center'},
-      	{type = 'spinner', text = 'Lay on Hands', key = 'LayonHands', default = 15},
-      	{type = 'spinner', text = 'Flash of Light', key = 'FlashofLight', default = 35},
-      	{type = 'spinner', text = 'Execution Sentence', key = 'ExecutionSentence', default = 10},
-      	{type = 'spinner', text = 'Eternal Flame', key = 'EternalFlame', default = 93, desc = 'With 1 Holy Power.'},
-      	{type = 'spinner', text = 'Word of Glory', key = 'WordofGlory', default = 80, desc = 'With 3 Holy Power.'},
-      	{type = 'spinner', text = 'Holy Shock', key = 'HolyShock', default = 100},
-     	{type = 'spinner', text = 'Holy Prism', key = 'HolyPrism', default = 85},
-      	{type = 'spinner', text = 'Sacred Shield', key = 'SacredShield', default = 80, desc = 'With 2 charge or more.'},
-      	{type = 'spinner',text = 'Holy Light', key = 'HolyLight', default = 100},
-	}
+		}
 }
 
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
-local lib = function()
+local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfPalaHoly') end)
+	DarkNCR.ClassSetting(mKey)
 end
 
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	The Fetch and dynaEval functions below have been updated, 
+--	if there is errors look there first, new skills have not been updated
+--
+---------- This Starts the Area of your Rotaion ----------
 local _All = {
 	-- keybinds
 	{'114158', 'modifier.shift', 'target.ground'}, -- Light´s Hammer
@@ -101,21 +56,21 @@ local _All = {
 	-- Buffs
 	{'20217', {-- Blessing of Kings
 		'!player.buffs.stats',
-		(function() return PeFetch('NePConfPalaHoly', 'Buff') == 'Kings' end),
+		(function() return F('Buff') == 'Kings' end),
 	}, nil},
 	{'19740', {-- Blessing of Might
 		'!player.buffs.mastery',
-		(function() return PeFetch('NePConfPalaHoly', 'Buff') == 'Might' end),
+		(function() return F('Buff') == 'Might' end),
 	}, nil}, 
 	
 	-- Seals
 	{'20165', {-- seal of Insigh
 		'player.seal != 2', 
-		(function() return PeFetch('NePConfPalaHoly', 'seal') == 'Insight' end),
+		(function() return F('seal') == 'Insight' end),
 	}, nil}, 
 	{'105361', {-- seal of Command
 		'player.seal != 1',
-		(function() return PeFetch('NePConfPalaHoly', 'seal') == 'Command' end),
+		(function() return F('seal') == 'Command' end),
 	}, nil},
 }
 
@@ -152,7 +107,7 @@ local _InfusionOfLight = {
 		}, 'lowest'}, 
 	}, 'modifier.multitarget'}, 
 	{'82326', {-- Holy Light
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'HolyLightIL')) end),
+		(function() return E('lowest.health <= '..F('HolyLightIL')) end),
 		'!player.moving' 
 	}, 'lowest'},
 }
@@ -167,7 +122,7 @@ local _Fast = {
 
 local _Tank = {
 	{'633', {-- Lay on Hands
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
+		(function() return E('tank.health <= '..F('LayonHandsTank')) end),
 		'tank.spell(633).range'
 	}, 'tank'},
 	{'53563', {-- Beacon of light
@@ -177,20 +132,20 @@ local _Tank = {
 	}, 'tank'},
 	{'6940', {-- Hand of Sacrifice
 		'tank.spell(6940).range',
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
+		(function() return E('tank.health <= '..F('HandofSacrifice')) end)
 	}, 'tank'}, 
 	{'19750', {-- Flash of Light
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
+		(function() return E('tank.health <= '..F('FlashofLightTank')) end), 
 		'!player.moving',
 		'tank.spell(19750).range'
 	}, 'tank'},
 	{'114157', {-- Execution Sentence // Talent
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
+		(function() return E('tank.health <= '..F('ExecutionSentenceTank')) end),
 		'tank.spell(114157).range'
 	}, 'tank'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 1', 
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
+		(function() return E('tank.health <= '..F('SacredShieldTank')) end), 
 		'!tank.buff(148039)', -- SS
 		'tank.range < 40' 
 	}, 'tank'},
@@ -198,20 +153,20 @@ local _Tank = {
 			'player.holypower >= 3', 
 		'!tank.buff(114163)',
 		'focus.spell(114163).range',
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
+		(function() return E('lowest.health <= '..F('EternalFlameTank')) end)
 	}, 'tank'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3',
 		'focus.spell(85673).range',
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end)
+		(function() return E('lowest.health <= '..F('WordofGloryTank')) end)
 	}, 'tank' },
 	{'114165', {-- Holy Prism // Talent
-		(function() return dynEval('tank.health <= '..PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
+		(function() return E('tank.health <= '..F('HolyPrismTank')) end), 
 		'!player.moving',
 		'tank.spell(114165).range' 
 	}, 'tank'},
 	{'82326', {-- Holy Light
-		(function() return dynEval('tank.health < '..PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
+		(function() return E('tank.health < '..F('HolyLightTank')) end),
 		'!player.moving',
 		'focus.spell(82326).range' 
 	}, 'tank'},
@@ -219,25 +174,25 @@ local _Tank = {
 
 local _Focus = {
 	{'633', {-- Lay on Hands
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'LayonHandsTank')) end),
+		(function() return E('focus.health <= '..F('LayonHandsTank')) end),
 		'focus.spell(633).range'
 	}, 'focus'}, 
 	{'6940', {-- Hand of Sacrifice
 		'focus.spell(6940).range',
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'HandofSacrifice')) end)
+		(function() return E('focus.health <= '..F('HandofSacrifice')) end)
 	}, 'focus'},
 	{'19750', {-- Flash of Light
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'FlashofLightTank')) end), 
+		(function() return E('focus.health <= '..F('FlashofLightTank')) end), 
 		'!player.moving',
 		'focus.spell(19750).range'
 	}, 'focus'},
 	{'114157', {-- Execution Sentence // Talent
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'ExecutionSentenceTank')) end),
+		(function() return E('focus.health <= '..F('ExecutionSentenceTank')) end),
 		'focus.spell(114157).range'
 	}, 'focus'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 1', 
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'SacredShieldTank')) end), 
+		(function() return E('focus.health <= '..F('SacredShieldTank')) end), 
 		'!focus.buff(148039)', 
 		'focus.range < 40' 
 	}, 'focus'},
@@ -245,21 +200,21 @@ local _Focus = {
 		'player.holypower >= 3', 
 		'!focus.buff(114163)',
 		'focus.spell(114163).range',
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'EternalFlameTank')) end)
+		(function() return E('lowest.health <= '..F('EternalFlameTank')) end)
 	}, 'focus'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3',
 		'focus.spell(85673).range',
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'WordofGloryTank')) end) 
+		(function() return E('lowest.health <= '..F('WordofGloryTank')) end) 
 	}, 'focus'},
 	{'114165', {-- Holy Prism // Talent
 		'player.holypower >= 3',
-		(function() return dynEval('focus.health <= '..PeFetch('NePConfPalaHoly', 'HolyPrismTank')) end), 
+		(function() return E('focus.health <= '..F('HolyPrismTank')) end), 
 		'!player.moving',
 		'focus.spell(114165).range' 
 	}, 'focus'},
 	{'82326', {-- Holy Light
-		(function() return dynEval('focus.health < '..PeFetch('NePConfPalaHoly', 'HolyLightTank')) end),
+		(function() return E('focus.health < '..F('HolyLightTank')) end),
 		'!player.moving',
 		'focus.spell(82326).range' 
 	}, 'focus'},
@@ -267,20 +222,20 @@ local _Focus = {
 
 local _Player = {
 	-- Items
-	{'#5512', (function() return dynEval('player.health <= '..PeFetch('NePConfPalaHoly', 'Healthstone')) end), nil}, -- Healthstone
-	{'#trinket1', (function() return dynEval('player.mana <= '..PeFetch('NePConfPalaHoly', 'Trinket1')) end), nil}, -- Trinket 1
-	{'#trinket2', (function() return dynEval('player.mana <= '..PeFetch('NePConfPalaHoly', 'Trinket2')) end), nil}, -- Trinket 2
+	{'#5512', healthstn}, 											-- Health stone
+	{'#trinket1', (function() return F('trink1') end)},				-- Trinket 1
+	{'#trinket2', (function() return F('trink2') end)}, 			-- Trinket 2
 	{{-- Beacon of Faith
 		{'156910', {
 			'!player.buff(53563)', -- Beacon of light
 			'!player.buff(156910)' -- Beacon of Faith
 		}, 'player'},
 	}, 'talent(7,1)'},
-	{'498', (function() return dynEval('player.health <= '..PeFetch('NePConfPalaHoly', 'DivineProtection')) end), nil}, -- Divine Protection
-	{'642', (function() return dynEval('player.health <= '..PeFetch('NePConfPalaHoly', 'DivineShield')) end), nil}, -- Divine Shield
+	{'498', (function() return E('player.health <= '..F('DivineProtection')) end), nil}, -- Divine Protection
+	{'642', (function() return E('player.health <= '..F('DivineShield')) end), nil}, -- Divine Shield
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 2', 
-		(function() return dynEval('player.health <= '..PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
+		(function() return E('player.health <= '..F('SacredShield')) end), 
 		'!player.buff(148039)' 
 	}, 'player'},
 }
@@ -301,7 +256,7 @@ local inCombat = {
 	{'35395', {-- Crusader Strike
 		'target.range < 5',
 		'target.infront',
-		(function() return PeFetch('NePConfPalaHoly', 'CrusaderStrike') end) 
+		(function() return F('CrusaderStrike') end) 
 	}, 'target'},
 }
 
@@ -323,10 +278,10 @@ local _DivinePurpose = {
 		'player.holypower >= 1',
 		'modifier.party' 
 	}},
-	{'85673', (function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'WordofGloryDP')) end), 'lowest' }, -- Word of Glory
+	{'85673', (function() return E('lowest.health <= '..F('WordofGloryDP')) end), 'lowest' }, -- Word of Glory
 	{'114163', {-- Eternal Flame
 		'!lowest.buff(114163)', 
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'EternalFlameDP')) end) 
+		(function() return E('lowest.health <= '..F('EternalFlameDP')) end) 
 	}, 'lowest'},
 }
 
@@ -334,7 +289,7 @@ local _SelflessHealer = {
 	{'20271', 'target.spell(20271).range', 'target'}, -- Judgment
 	{{-- If got buff
 		{'19750', {-- Flash of light
-			(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'FlashofLightSH')) end),  
+			(function() return E('lowest.health <= '..F('FlashofLightSH')) end),  
 			'!player.moving' 
 		}, 'lowest'}, 
 	}, 'player.buff(114250).count = 3'}
@@ -342,33 +297,33 @@ local _SelflessHealer = {
 
 local _Raid = {
 	-- Lay on Hands
-	{'633', (function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'LayonHands')) end), 'lowest'}, 
+	{'633', (function() return E('lowest.health <= '..F('LayonHands')) end), 'lowest'}, 
 	{'19750', {-- Flash of Light
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'FlashofLight')) end), 
+		(function() return E('lowest.health <= '..F('FlashofLight')) end), 
 		'!player.moving' 
 	}, 'lowest'},
 	-- Execution Sentence // Talent
-	{'114157', (function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'ExecutionSentence')) end), 'lowest'},
+	{'114157', (function() return E('lowest.health <= '..F('ExecutionSentence')) end), 'lowest'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 2', 
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'SacredShield')) end), 
+		(function() return E('lowest.health <= '..F('SacredShield')) end), 
 		'!lowest.buff(148039)' 
 	}, 'lowest'},
 	{'114163', {-- Eternal Flame // talent
 		'player.holypower >= 1', 
 		'!lowest.buff(114163)', 
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'EternalFlame')) end)
+		(function() return E('lowest.health <= '..F('EternalFlame')) end)
 	}, 'lowest'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3', 
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'WordofGlory')) end)
+		(function() return E('lowest.health <= '..F('WordofGlory')) end)
 	}, 'lowest' },
 	{'114165', {-- Holy Prism // Talent
-		(function() return dynEval('lowest.health <= '..PeFetch('NePConfPalaHoly', 'HolyPrism')) end), 
+		(function() return E('lowest.health <= '..F('HolyPrism')) end), 
 		'!player.moving' 
 	}, 'lowest'},
 	{'82326', {-- Holy Light
-		(function() return dynEval('lowest.health < '..PeFetch('NePConfPalaHoly', 'HolyLight')) end),
+		(function() return E('lowest.health < '..F('HolyLight')) end),
 		'!player.moving' 
 	}, 'lowest'},
 }
@@ -403,12 +358,12 @@ local outCombat = {
 	}, 'modifier.multitarget'},
 	-- Holy Light
 	{'82326', {
-		(function() return dynEval('lowest.health < '..PeFetch('NePConfPalaHoly', 'HolyLightOCC')) end),
+		(function() return E('lowest.health < '..F('HolyLightOCC')) end),
 		'!player.moving' 
 	}, 'lowest'},
 }
 
-NeP.Engine.registerRotation(65, '[|cff'..NeP.Interface.addonColor..'NeP|r] Paladin - Holy', 
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{_All},
 		-- Dispell

@@ -1,145 +1,108 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-local addonColor = '|cff'..NeP.Interface.addonColor
-
-local InsanityHack = GetSpellInfo(15407)
-
-local config = {
-	key = 'NePConfPriestShadow',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Priest'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Shadow'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Priest Shadow Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		-- Keybinds
-		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
-			-- Control
-			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Mind Sear', align = 'right', size = 11, offset = 0 },
-			-- Shift
-			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Cascade', align = 'right', size = 11, offset = 0 },
-			-- Alt
-			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0 },
-		
-		-- [[ General Settings ]]
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = addonColor..'General', align = 'center'},
-			{ type = 'checkbox', text = 'Move faster', key = 'canMoveF', default = true },
-		
-		-- [[ Survival settings ]]
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = addonColor..'Survival', align = 'center'},
-			{ type = "spinner", text = "Flash Heal", key = "FlashHeal", default = 35},
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
-local lib = function()
+local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfPriestShadow') end)
+	DarkNCR.ClassSetting(mKey)
 end
 
-local keybinds = {
-	-- Pause
-	{'pause', 'modifier.alt'},
-	-- Cascade
-	{'127632', 'modifier.shift'},
-	-- Mind Sear
-	{'48045', 'modifier.control'},
-}
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-local Buffs = {
-	-- Power Word: Fortitude
-	{'21562', '!player.buffs.stamina'},
-	-- Shadowform
-	{'15473', 'player.stance != 1'},
-	--{'1706', 'player.falling'} -- Levitate
-	-- Angelic Feather
-	{'121536', {
-		'player.movingfor > 3',
-		'!player.buff(121557)',
-		(function() return PeFetch('NePConfPriestShadow', 'canMoveF') end)
-	}, 'player.ground'}
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	-- Mindbender
-	{'123040'},
-	 --Shadowfiend
-	{'34433'},
-	-- Vampiric Embrace
-	{'15286', '@coreHealing.needsHealing(65, 3)'}
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
 }
 
-local Survival = {
-	-- PW:Shield
-	{'17', '!player.buff(17)', 'player'},
-	 -- Flash Heal
-	{'2061', (function() return dynEval('player.health < '..PeFetch('NePConfPriestShadow', 'FlashHeal')) end), 'player'},
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
+}
+
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs, while out of combat! 
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
 }
 
 local AoE = {
-	-- Cascade
-	{'127632'},
-	-- Mind Sear
-	{'48045', 'target.area(8).enemies >= 3'},
+	-- AoE Rotation goes here.
+	
 }
 
-local Moving = {
-	-- Shadow Word: Death
-	{'32379', '@DarkNCR.instaKill(20)'},
-	-- Shadow Word: Pain.
-	{'589', '@DarkNCR.aDot(2)'},
+local ST = {
+	-- Single target Rotation goes here
+	
 }
 
-local inCombat = {
-	-- Void Entropy
-	{'155361', {'player.shadoworbs >= 3', '!target.debuff(155361)'}},
+local Keybinds = {
 
-	-- Cast Devouring Plague with 3 or more Shadow Orbs.
-	{'2944', {'player.shadoworbs >= 3', '!target.debuff(2944)'}},
-
-	-- Cast Mind Blast if you have fewer than 5 Shadow Orbs.
-	{'!8092', 'player.shadoworbs < 5', 'target'},
-
-	-- Cast Shadow Word: Death if you have fewer than 5 Shadow Orbs.
-	{'!32379', {'player.shadoworbs < 5', '@DarkNCR.instaKill(20)'}},
-
-	-- Cast Insanity on the target when you have the Insanity buff (if you are using the Insanity talent).
-	{'/cast '..InsanityHack, 'player.buff(132573).duration > 0.4'},
-
-	-- Cast Mind Spike if you have a Surge of Darkness proc (if you are using this talent).
-	{'73510', 'player.buff(Surge of Darkness)'},
-
-	-- Apply and maintain Shadow Word: Pain.
-	{'589', '@DarkNCR.aDot(2)'},
-
-	-- Apply and maintain Vampiric Touch.
-	{'34914', '@DarkNCR.aDot(3)'},
-
-	{AoE, 'player.area(40).enemies >= 3'},
-
-	-- Cast Mind Flay as your filler spell.
-	{'15407'}
-
-} 
+	{'pause', 'modifier.alt'},													-- Pause
+	
+}
 
 local outCombat = {
+	{Keybinds},
 	{Buffs},
-	{keybinds}
+	{Pet}
 }
 
-NeP.Engine.registerRotation(258, '[|cff'..NeP.Interface.addonColor..'NeP|r] Priest - Shadow', 
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		{keybinds},
-		{Buffs},
-		{Moving, 'player.moving'},
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
-		{inCombat},
-	}, outCombat, lib)
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

@@ -40,7 +40,7 @@
   <Script file="rotations\shaman\enh.lua" />
   <Script file="rotations\rogue\sub.lua" />
   <Script file="rotations\rogue\assassin.lua" />
-  <Script file="rotations\rogue\combat.lua" />
+  <Script file="rotations\rogue\outlaw.lua" />
   <Script file="rotations\demonhunter\havoc.lua" />
   <Script file="rotations\demonhunter\vengeance.lua" />
   

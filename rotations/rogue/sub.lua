@@ -1,153 +1,108 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-	key = 'NePConfigRogueSub',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Rogue'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Subtlety'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Rogue Subtlety Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
-		-- General
-		{ type = 'header', text = 'General:', align = 'center' },
-			-- ...Empty...
-			{ type = 'text', text = 'Nothing here yet... :C', align = 'center' },
-		-- Poisons
-		{ type = "spacer" },{ type = 'rule' },
-		{ type = 'header', text = 'Poisons:', align = 'center' },
-			-- Letal Poison
-			{ type = 'dropdown', text = 'Letal Posion', key = 'LetalPosion',
-		      	list = {
-			        {text = 'Wound Posion', key = 'Wound'},
-			        {text = 'Deadly Posion', key = 'Deadly'},
-			    },
-		    	default = 'Deadly',
-		    	desc = 'Select what Letal Posion to use.'
-		    },
-		    -- Non-Letal Poison
-			{ type = 'dropdown',text = 'Non-Letal Posion',key = 'NoLetalPosion',
-		      	list = {
-			        {text = 'Crippling Poison', key = 'Crippling'},
-			        {text = 'Leeching Posion', key = 'Leeching'},
-			    },
-		    	default = 'Crippling',
-		    	desc = 'Select what Non-Letal Posion to use.'
-		    },
-		-- Survival
-		{ type = 'spacer' },{ type = 'rule' },
-		{ type = 'header', text = 'Survival:', align = 'center'},
-			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', width = 50, default = 75},
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfigRogueSub') end)
-	NeP.Interface.CreateToggle(
-		'MfD', 
-		'Interface\\Icons\\Ability_hunter_assassinate.png', 
-		'Marked for Death', 
-		'Use Marked for Death \nBest used for targets that will die under a minute.')
+	DarkNCR.ClassSetting(mKey)
 end
 
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
+
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+}
+
 local Cooldowns = {
-	{'Shadow Reflection'},
-	{'Preparation', 'player.spell(Vanish).cooldown <= 0'},
-	{'Shadow Dance', 'player.energy > 75'},
-	{'Vanish', 'player.spell(Premeditation).cooldown <= 0'},
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
+}
+
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs, while out of combat! 
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
 }
 
 local AoE = {
-	{'Slice and Dice', { -- Slice and Dice // Refresh
-		'player.buff(Slice and Dice).duration <= 3',
-		'player.combopoints >= 3'
-	}},
-	{'Crimson Tempest', 'player.combopoints >= 5'}, -- Crimson Tempest // DUMP CP
-	{'Hemorrhage', 'target.debuff(Hemorrhage).duration <= 7'}, -- Hemorrhage to apply dot
-	{'Ambush'},
-	{'Fan of Knives'},
+	-- AoE Rotation goes here.
+	
 }
 
 local ST = {
-	-- Slice and Dice // Refresh
-	{'Slice and Dice', {
-		'player.buff(Slice and Dice).duration <= 3',
-		'player.combopoints <= 2'
-	}},
-	-- Rupture to apply dot
-	{'Rupture', {
-		'player.combopoints >= 5',
-		'target.debuff(Rupture).duration <= 7'
-	}},
-	-- Eviscerate // Dump CP
-	{'Eviscerate', {
-		'player.combopoints >= 5',
-	}},
-	-- Hemorrhage to apply dot
-	{'Hemorrhage', {
-		'target.debuff(Hemorrhage).duration <= 7',
-	}},
-	{'Ambush'},
-	{'Backstab', 'player.behind'},
+	-- Single target Rotation goes here
+	
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
+	
 }
 
 local outCombat = {
-	{'8676', { -- Ambush after vanish
-		'target.alive',
-		'lastcast(1856)' -- Vanish
-	}, 'target' },
-
-	-- Letal Poisons
-	{'2823', { -- Deadly Poison / Letal
-		'!lastcast(2823)',
-		'!player.buff(2823)',
-		(function() return NeP.Interface.fetchKey('NePConfigRogueSub', 'LetalPosion') == 'Deadly' end)
-	}},
-	{'8679', { -- Deadly Poison / Letal
-		'!lastcast(8679)',
-		'!player.buff(8679)',
-		(function() return NeP.Interface.fetchKey('NePConfigRogueSub', 'LetalPosion') == 'Wound' end)
-	}},
-	
-	-- Non-Letal Poisons
-	{'3408', { -- Crippling Poison / Non-Letal
-		'!lastcast(3408)',
-		'!player.buff(3408)',
-		(function() return NeP.Interface.fetchKey('NePConfigRogueSub', 'NoLetalPosion') == 'Crippling' end)
-	}},
-	{'108211', { -- Leeching Poison / Non-Letal
-		'!lastcast(108211)',
-		'!player.buff(108211)',
-		(function() return NeP.Interface.fetchKey('NePConfigRogueSub', 'NoLetalPosion') == 'Leeching' end)
-	}}
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(261, '[|cff'..NeP.Interface.addonColor..'NeP|r] Rogue - Subtlety', 
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		{{ -- Dont Break Sealth && Melee Range
-			{{-- Interrupts
-				{ 'Kick' },
-			}, 'target.interruptAt(40)' },
-			{'Recuperate',{
-				'player.combopoints <= 3',
-				'player.health < 35',
-				'player.buff(Recuperate).duration <= 5'
-			}},
-			{'Marked for Death', {
-				'player.combopoints = 0',
-				'toggle.MfD'
-			}},
-			{'Premeditation', 'player.buff(Vanish)'},
-			{'Premeditation', 'player.buff(Shadow Dance)'},
-			{'Tricks of the Trade', 'player.aggro > 60', 'tank'},
-			{'Evasion', 'player.health < 30'},
-			{Cooldowns, 'modifier.cooldowns' },
-			{AoE, 'player.area(10).enemies >= 3' },
-			{ST, '!modifier.multitarget' },
-		}, {'!player.buff(Vanish)', 'target.range < 7'} },
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
 	}, outCombat, exeOnLoad)

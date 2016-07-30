@@ -1,100 +1,127 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-	key = 'NePConfigMageFrost',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Mage'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Frost'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Mage Frost Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = {
 		-- General
-		{ type = 'rule' },
-		{ type = 'header',text = 'General settings:', align = 'center' },
-			--Empty
-		{ type = 'spacer' },{ type = 'rule' },
-		{ type = 'header', text = 'Survival Settings', align = 'center' },
+		{type = 'rule'},
+		{type = 'header', text = 'General:', align = 'center'},
+			--Trinket usage settings:
+			{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
+			{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
+			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 50},
 			
-			-- Survival Settings:
-			{type = 'spinner',text = 'Healthstone - HP',key = 'Healthstone',width = 50, default = 75,},
-	}
+		--Spec Specific settings
+		{type = 'spacer'},{ type = 'rule'},
+		{type = 'header', text = 'Class Specific Settings', align = 'center'},
+			
+
+		}
 }
 
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
-local lib = function()
+local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfigMageFrost') end)
-  	NeP.Interface.CreateToggle(
-  		'cleave', 
-  		'Interface\\Icons\\spell_frost_frostbolt', 
-  		'Disable Cleaves', 
-  		'Disable casting of Cone of Cold and Ice Nova for Procs.')
+	DarkNCR.ClassSetting(mKey)
 end
 
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+----------	END of do not change area ----------
 
+---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-	{ '#5512', (function() return dynEval('player.health <= ' .. PeFetch('NePConfigMageFrost', 'Healthstone')) end) }, --Healthstone
-	{ '1953', 'player.state.root' }, -- Blink
-	{ '475', { -- Remove Curse
-		'!lastcast(475)', 
-		'player.dispellable(475)' 
-	}, 'player' }, 
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
+
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	{ 'Rune of Power', { '!player.buff(Rune of Power)', '!player.moving' }, 'player.ground' }, 
-	{ '12472' },--Icy Veins
-	{ 'Mirror Image' },
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
 }
 
-local inCombat = {
-
-	-- Moving
-	{ 'Ice Floes', 'player.moving' },
-
-	-- Procs
-	{ '44614', 'player.buff(Brain Freeze)', 'target' },-- Frostfire Bolt
-	{ '30455', 'player.buff(Fingers of Frost)', 'target' },-- Ice Lance
-
-	-- Frost Bomb
-	{ 'Frost Bomb', { 
-		'target.debuff(Frost Bomb).duration <= 3', 
-		'talent(5, 1)' 
-	}},
-
-	{{ -- AoE
-		{ '84714' },--Frozen Orb
-		{ 'Ice Nova', 'talent(5, 3)'},
-		{ '120' },--Cone of Cold
-		{ '10', nil, 'target.ground' },--Blizzard
-	}, 'player.area(40).enemies >= 3' },
+local Interrupts = {
 	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
+}
 
-	-- Main Rotation
-	{ '84714', '!toggle.cleave' }, -- Frozen Orb
-	{ 'Ice Nova', { '!toggle.cleave', 'talent(5, 3)' } },
-	{ '120', { '!toggle.cleave' } },--Cone of Cold
-	{ '116' },--Frostbolt
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs while out of combat! 
+	--[[
+	Here is an example from Hunter CR.
+	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
+  	{{ 																			-- Pet Dead
+		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
+		{'982'} 																-- Revive Pet
+	}, {'pet.dead', 'toggle.ressPet'}},	
+	]]--
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+
+}
+
+local ST = {
+
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
 	
 }
 
 local outCombat = {
-	-- Buffs
-	{ 'Arcane Brilliance', '!player.buff(Arcane Brilliance)' },
-	{ 'Summon Water Elemental', '!pet.exists'}
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(64, '[|cff'..NeP.Interface.addonColor..'NeP|r] Mage - Frost',
-	{ -- In-Combat
-		-- Rotation Utilities
-		{ 'pause', 'modifier.lalt' },
-		{ 'Rune of Power', 'modifier.lcontrol', 'player.ground' },
-		{ '2139', 'target.interruptAt(40)' },--Counterspell
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
-		{inCombat, { 'target.infront', 'target.exists', 'target.range <= 40' }},
-	}, outCombat, lib)
+		{Cooldowns, 'toggle.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

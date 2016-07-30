@@ -1,114 +1,108 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-local addonColor = '|cff'..NeP.Interface.addonColor
-
-local config = {
-	key = 'NePconfigMonkMm',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Monk'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Mistweaver'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Monk Mistweaver Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		-- Keybinds
-		{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
-			-- Control
-			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Summon Jade Serpent Statue', align = 'right', size = 11, offset = 0},
-			-- Shift
-			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
-			{type = 'text', text = '...', align = 'right', size = 11, offset = 0},
-			-- Alt
-			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
-			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0},
-		
-		-- General
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header',text = addonColor..'Tank/Focus:', align = 'center'},
-
-		-- General
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header',text = addonColor..'Raid:', align = 'center'},
-
-		-- Survival		
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = addonColor..'Survival:', align = 'center'},	
-			
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePconfigMonkMm') end)
-	NeP.Interface.CreateToggle(
-		'trans', 
-		'Interface\\Icons\\Inv_boots_plate_dungeonplate_c_05.png', 
-		'Enable Casting Transcendence Outside of Combat', 
-		'Enable/Disable Casting Transcendence Outside of Combat.')
+	DarkNCR.ClassSetting(mKey)
 end
 
-local function Trans()
-	-- Transcendence: Transfer
-	local usable, nomana = IsUsableSpell('119996');
-	local tFound = false;
-	for i=1,40 do 
-		local B=UnitBuff('player', i); 
-		if B=='Transcendence' then tFound = true; break end 
-	end
-	if not usable or not tFound then return true end
-	return false
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
 end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-local All = {
-	-- Legacy of the Emperor
-  	{'115921', '!player.buffs.stats'},
-	
-	-- Pause
-	{'pause', 'modifier.alt'},
-	-- Summon Jade Serpent Statue
-  	{'115313' , 'modifier.shift', 'tank.ground'},
 
-	-- Nimble Brew
-	{'137562', 'player.state.disorient'},
-	{'137562', 'player.state.stun'}, 
-	{'137562', 'player.state.root'},
-	{'137562', 'player.state.fear'},
-	{'137562', 'player.state.horror'},
-	{'137562', 'player.state.snare'},
-	
-	-- Tiger's Lust
-	{'116841', 'player.state.disorient'},
-	{'116841', 'player.state.stun'},
-	{'116841', 'player.state.root'},
-	{'116841', 'player.state.snare'},
-
-	-- Transcendence: Transfer
-	{'119996', 'player.health < 35'},
-	-- Transcendence
-	{'Transcendence', {
-		(function() return Trans() end),
-		'toggle.trans'
-	}},
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
-local inCombatSerpente = {
+local Cooldowns = {
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
 	
 }
 
-local inCombatCrane = {
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs, while out of combat! 
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+	-- AoE Rotation goes here.
+	
+}
+
+local ST = {
+	-- Single target Rotation goes here
+	
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
 	
 }
 
 local outCombat = {
-	{All},
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(270, '[|cff'..NeP.Interface.addonColor..'NeP|r] Monk - Mistweaver', 
-	{-- In-Combat Change CR dyn
-		{All},
-		{inCombatSerpente, 'player.stance = 1'}, -- Serpent Stance
-		{inCombatCrane, 'player.stance = 2'}, -- Crane Stance
-	},outCombat, exeOnLoad)
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

@@ -1,66 +1,38 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-
-
-local config = {
-	key = 'DarkNConfigHunterSurv',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Hunter'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Survival'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Hunter Survival Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
-		-- General
-		{type = 'rule'},
-		{type = 'header', text = 'General:', align = 'center'},
-			--Trinket usage settings:
-			{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
-			{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
-			
-		
-		{type = 'spacer'},{ type = 'rule'},
-		{type = 'header', text = 'Survival', align = 'center'},
-			
-		-- Survival Settings:
-		{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 75},
-		
-		{type = 'spacer'},{ type = 'rule'},
-		{type = 'header', text = 'Survival Hunter', align = 'center'},
-			
-		-- Survival Settings:
-		{type = 'spinner', text = 'Pet Slot to use: 1 - 5', key = 'ptsltnum', default = 1, min = 1 , max = 5 },
-	
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
-local lib = function()
+local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('DarkNConfigHunterSurv') end)
+	DarkNCR.ClassSetting(mKey)
 	NeP.Interface.CreateToggle('md', 'Interface\\Icons\\ability_hunter_misdirection', 'Auto Misdirect', 'Automatially Misdirect when necessary')
 	NeP.Interface.CreateToggle('ressPet', 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 'Pet Ress', 'Automatically ress your pet when it dies.')
 end
 
-local trinkset1 = function()
-	return PeFetch('DarkNConfigHunterSurv', 'trink1')
-end
-
-local trinkset2 = function()
-	return PeFetch('DarkNConfigHunterSurv', 'trink2')
-end
-
 local healthstn = function() 
-	return dynEval('player.health <= ' .. PeFetch('DarkNConfigHunterSurv', 'Healthstone')) 
+	return E('player.health <= ' .. F('Healthstone')) 
 end
 
+---------- Special function for pet summon ----------
 local petnum = function()
-	return PeFetch('DarkNConfigHunterSurv', 'ptsltnum',1)
+	return F('ptsltnum',1)
 end 
-
 
 local petT = {
     [1] = (function() CastSpellByName(GetSpellInfo(883)) end),
@@ -75,45 +47,16 @@ local petcallnum = function()
 end
 
 local configupdate = {
-	{trinket1},
-	{trinkset2},
-	{healthstn},
 	{petcallnum},
 }
-local Keybinds = {
-	{ '109248' , 'modifier.lcontrol', 'target.ground' }, 						-- Binding Shot
-}
-
-local Buffs = {
-}
-
-local Pet = {
-	{petcallnum, '!pet.exists'},												-- Summon Pet
-  	{{ 																			-- Pet Dead
-		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
-		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
-}
-
-local Pet_inCombat = {
---	{'53271', 'player.state.stun'}, 											-- Master's Call
---	{'53271', 'player.state.root'}, 											-- Master's Call
---	{'53271', { 'player.state.snare', '!player.debuff(Dazed)' }},				-- Master's Call
---	{'53271', 'player.state.disorient'}, 				 						-- Master's Call
-	{'136', { 'pet.health <= 75', '!pet.buff(136)' }},							-- Mend Pet
-}
-
-local Cooldowns = {
-	{'193526'}, 																-- TrueShot
-	{'131894'}, 																-- A Murder of Crows
-	{'Lifeblood'},
-	{'Berserking'},
-	{'Blood Fury'},
-	{'#trinket1', trinkset1},
-	{'#trinket2', trinkset2},
-}
-
+---------- End section for pet summon ----------
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
 local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 	{'5384', {'player.aggro >= 100', 'modifier.party', '!player.moving'}}, 		-- Fake death
 	{'194291', 'player.health < 50'}, 											-- Exhilaration
 	{'186265', 'player.health < 10'}, 											-- Aspect of the turtle
@@ -122,59 +65,71 @@ local Survival = {
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
+local Cooldowns = {
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	{'193526'}, 																-- TrueShot
+	{'131894'}, 																-- A Murder of Crows
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
 local Interrupts = {
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
 	{'!147362'},																-- Counter Shot
 	{'!19577'},																	-- Intimidation
 	{'!19386'},																	-- Wyvern Sting
 	{'!186387'},																-- Bursting Shot
+}
+
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+	--Put skills in here that apply to your pet needs, while out of combat! 
+	{petcallnum, '!pet.exists'},												-- Summon Pet
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+	-- AoE Rotation goes here.
 	
 }
-	
-local inCombat = {
-	-- Misdirect to focus target or pet when threat is above a certain threat
-{{
-	{ "34477", { "focus.exists", "!player.buff(35079)", "target.threat > 60" }, "focus" },
-	{ "34477", { "pet.exists", "!pet.dead", "!player.buff(35079)", "!focus.exists", "target.threat > 85", "!talent(7,3)" }, "pet" },
-}, "toggle.md", },
 
-	{'120360', 'toggle.AoE'}, 													-- Barrage // TALENT	
-	{'214579', {'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
-	{'185358' , {'player.buff(193534).duration < 3','talent (1,2)'}, 'target'},	-- Arcane Shot /W Steady Focus
-	{'19434', 'player.buff(194594)', 'target'},  								-- Aimed shot /w lnl
-	{'185901', 'target.debuff(185365)'}, 										-- Marked Shot
-	{'19434', {'player.focus > 50', 'target.debuff(187131)'}, 'target'},  		-- Aimed shot /w Vulnerable
-	{'214579', {'player.focus < 50','toggle.AoE'}, 'target'},					-- sidewinder focus pool
-	{'198670', 'player.focus > 30'},											-- Piercing Shot
-	{'194599'}, 																-- Black Arrow	
-	{'206817'},																	-- Sentinel
-	{'185358', '!talent(7,1)'},													-- Arcane Shot
-	{'2643', {'player.focus > 60', 'player.area(40).enemies >= 3','toggle.AoE'}, 'target'}, 	-- Multi-Shot
-	{'163485', '!player.moving', 'target'}, 									-- Focusing Shot // TALENT
-	{'19434', {'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
-	{'19434', 'player.focus > 90', 'target'} 									-- Aimed Shot
+local ST = {
+	-- Single target Rotation goes here
+	
+}
+
+local Keybinds = {
+	{'pause', 'modifier.alt'},													-- Pause
+
 }
 
 local outCombat = {
-	{configupdate},
 	{Keybinds},
 	{Buffs},
 	{Pet}
 }
 
-NeP.Engine.registerRotation(255, '[|cff'..NeP.Interface.addonColor..'DarkNemie|r] Hunter - Survival',
-	{ 																			-- In-Combat
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
 		{'pause', 'player.buff(5384)'},											-- Pause for Feign Death
-		{configupdate},
 		{Keybinds},
-		{Buffs},
-		{Pet},
-		{Interrupts, 'target.interruptAt(5)'},
-		{	
-			{																	-- General Conditions
-				{Survival, 'player.health < 100'},
-				{Cooldowns, 'modifier.cooldowns'},
-				{Pet_inCombat},
-				{inCombat, {'target.infront', 'target.range <= 45'}
-			},
-		}, '!player.channeling'}
-	}, outCombat, lib)
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

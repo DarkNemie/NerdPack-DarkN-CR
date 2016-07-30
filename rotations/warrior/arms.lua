@@ -1,115 +1,114 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-	key = "NePConfigWarrArms",
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Warrior'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Arms'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick.." Config",
-	subtitle = "Warrior Arms Settings",
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
-		-- General
-		{type = 'rule'},
-		{type = 'header',text = "General settings:", align = "center"},
-			-- NOTHING IN HERE YET...
-
-		{type = "spacer"},
-		{type = 'rule'},
-		{type = "header", text = "Survival Settings", align = "center"},
-			{type = "spinner", text = "Healthstone", key = "Healthstone", width = 50, default = 75},
-
-			-- Survival
-		{type = 'spacer'},{type = 'rule'},
-		{type = 'header', text = 'Survival', align = 'center'},
-			{type = 'spinner', text = 'Rallying Cry', key = 'RallyingCry', default = 15,},
-			{type = 'spinner',text = 'Die by the Sword', key = 'DBTS', default = 25,},
-			{type = 'spinner',text = 'Impending Victory', key = 'IVT', default = 100,},
-			{type = 'spinner',text = 'Enraged Regeneration', key = 'ERG', default = 60,},
-
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfigWarrArms') end)
+	DarkNCR.ClassSetting(mKey)
 end
 
-local Shared = {
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
+  	
 	
-}
-
-local Keybinds = {
-	{'Heroic Leap', 'modifier.shift', 'target.ground'}
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	{'Recklessness'},
+	--Put items you want used on CD below:     Example: {'skillid'},  
+	
+	{'Lifeblood'},
+	{'Berserking'},
 	{'Blood Fury'},
-	{'Bloodbath'}
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
-	-- Pummel
-	{"6552"},
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
 }
 
-local Survival = {
-	-- Healthstone
-  	{"#5512", (function() return dynEval("player.health <= "..PeFetch('NePConfigWarrArms', 'Healthstone')) end)}, 
-  	-- Rallying Cry
-	{'97462', (function() return dynEval('player.health <= '..PeFetch('NePConfigWarrArms', 'RallyingCry')) end)},
-	-- Die by the Sword
-  	{'118038', (function() return dynEval('player.health <= '..PeFetch('NePConfigWarrArms', 'DBTS')) end)}, 
-  	-- Impending Victory
-  	{'103840', (function() return dynEval('player.health <= '..PeFetch('NePConfigWarrArms', 'IVT')) end)}, 
-  	 -- Enraged Regeneration
-	{'55694', (function() return dynEval('player.health <= '..PeFetch('NePConfigWarrArms', 'ERG')) end)},
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs while out of combat! 
+	--[[
+	Here is an example from Hunter CR.
+	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
+  	{{ 																			-- Pet Dead
+		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
+		{'982'} 																-- Revive Pet
+	}, {'pet.dead', 'toggle.ressPet'}},	
+	]]--
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
 }
 
 local AoE = {
-	{'Bladestorm'},
-	{'Dragon Roar'},
-	{'Thunder Clap', 'player.glyph(Glyph of Resonating Power)'},
-	{'Whirlwind'},
+
 }
 
-local inCombat = {
-	{'Sweeping Strikes', 'player.area(8).enemies > 1'},
-	{'Rend', 'target.debuff(Rend).duration < 5'},
-	{'Rend', '@DarkNCR.areaRend(3, 5)'},
-	{'Ravager'},
-	{'Colossus Smash', '!target.debuff(Colossus Smash)'},
-	{'Mortal Strike', 'target.health > 20'},
-	{'Colossus Smash'},
-	{'Bladestorm', {'target.debuff(Colossus Smash)', 'modifier.cooldowns'} },
-	{'Storm Bolt', '!target.debuff(Colossus Smash)'},
-	{'Dragon Roar'},
-	{'Execute', 'player.buff(Sudden Death)'},
-	{'Execute'},
-	{'Execute', '@DarkNCR.aoeExecute()'},
-	{'Thunder Clap', 'player.glyph(Glyph of Resonating Power)'},
-	{'Whirlwind', 'player.rage > 40'},
-	{'Whirlwind', 'target.debuff(Colossus Smash)'}
+local ST = {
+
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
+	
 }
 
 local outCombat = {
-	{Shared},
-	{Keybinds}
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(71, '[|cff'..NeP.Interface.addonColor..'NeP|r] Warrior - Arms', 
-	{-- In-Combat CR
-		{Shared},
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
 		{Keybinds},
-		{Interrupts, "target.interruptAt(70)"},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-  		{Cooldowns, "modifier.cooldowns"},
-  		{AoE, {'player.area(40).enemies >= 3', 'modifier.aoe'} },
-		{inCombat, 'target.range <= 7'}
-		-- {"57755", "player.range > 10", "target"} -- Heroic Throw
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
 	}, outCombat, exeOnLoad)

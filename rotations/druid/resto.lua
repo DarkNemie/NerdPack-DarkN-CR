@@ -1,308 +1,108 @@
-local dynEval = DarkNCR.dynEval
-local fetchKey = NeP.Interface.fetchKey
-
-local config = {
-	key = "NePConfDruidResto",
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Druid'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Restoration'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick.." Config",
-	subtitle = "Druid Restoration Settings",
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
-		-- General
-		{ type = 'rule' },
-		{ type = 'header', text = "General settings:", align = "center"},
-
-		-- Focus
-		{ type = 'rule' },
-		{ type = 'header', text = 'Focus settings:', align = "center"},
-			{ type = "spinner", text = "Life Bloom", key = "LifeBloomTank", default = 100},
-			{ type = "spinner", text = "Swiftmend", key = "SwiftmendTank", default = 80},
-			{ type = "spinner", text = "Rejuvenation", key = "RejuvenationTank", default = 95},
-			{ type = "spinner", text = "Wild Mushroom", key = "WildMushroomTank", default = 100},
-			{ type = "spinner", text = "Healing Touch", key = "HealingTouchTank", default = 96},
-
-	}
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = DNCRClassMenu.Config(Sidnum)
 }
-
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfDruidResto') end)
-end	
+	DarkNCR.ClassSetting(mKey)
+end
 
-local Shared = {
-	--	keybinds
-	{ "740" , "modifier.shift" }, -- Tranq
-	{ "!/focus [target=mouseover]", "modifier.alt" }, -- Mouseover Focus
-	{ "20484", "modifier.control", "mouseover" }, -- Rebirth
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+--------------- END of do not change area ----------------
+--
+--	Notes:
+--
+---------- This Starts the Area of your Rotaion ----------
+local Survival = {
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-	-- Mark of the Wild
-	{ "1126", '!player.buffs.stats'},
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
-local inCombat = {
-
-	-- Dispell
-	{ "88423", 'player.dispellAll(88423)' },
-
-	{{-- Cooldowns
-		{ "29166", "player.mana < 80", "player" }, -- Inervate
-		{ "132158" }, -- Nature's Swiftness
-		{{ -- Party
-			{ "106731", "@coreHealing.needsHealing(85, 3)" },-- Incarnation
-			{ "740", "@coreHealing.needsHealing(50, 3)" }, -- Tranq
-		}, "modifier.party" },
-		{{ -- Raid
-			{ "106731", "@coreHealing.needsHealing(85, 6)" },-- Incarnation
-			{ "740", "@coreHealing.needsHealing(50, 7)" }, -- Tranq
-		}, "modifier.raid" },
-	}, "modifier.cooldowns"},
+local Cooldowns = {
+	--Put items you want used on CD below:     Example: {'skillid'},  
 	
-	-- Items
-		{ "#5512", "player.health < 60" }, --Healthstone
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
+local Interrupts = {
 	
-	--  Ironbark
-		{"Ironbark",{
-			"focus.health <= 40",
-			"focus.friend",
-			"focus.range <= 40"
-		},"focus"},
-		{"Ironbark",{
-			"tank.health <= 40",
-			"tank.range <= 40"
-		},"tank"},
-
-	-- Genesis
-		{ "145518", { -- Genesis
-			"!player.spell(18562).cooldown = 0", 
-			"lowest.health < 40", 
-			"lowest.buff(774)" 
-		}, "lowest" }, 
-
-	{{-- FREE Regrowth
-		{ "8936", {  
-			"lowest.health < 50", 
-			"!lowest.buff(8936)", 
-			"!player.moving" 
-		}, "lowest" },
-	}, "player.buff(8936)" },
-
-	{{-- AOE
-		{ "48438", { -- Wildgrowth
-			"@coreHealing.needsHealing(85, 3)", 
-			"!lastcast(48438)"
-		}, "lowest" }, 
-	}, "modifier.multitarget" },
-
-	{{-- Soul of the Forest
-		{ "Regrowth", {
-			"!player.moving",
-			"focus.range <= 40", 
-			"focus.health <=85"
-		}, "focus"},
-		{ "Regrowth", {
-			"!player.moving",
-			"tank.range <= 40", 
-			"tank.health <=85"
-		}, "tank" },
-		{ "Regrowth", {
-			"!player.moving",
-			"lowest.range <= 40", 
-			"lowest.health <=85"
-		}, "lowest" },
-	}, "player.buff(114108)" },
-
-	{{-- Incarnation: Tree of Life
-		{ "33763", { -- Lifebloom
-			"!lowest.buff(33763)", 
-			"lowest.health < 30" 
-		}, "lowest" },
-		{ "8936", { -- Regrowth
-			"player.buff(16870)", 
-			"!lowest.buff", 
-			"lowest.health < 80" 
-		}, "lowest" }, 
-	}, "player.buff(33891)" },
-
-	{{-- Clearcasting
-		{ "8936", { -- Regrowth
-			"!lowest.buff(8936)", 
-			"lowest.health < 80", 
-			"!player.moving", 
-		}, "lowest" }, 
-		{ "5185", { -- Healing Touch
-			"lowest.health < 80", 
-			"!player.moving",
-		}, "lowest" },
-	}, "player.buff(16870)" },
-
-	{{-- Force of Nature
-		{ "102693", {
-			"!lastcast(102693)",
-			"player.spell(102693).charges >= 1", 
-			"tank.range <= 40",
-			"@coreHealing.needsHealing(70, 5)"
-		}, "tank" },
-		{ "102693", {
-			"!lastcast",
-			"player.spell(102693).charges >= 1", 
-			"lowest.range <= 40",
-			"@coreHealing.needsHealing(70, 5)"
-		}, "lowest" }, 
-		{ "102693", {
-			"!lastcast",
-			"player.spell(102693).charges >= 2", 
-			"tank.range <= 40", 
-			"tank.health <= 70"
-		}, "tank" },  
-		{ "102693", {
-			"!lastcast",
-			"player.spell(102693).charges >= 2", 
-			"lowest.range <= 40", 
-			"lowest.health <= 70"
-		}, "lowest" },
-		{ "102693", {
-			"!lastcast",
-			"player.spell(102693).charges = 3", 
-			"tank.range <= 40", 
-			"tank.health <= 92"
-		}, "tank" }, 
-		{ "102693", {
-			"!lastcast",
-			"player.spell(102693).charges = 3", 
-			"lowest.range <= 40", 
-			"lowest.health <= 92"
-		}, "lowest" },  
-	},"talent(4,3)"},
-
-	-- Life Bloom
-		{ "33763", { -- Life Bloom
-			(function() return dynEval(
-				"focus.health <= "..fetchKey('NePConfDruidResto', 'LifeBloomTank')
-			) end),
-			"!focus.buff(33763)", 
-			"focus.spell(33763).range" 
-		}, "focus" }, 
-		{ "33763", { -- Life Bloom
-			(function() return dynEval(
-				"tank.health <= "..fetchKey('NePConfDruidResto', 'LifeBloomTank'
-			)) end),
-			"!tank.buff(33763)", 
-			"tank.spell(33763).range" 
-		}, "tank" }, 
-
-	{{-- Wild Mushroom
-		{ "145205", "!player.totem(145205)", "focus" }, -- Wild Mushroom
-    	{ "145205", "!player.totem(145205)", "tank" }, -- Wild Mushroom
-	}, "!glyph(146654)" },
-
-	{{-- Wild Mushroom // Glyph of the Sprouting Mushroom
-		{ "145205", "!player.totem(145205)", "focus.ground" }, -- Wild Mushroom
-		{ "145205", "!player.totem(145205)", "tank.ground" }, -- Wild Mushroom
-	}, "glyph(146654)" },
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
 	
-	-- Swiftmend
-		{ "18562", {  -- Swiftmend
-			(function() return dynEval(
-				"focus.health <= "..fetchKey('NePConfDruidResto', 'SwiftmendTank')
-			) end),
-			"focus.buff(774)" 
-		}, "focus" },
-		{ "18562", { -- Swiftmend
-			(function() return dynEval(
-				"tank.health <= "..fetchKey('NePConfDruidResto', 'SwiftmendTank')
-			) end),
-			"tank.buff(774)" 
-		}, "tank" },
-		{ "18562", { "lowest.health < 30", "lowest.buff(774)" }, "focus" }, -- Swiftmend
+}
 
-	-- Rejuvenation
-		{ "774", {
-			(function() return dynEval(
-				"focus.health <= "..fetchKey('NePConfDruidResto', 'RejuvenationTank')
-			) end),
-			"!focus.buff", 
-			"focus.spell(774).range" 
-			}, "focus" },
-		{ "774", {
-			(function() return dynEval(
-				"tank.health <= "..fetchKey('NePConfDruidResto', 'RejuvenationTank')
-			) end),
-			"!tank.buff", 
-			"tank.spell(774).range" 
-			}, "tank" },
-		{ "774", {
-			"!lowest.buff", 
-			"lowest.health < 65" 
-		}, "lowest" },
+local Buffs = {
 
-	{{-- Germination // Talent
-		{ "774", {
-			(function() return dynEval(
-				"focus.health <= "..fetchKey('NePConfDruidResto', 'RejuvenationTank')
-			) end),
-			"!focus.buff(155777)", 
-			"focus.spell(774).range" 
-		}, "focus" },
-		{ "774", {
-			(function() return dynEval(
-				"tank.health <= "..fetchKey('NePConfDruidResto', 'RejuvenationTank')
-			) end),
-			"!tank.buff(155777)", 
-			"tank.spell(774).range" 
-		}, "tank" },
-		{ "774", { 
-			"!lowest.buff(155777)", 
-			"lowest.health < 65" 
-		}, "lowest" },
-	}, "talent(7,2)" },
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs, while out of combat! 
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+	-- AoE Rotation goes here.
 	
-	{{-- Regrowth EMERGENCY
-		{ "!8936", {  -- Regrowth
-			"lowest.health < 20", 
-			"!player.moving" 
-		}, "lowest" },
-	}, "!player.casting.percent >= 50" },
+}
 
-	-- Regrowth	
-		{ "8936", {  -- Regrowth
-			"lowest.health < 50", 
-			"!lowest.buff(8936)", 
-			"!player.moving" 
-		}, "lowest" },
+local ST = {
+	-- Single target Rotation goes here
+	
+}
 
-	-- Healing Touch
-	 	{ "5185", {  -- Healing Touch
-	 		(function() return dynEval(
-				"focus.health <= "..fetchKey('NePConfDruidResto', 'HealingTouchTank')
-			) end), 
-		 	"!player.moving" 
-		}, "focus" },
-		{ "5185", { -- Healing Touch
-			(function() return dynEval(
-				"tank.health <= "..fetchKey('NePConfDruidResto', 'HealingTouchTank')
-			) end),
-			"!player.moving" 
-		}, "tank" },
-		{ "5185", { "lowest.health < 96", "!player.moving" }, "lowest" }, -- Healing Touch
+local Keybinds = {
 
+	{'pause', 'modifier.alt'},													-- Pause
+	
 }
 
 local outCombat = {
-
-	{Shared},
-
-	-- Life Bloom
-		{ "33763", { -- Life Bloom
-			"tank.health < 100",
-			"!tank.buff(33763)", 
-			"tank.spell(33763).range" 
-		}, "tank" }, 
-
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(105, '[|cff'..NeP.Interface.addonColor..'NeP|r] Druid - Restoration', inCombat, outCombat, exeOnLoad)
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
+		{Survival, 'player.health < 100'},
+		{Cooldowns, 'modifier.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

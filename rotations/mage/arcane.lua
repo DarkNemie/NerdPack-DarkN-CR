@@ -1,92 +1,127 @@
-local dynEval = DarkNCR.dynEval
-local PeFetch = NeP.Interface.fetchKey
-
-local config = {
-	key = 'NePConfigMageArcane',
+local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myClass 	= 'Mage'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Arcane'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----------	Do not change unless you know what your doing ----------
+local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
+local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local config 	= {
+	key 	 = mKey,
 	profiles = true,
-	title = '|T'..NeP.Interface.Logo..':10:10|t'..NeP.Info.Nick..' Config',
-	subtitle = 'Mage Arcane Settings',
-	color = NeP.Core.classColor('player'),
-	width = 250,
-	height = 500,
-	config = {
-		
+	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
+	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
+	color 	 = NeP.Core.classColor('player'),	
+	width 	 = 250,
+	height 	 = 500,
+	config 	 = {
 		-- General
-		{ type = 'rule' },
-		{ type = 'header',text = 'General settings:', align = 'center' },
-			--Empty
-		{ type = 'spacer' },{ type = 'rule' },
-		{ type = 'header', text = 'Survival Settings', align = 'center' },
+		{type = 'rule'},
+		{type = 'header', text = 'General:', align = 'center'},
+			--Trinket usage settings:
+			{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
+			{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
+			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 50},
 			
-			-- Survival Settings:
-			{type = 'spinner',text = 'Healthstone - HP',key = 'Healthstone',width = 50,default = 75,},
-	}
+		--Spec Specific settings
+		{type = 'spacer'},{ type = 'rule'},
+		{type = 'header', text = 'Class Specific Settings', align = 'center'},
+			
+
+		}
 }
 
 NeP.Interface.buildGUI(config)
+local E = DarkNCR.dynEval
+local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
-local lib = function()
+local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('NePConfigMageArcane') end)
-	NeP.Interface.CreateToggle(
-		'alter', 
-		'Interface\\ICONS\\spell_mage_altertime', 
-		'Alter Time', 
-		'Toggle the usage of Alter Time and Arcane Power.')
-	NeP.Interface.CreateToggle(
-		'def', 
-		'Interface\\ICONS\\creatureportrait_creature_iceblock', 
-		'Survival', 
-		'Ice Block when Shit gets serious')
+	DarkNCR.ClassSetting(mKey)
 end
 
+local healthstn = function() 
+	return E('player.health <= ' .. F('Healthstone')) 
+end
+----------	END of do not change area ----------
+
+---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-	{ '45438', {'toggle.def','player.health <= 30'}}, --Ice Block
-    { '11958', {'toggle.def','player.health <= 25','player.spell(45438).cooldown'}}, --Cold Snap for Reset 
-	{ '#5512', (function() return dynEval('player.health <= ' .. PeFetch('NePConfigMageArcane', 'Healthstone')) end) }, --Healthstone
+	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
+
+
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'#5512', healthstn}, 														-- Health stone
+	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	{ '12042'},-- Arcane Power
-    { '12043'},-- Presence of Mind
-    { '108978', {'player.buff(12042)','!player.buff(108978)','toggle.alter' }},-- Alter Time
-    { '159916'}, -- AMagic
-}
-
-local Moving = {
-	{ '108839'}, -- Ice Floes
-    { '108843', 'player.spell.exists(108843)' }, -- Blazing Speed
-}
-
-local inCombat = {
-	-- AoE
-    { '1449', 'player.area(10).enemies >= 5'},-- Arcane Explosion
-    { '120', 'player.area(10).enemies >= 5'},-- Cone of Cold
+	--Put items you want used on CD below:     Example: {'skillid'},  
 	
-	-- Rotation
-    { '114923', {'player.debuff(36032).count >= 4', 'target.debuff(114923).duration <= 3.6'}},-- Nether Tempest
-    { '157980', {'modifier.cooldowns','player.spell.exists(157980)'}},-- Supernova
-    { '5143', { 'player.debuff(36032).count >= 4', 'player.buff(79683).count >= 3' }},-- Arcane Missiles with 3x Procc
-    { '44425', 'player.debuff(36032).count >= 4' },-- Arcane Barrage 
-    { '30451' },--Arcane Blast
+	{'Lifeblood'},
+	{'Berserking'},
+	{'Blood Fury'},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
+}
+
+local Interrupts = {
+	
+	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	
+}
+
+local Buffs = {
+
+	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+
+}
+
+local Pet = {
+
+	--Put skills in here that apply to your pet needs while out of combat! 
+	--[[
+	Here is an example from Hunter CR.
+	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
+  	{{ 																			-- Pet Dead
+		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
+		{'982'} 																-- Revive Pet
+	}, {'pet.dead', 'toggle.ressPet'}},	
+	]]--
+
+}
+
+local Pet_inCombat = {
+
+	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
+
+}
+
+local AoE = {
+
+}
+
+local ST = {
+
+}
+
+local Keybinds = {
+
+	{'pause', 'modifier.alt'},													-- Pause
+	
 }
 
 local outCombat = {
-	{ '1459', '!player.buff' }, -- Arcane Brilliance
-	{ '30455', 'tank.combat', 'target' }, -- Ice Lance
+	{Keybinds},
+	{Buffs},
+	{Pet}
 }
 
-NeP.Engine.registerRotation(62, '[|cff'..NeP.Interface.addonColor..'NeP|r] Mage - Arcane', 
-	{ -- In-Combat
-		-- keybinds
-		{ '113724', 'modifier.alt', 'target.ground' }, -- Ring of Frost
-		{ '116011', {'modifier.shift','!player.buff(116014)'}, 'player.ground' }, -- Rune of Power
-		{{-- Interrupts
-			{ '102051' }, -- Frostjaw
-			{ '2139' }, -- Counterspell
-		}, 'target.interruptAt(40)' },
+NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+	{-- In-Combat
+		{Keybinds},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
-		{Moving, 'player.moving'},
-		{inCombat, { 'target.infront', 'target.exists', 'target.range <= 40' }},
-	}, outCombat, lib)
+		{Cooldowns, 'toggle.cooldowns'},
+		{Pet_inCombat},
+		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{ST}
+	}, outCombat, exeOnLoad)

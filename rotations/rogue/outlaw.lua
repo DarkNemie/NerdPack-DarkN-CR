@@ -1,6 +1,6 @@
 local myCR 		= 'DarkNCR'									-- Change this to something Unique
-local myClass 	= 'Paladin'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
-local mySpec 	= 'Retribution'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+local myClass 	= 'Rogue'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Outlaw'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
@@ -64,15 +64,7 @@ local Buffs = {
 
 local Pet = {
 
-	--Put skills in here that apply to your pet needs while out of combat! 
-	--[[
-	Here is an example from Hunter CR.
-	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
-  	{{ 																			-- Pet Dead
-		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
-		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
-	]]--
+	--Put skills in here that apply to your pet needs, while out of combat! 
 
 }
 
@@ -83,11 +75,13 @@ local Pet_inCombat = {
 }
 
 local AoE = {
-
+	-- AoE Rotation goes here.
+	
 }
 
 local ST = {
-
+	-- Single target Rotation goes here
+	
 }
 
 local Keybinds = {
@@ -107,7 +101,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'toggle.cooldowns'},
+		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}
