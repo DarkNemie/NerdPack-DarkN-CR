@@ -1,7 +1,6 @@
 DNCRlib = {
-	Version = '1.0.1',
-	Branch 	= 'Release',
-	Author 	= 'DarkNemie'
+	Version = '1.0.0',
+	Branch = 'Release',
 }
 local Parse = NeP.DSL.parse
 local Fetch = NeP.Interface.fetchKey
@@ -45,8 +44,7 @@ local _classSpecNum = {
 	['DemonHunterVengeance']	=	581 ,
 
 }
-DNCRlib.myClass = nil
-DNCRlib.mySpec 	= nil
+
 function DNCRlib.classSpecNum(_type)
 	return _classSpecNum[_type]
 end
