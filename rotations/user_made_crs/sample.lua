@@ -1,6 +1,16 @@
-local myCR 		= 'DarkNCR'									-- Change this to something Unique
-local myClass 	= 'Class'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
-local mySpec 	= 'Spec'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+----
+---- This is a sample CR to show and where to put your own custom cr's
+---- Keep in mind this CR will not load at all unless you change the 
+---- following 3 strings:
+---- 'mySample' this needs to be changed to the name of your cr file or something simular - DO NOT USE 'DarkNCR'
+---- 'Class' this needs to be changed to the Class you want to use this file - Follow the comments
+---- 'Spec'  this needs to be changed to the Spec you want to use this file - Follow the comments
+---- Lastly DO NOT FORGET to add your newly named file to the DarkN-CR.xml file - please use the section
+---- at the bottom to avoid loading errors.
+----
+local myCR 		= 'mySample'									-- Change this to something Unique
+local myClass 	= 'Mage'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
+local mySpec 	= 'Fire'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing

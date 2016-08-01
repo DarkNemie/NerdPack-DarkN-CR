@@ -103,20 +103,22 @@ local Buffs = {
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
 
 }
-
+--	{'982','pet'}, 
+--	{{ 																			-- Pet Dead
+--		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
+--		{'982'} 																-- Revive Pet
+--	}, {'lastspell(petcallnum)', 'toggle.ressPet'},'!pet.exists'},
 local Pet = {
 	--Put skills in here that apply to your pet needs, while out of combat! 
-	{{ 																			-- Pet Dead
-		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
-		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
-	{petcallnum, '!pet.exists'},												-- Summon Pet
+	{petcallnum, {'toggle.ressPet','!pet.exists'}},												-- Summon Pet
+	{'982',{'toggle.ressPet', 'pet.health <= 0'}},
 	{'/petassist'}
 }
 
 local Pet_inCombat = {
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
-	{'136', { 'pet.health <= 75', '!pet.buff(136)' }},							-- Mend Pet
+	--{'982',{'toggle.ressPet','pet.dead'}},
+	-- {'136', 'pet.health <= 75'},							-- Mend Pet
 }
 
 local AoE = {
@@ -170,12 +172,15 @@ local outCombat = {
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		{'pause', 'player.buff(5384)'},											-- Pause for Feign Death
-		{Keybinds},
-		{Interrupts, 'target.interruptAt(15)'},
-		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
-		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST}
+		
+			{'pause', 'player.buff(5384)'},											-- Pause for Feign Death
+			{Keybinds},
+			{Interrupts, 'target.interruptAt(15)'},
+		{{	
+			{Survival, 'player.health < 100'},
+			{Cooldowns, 'modifier.cooldowns'},
+			{Pet_inCombat},
+			{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+			{ST}
+		}, '!player.channeling'}	
 	}, outCombat, exeOnLoad)
