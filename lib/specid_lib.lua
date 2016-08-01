@@ -1,11 +1,7 @@
-DNCRlib = {
-	Version = '1.0.0',
-	Branch = 'Release',
-}
 local Parse = NeP.DSL.parse
 local Fetch = NeP.Interface.fetchKey
 
-local _classSpecNum = {
+DarkNCR.classSpecNum = {
 	['MageArcane']				=	62 ,
 	['MageFire']				=	63 ,
 	['MageFrost']				=	64 ,
@@ -45,6 +41,3 @@ local _classSpecNum = {
 
 }
 
-function DNCRlib.classSpecNum(_type)
-	return _classSpecNum[_type]
-end

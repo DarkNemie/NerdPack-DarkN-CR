@@ -45,6 +45,6 @@
   <Script file="rotations\demonhunter\vengeance.lua" />
   
   <!-- Add user Created Rotations here-->
-  <Script file="rotations\user_made_crs\sample.lua" />
+  <!-- <Script file="rotations\user_made_crs\sample.lua" /> -->
   
 </Ui>

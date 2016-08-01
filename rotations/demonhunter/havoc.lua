@@ -1,11 +1,9 @@
-local myClass 	= DNCRlib.myClass
-local mySpec	= DNCRlib.mySpec
 local myCR 		= 'DarkNCR'									-- Change this to something Unique
 local myClass 	= 'DemonHunter'								-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
 local mySpec 	= 'Havoc'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
-local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
 local config 	= {
 	key 	 = mKey,
 	profiles = true,
@@ -14,7 +12,7 @@ local config 	= {
 	color 	 = NeP.Core.classColor('player'),	
 	width 	 = 250,
 	height 	 = 500,
-	config 	 = DNCRClassMenu.Config(Sidnum)
+	config 	 = DarkNCR.menuConfig[Sidnum]
 }
 NeP.Interface.buildGUI(config)
 local E = DarkNCR.dynEval

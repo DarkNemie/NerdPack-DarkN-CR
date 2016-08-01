@@ -3,7 +3,7 @@ local myClass 	= 'Mage'									-- Change to your Class Name DO NOT USE SPACES -
 local mySpec 	= 'Frost'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
-local Sidnum 	= DNCRlib.classSpecNum(myClass ..mySpec)	-- Do not change unless you know what your doing
+local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
 local config 	= {
 	key 	 = mKey,
 	profiles = true,

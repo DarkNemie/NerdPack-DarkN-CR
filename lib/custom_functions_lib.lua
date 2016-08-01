@@ -1,14 +1,42 @@
 DarkNCR = {
-	Version = '0.3.0',
-	Branch = 'BETA',
-	Interface = {
-		addonColor = '335FFF',
-		Logo = NeP.Interface.Logo -- Temp until i get my own logo
+	Info = {
+		Name = 'DarkNCR',
+		Nick = 'DarkNCR',
+		Author = 'Dark Nemie',
+		Version = '0.4',
+		Branch = 'BETA',
 	},
+	Interface = {
+		Logo = 'Interface\\AddOns\\NerdPack\\media\\logo.blp',
+		addonColor = '0070DE',
+		printColor = '|cffFFFFFF',
+		mediaDir = 'Interface\\AddOns\\NerdPack\\media\\',
+	},
+	Locale = {}
 }
 NeP.Core.DebugMode = false
-local Parse = NeP.DSL.parse
-local Fetch = NeP.Interface.fetchKey
+local Parse 	= NeP.DSL.parse
+local Fetch		= NeP.Interface.fetchKey
+local Interface = NeP.Interface
+local mKey 		= 'DarkNCRcflconfig'
+
+local config = {
+	key = mKey,
+	profiles = true,
+	title = '|T'..DarkNCR.Interface.Logo..':10:10|t'..' '..DarkNCR.Info.Name,
+	subtitle = 'DarkN-CR Settings',
+	color = DarkNCR.Interface.addonColor,
+	width = 250,
+	height = 200,
+	config = {
+		{ type = 'header', text = 'Basic:', size = 25, align = 'Center' },
+			{ type = 'button', text = 'enable Debug', width = 100, height = 15,  callback = function() NeP.Core.DebugMode = not NeP.Core.DebugMode end }--{ type = 'checkbox', text = 'Debugging', key = 'Debugme', default = false },
+	}
+}
+local plugname = '|cff'..DarkNCR.Interface.addonColor..' '..DarkNCR.Info.Name..' |r|cffffc61a v.'..DarkNCR.Info.Version..' - '..DarkNCR.Info.Branch
+Interface.buildGUI(config)
+Interface.CreatePlugin(plugname, function() Interface.ShowGUI(mKey) end)
+
 
 -- Temp Hack
 function DarkNCR.Splash()
