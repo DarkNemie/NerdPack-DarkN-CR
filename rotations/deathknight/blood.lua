@@ -15,7 +15,6 @@ local config 	= {
 	config 	 = DarkNCR.menuConfig[Sidnum]
 }
 NeP.Interface.buildGUI(config)
---DarkNCR.debugme()
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key) end
 

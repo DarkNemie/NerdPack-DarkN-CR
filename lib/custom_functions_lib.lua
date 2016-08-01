@@ -38,13 +38,10 @@ Interface.buildGUI(config)
 Interface.CreatePlugin(plugname, function() Interface.ShowGUI(mKey) end)
 
 
--- Temp Hack
+-- DarkNCR wide added buttons
 function DarkNCR.Splash()
-	NeP.Interface.CreateToggle(
-		'ADots',
-		'Interface\\Icons\\Ability_creature_cursed_05.png',
-		'Automated Dotting',
-		'Click here to dot all the things!')
+	NeP.Interface.CreateToggle('ADots','Interface\\Icons\\Ability_creature_cursed_05.png','Automated Dotting','Click here to dot all the things!')
+	NeP.Interface.CreateToggle('Raidme','Interface\\Icons\\Ability_rogue_findweakness.png','Raiding On Off','Turn on/off the use of Flask/Food/Rune')		
 end
 
 function DarkNCR.ClassSetting(key)
