@@ -107,7 +107,7 @@ local ST = {
 	{'100780', 'player.energy >= 65'},
 	{'115181'},											--[[Use Breath of Fire on cooldown ]]
 	{'116847'},											-- Use Rushing Jade Wind, if you have taken this talent.
-	{'117952', '!target.inMelee'},						-- Crackling Jade Lightning
+	{'117952', 'target.range >= 10'},					-- Crackling Jade Lightning
 }
 
 local Keybinds = {
@@ -131,6 +131,6 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST, {'target.inMelee', 'target.infront'}},
+		{ST, {'target.range <= 8', 'target.infront'}},
 		{Taunts,(function() return F('canTaunt') end)}
 	}, outCombat, exeOnLoad)

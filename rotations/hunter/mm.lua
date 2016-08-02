@@ -161,7 +161,6 @@ local ST = {
 
 local Keybinds = {
 	{'pause', 'modifier.lshift'},												-- Pause
-	{ '109248' , 'modifier.lcontrol', 'player.ground' }, 						-- Binding Shot
 }
 
 local outCombat = {
