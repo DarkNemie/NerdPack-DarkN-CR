@@ -53,7 +53,7 @@ local Survival = {
 	{'Berserking'},
 	{'Blood Fury'},
 	{'#5512', healthstn}, 																					-- Health stone
-	{'#109223','player.health <= 50'}																		-- Healing Tonic
+	{'#109223','player.health <= 50'},																		-- Healing Tonic
 }
 
 local Cooldowns = {

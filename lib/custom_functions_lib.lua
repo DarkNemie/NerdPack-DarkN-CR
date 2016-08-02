@@ -3,7 +3,7 @@ DarkNCR = {
 		Name = 'DarkNCR',
 		Nick = 'DarkNCR',
 		Author = 'Dark Nemie',
-		Version = '0.4',
+		Version = '0.4.2',
 		Branch = 'BETA',
 	},
 	Interface = {

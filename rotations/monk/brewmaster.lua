@@ -107,7 +107,7 @@ local ST = {
 	{'100780', 'player.energy >= 65'},
 	{'115181'},											--[[Use Breath of Fire on cooldown ]]
 	{'116847'},											-- Use Rushing Jade Wind, if you have taken this talent.
-	{'117952',, '!target.inMelee'},						-- Crackling Jade Lightning
+	{'117952', '!target.inMelee'},						-- Crackling Jade Lightning
 }
 
 local Keybinds = {

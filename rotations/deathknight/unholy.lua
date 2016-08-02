@@ -36,7 +36,13 @@ local Survival = {
 }
 
 local Cooldowns = {
-
+    { "207349" , "player.runicpower >= 70" }, --Dark Artbiter with enough RP for Death Coil
+    { "49206" }, --Summon Gargoyle
+}
+ 
+local Healing = {
+    { "49998" , { "player.buff(101568)" , "player.health <= 80" }}, --Death Strike with Proc
+    { "49998", { "player.buff(101568).duration < 2" , "player.health <= 95" }}, --Death Strike anyway since proc is falling off.
 }
 
 local AoE = {
@@ -44,22 +50,22 @@ local AoE = {
 }
 
 local ST = {
-	--Blood Boil to maintain Blood Plague.
-	{'Blood Boil', '!target.debuff(Blood Plague)'},
-	
-	--Death and Decay whenever available. Watch for Crimson Scourge procs.
-	
-	--Marrowrend to maintain 5 undefined.
-	{'Marrowrend'},
-	
-	--Blood Boil with 2 charges.
-	{'Blood Boil', 'player.spell(Blood Boil).charges >= 2'},
-	
-	--Death Strike to dump Runic Power.
-	{'Death Strike', 'player.energy >= 75'},
-	
-	--Heart Strike as a filler to build Runic Power.
-	{'Heart Strike'}
+	{Healing},
+	-- SINGLE TARGET
+    {{
+		{ "47541" , { "player.spell(207349).cooldown >= 3" , "player.runicpower >= 50" }}, 			--Death Coil if CD we wont have a Dark Arbiter soon.
+        { "47541" , { "player.runicpower >= 50" , "!modifier.cooldowns" }}, 						--Death Coil
+        { "47541" , "player.spell(207349).cooldown >= 165" },  						  				--Death Coil to increase the DPS from Dark Arbiter.
+	}, "talent(7, 1)" },				
+    { "47541" , "player.runicpower >= 50" }, 														--Death Coil
+    { "47541" , "player.buff(49530)"}, 																--Free Death Coil With Sudden Doom
+    { "63560" }, 																					--Dark Transformation
+    { "130736" , "target.debuff(197147).count >= 3" }, 												--Soul Reaper with Festering Wound (need a better check)
+    { "207311" , "target.debuff(197147)" },													 		--Clawing Shadows
+    { "77575", "target.debuff(191587).duration <= 3" }, 											--Outbreak
+    { "85948" , "target.debuff(197147).count <= 4" }, 												--Festering Strike to gain Festering Wound
+    { "47541" , { "player.spell(207349).cooldown >= 1" , "talent(7, 1)"}}, 							--Death Coil filler 
+    { "47541" , "!modifier.cooldowns" }, 															--Death Coil filler if we dont plan to use Dark Arbiter
 }
 
 local Keybinds = {
