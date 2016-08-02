@@ -44,7 +44,7 @@ local healthstn = function()
 end
 ---------- This Starts the Area of your Rotaion ----------
 local dpsCheck ={
--- DPS Timmer
+	-- DPS Timmer
 	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
 }
 
@@ -52,20 +52,21 @@ local Survival = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#5512', healthstn}, 																			-- Health stone
+	{'#5512', healthstn}, 																					-- Health stone
+	{'#109223','player.health <= 50'}																		-- Healing Tonic
 }
 
 local Cooldowns = {
-	{'49028'}, 																						-- Dancing RuneWeapon
-	{'55233', 'player.health <= 50'}, 																-- Vampiric Blood
+	{'49028'}, 																								-- Dancing RuneWeapon
+	{'55233', 'player.health <= 50'}, 																		-- Vampiric Blood
 	{'#trinket1', (function() return F('trink1') end)},
 	{'#trinket2', (function() return F('trink2') end)},   
 }
 
 local Interrupts = {
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	{'47528'},																						-- Mind Freeze
-	{'221562'},																						-- Asphyxiate
+	{'47528'},																								-- Mind Freeze
+	{'221562'},																								-- Asphyxiate
 }
 
 local AoE = {
@@ -75,9 +76,9 @@ local AoE = {
 local ST = {
 	{dpsCheck},
 	--- my auto target
---	{ "/targetenemy [noexists]", { "toggle.myat", "!target.exists" } },
---	{ "/targetenemy [dead]", { "toggle.myat", "target.exists", "target.dead" } },
---player.spell(50842).charges >= 1 
+	{ "/targetenemy [noexists]", { "toggle.myat", "!target.exists" } },
+	{ "/targetenemy [dead]", { "toggle.myat", "target.exists", "target.dead" } },
+
 	
 	{ '50842', '!target.debuff(55078)', 'target'},															-- BloodBoil
 	{ '195182', 'player.buff(195181).count <= 6', 'target'},												-- Marrowrend w Bone Shield
@@ -86,14 +87,14 @@ local ST = {
 	{ '50842', 'player.spell(50842).charges >= 1', 'target'},												-- BloodBoil
 	{ '43265', 'player.buff(81141)', 'target.ground' },														-- DnD
 	{ '49998', {'player.health <= 90','!toggle.saveDS'}, 'target'},											-- Death Strike
-    { '206930',{'player.buff(195181).count > 6', 'player.runes > 2'}, 'target'},													-- Heart Strike
+    { '206930',{'player.buff(195181).count > 6', 'player.runes > 2'}, 'target'},							-- Heart Strike
     { '49998', {'player.energy >= 75','!toggle.saveDS'}, 'target'},											-- Death Strike
 }
 
 local Keybinds = {
-	{'pause', 'modifier.alt'},																		-- Pause
-	{'43265', 'modifier.lcontrol', 'target.ground' },												-- DnD
-	{'108199', 'modifier.lshift'}																	-- GGrasp
+	{'pause', 'modifier.alt'},																				-- Pause
+	{'43265', 'modifier.lcontrol', 'target.ground' },														-- DnD
+	{'108199', 'modifier.lshift'}																			-- GGrasp
 }
 
 local outCombat = {

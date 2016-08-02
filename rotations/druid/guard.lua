@@ -3,7 +3,7 @@ local myClass 	= 'Druid'									-- Change to your Class Name DO NOT USE SPACES 
 local mySpec 	= 'Guardian'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
-local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
+local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]		-- Do not change unless you know what your doing
 local config 	= {
 	key 	 = mKey,
 	profiles = true,
@@ -33,11 +33,16 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-
-
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'22842', {'player.spell(22842).charges = 2', 'player.health < 100'} },		-- Frenzied Regeneration
+	{'22842', 'player.health < 70' },											-- Frenzied Regeneration
+	{'61336', {'player.spell(61336).charges = 2', 'player.health < 80'} },		-- Survival Instincts
+	{'61336', 'player.health < 35' },											-- Survival Instincts
+	{'22812', 'player.health < 85' },											-- Barkskin
+	{'192081', 'player.rage >= 95', 'player' },									-- IronFur
+		
 }
 
 local Cooldowns = {
@@ -51,43 +56,45 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
-	-- Place skills that interrupt casts below:		Example: {'skillid'},
+	{'106839'},																	-- Skull Bash
 	
 }
 
 local Buffs = {
-
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
-
 }
 
 local Pet = {
-
 	--Put skills in here that apply to your pet needs, while out of combat! 
-
 }
 
 local Pet_inCombat = {
-
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
-
 }
 
 local AoE = {
-	-- AoE Rotation goes here.
-	
+	{ '6807', 'player.rage > 70', 'target' },-- Maul
+	{ '8921', 'player.buff(Galactic Guardian)' },	-- Moonfire
+	{ '106832' },-- Thrash
+	{ '33917' },-- Mangle
+	{ '8921', '!target.debuff(164812)', 'target'},	-- Moonfire
+	{ '8921', 'target.debuff(164812).duration <= 4.2', 'target' },	-- Moonfire
+	{ '213771 ' },--- Swipe	
 }
 
 local ST = {
-	-- Single target Rotation goes here
+	{ '6807', 'player.rage > 70', 'target' }, -- Maul
+	{ '8921', '!target.debuff(164812)', 'target'},	-- Moonfire
+	{ '33917' },	-- Mangle
+	{ '106832' }, -- Thrash
+	{ '8921', 'player.buff(Galactic Guardian)', 'target' },	-- Moonfire
+	{ '8921', 'target.debuff(164812).duration <= 4.2', 'target' }, -- Moonfire
+	{ '213771' }, -- Swipe	
 	
 }
 
 local Keybinds = {
-
-	{'pause', 'modifier.alt'},													-- Pause
-	
+	{'pause', 'modifier.alt'},
 }
 
 local outCombat = {

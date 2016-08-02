@@ -533,6 +533,29 @@ DarkNCR.menuConfig = {
 			--Spec Specific settings
 			{type = 'spacer'},{ type = 'rule'},
 			{type = 'header', text = 'Spec Specific Settings', align = 'center'},
+			-- Keybinds
+			{type = 'header', text = addonColor..'Keybinds:', align = 'center'},
+			-- Control
+			{type = 'text', text = addonColor..'Control: ', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Summon Black Ox Statue', align = 'right', size = 11, offset = 0 },
+			-- Shift
+			{type = 'text', text = addonColor..'Shift:', align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Placeholder', align = 'right', size = 11, offset = 0 },
+			-- Alt
+			{type = 'text', text = addonColor..'Alt:',align = 'left', size = 11, offset = -11},
+			{type = 'text', text = 'Pause Rotation', align = 'right', size = 11, offset = 0 },
+			-- General
+		{type = 'spacer'},{type = 'rule'},
+		{type = 'header', text = addonColor..'General', align = 'center' },
+			{ type = "checkbox", text = "Automated Taunts", key = "canTaunt", default = false },
+			-- Survival
+		{type = 'spacer'},{type = 'rule'},
+		{type = 'header', text = addonColor..'Survival', align = 'center'},
+			{type = 'spinner', text = 'Expel Harm', key = 'ExpelHarm', default = 50},
+			{type = 'spinner', text = 'Chi Wave', key = 'ChiWave', default = 70},
+			{type = 'spinner', text = 'Fortifying Brew', key = 'FortifyingBrew', default = 36},
+			{type = 'spinner', text = 'Ironskin Brew', key = 'IronskinBrew', default = 90},
+			{type = 'spinner', text = 'Purifying Brew', key = 'PurifyingBrew', default = 60},
 	},		
 	--[[MonkWindwalker]]		[269] = 
 	{

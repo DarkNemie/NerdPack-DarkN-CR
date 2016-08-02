@@ -34,15 +34,27 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-
-	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
-	{'#5512', healthstn}, 														-- Health stone
-	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{'115072', (function() return E('player.health <= '..F('ExpelHarm')) end)},			-- Expel Harm
+	{'115098', (function() return E('player.health <= '..F('ChiWave')) end)},			-- Chi Wave
+	{'115203', (function() return E('player.health <= '..F('FortifyingBrew')) end)},	-- Fortifying Brew
+	{'115308', {'player.buff(215479).duration <= 1', 'player.debuff(124275)',(function() return E('player.health <= '..F('IronskinBrew')) end)}},-- Ironskin Brew
+	{'119582', {'player.debuff(124274)',(function() return E('player.health <= '..F('PurifyingBrew')) end)}},-- Purifying Brew
+	{'#109223', 'player.health < 40'}, 													-- Healing Tonic
+	{'#5512', healthstn}, 																-- Health stone
+	{'#109223', 'player.health < 40'}, 													-- Healing Tonic
 }
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	
+	-- Nimble Brew if pvp talent taken
+	{'137648', 'player.state.disorient'},
+	{'137648', 'player.state.stun'}, 
+	{'137648', 'player.state.fear'},
+	{'137648', 'player.state.horror'},
+	-- Tiger's Lust if cd taken
+	{'116841', 'player.state.root'},
+	{'116841', 'player.state.snare'},
+
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -51,42 +63,57 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	
+	{'116705'},																			-- Spear Hand Strike
 }
 
 local Buffs = {
-
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
-
 }
 
 local Pet = {
-
 	--Put skills in here that apply to your pet needs, while out of combat! 
-
 }
 
 local Pet_inCombat = {
-
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
-
 }
+
+local Taunts = {
+	{'115546', 'target.range <= 35'},						-- Provoke
+}
+
 
 local AoE = {
 	-- AoE Rotation goes here.
+	{'205523'},				--[[Use Blackout Strike first due to blackout combo talent this is priority over keg smash]]
+	{'121253'},				-- Cast Keg Smash on cd.
+	{'116847'},				-- Use Rushing Jade Wind, if you have taken this talent.
+	{'123986'},				--[[If you have taken Chi burst]]
+	{'115181'},				--[[Breath of Fire ]]
 	
+	--[[Use Tiger Palm to fill any spare global cooldowns. 
+	This should only be used each time the monk is above 65 energy and keg smash is currently on cd.]]
+	{'100780', 'player.energy >= 65'},
 }
 
 local ST = {
-	-- Single target Rotation goes here
+	-- Single target/Melle Rotation goes here
+	{'205523'},											--[[Use Blackout Strike first due to blackout combo talent this is priority over keg smash]]
+	{'121253'},											--[[Use Keg Smash on cooldown ]]
 	
+	--[[Use Tiger Palm to fill any spare global cooldowns. 
+	This should only be used each time the monk is above 65 energy and keg smash is currently on cd.]]
+	{'100780', 'player.energy >= 65'},
+	{'115181'},											--[[Use Breath of Fire on cooldown ]]
+	{'116847'},											-- Use Rushing Jade Wind, if you have taken this talent.
+	{'117952',, '!target.inMelee'},						-- Crackling Jade Lightning
 }
 
 local Keybinds = {
 
-	{'pause', 'modifier.alt'},													-- Pause
+	{'pause', 'modifier.alt'},														-- Pause
+	{'115315', 'modifier.control', 'mouseover.ground'},								-- Summon Black Ox Statue
 	
 }
 
@@ -104,5 +131,6 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST}
+		{ST, {'target.inMelee', 'target.infront'}},
+		{Taunts,(function() return F('canTaunt') end)}
 	}, outCombat, exeOnLoad)
