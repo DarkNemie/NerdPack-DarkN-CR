@@ -183,6 +183,10 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+# My ignored directory
+codestore/
+
+
 
 #############
 ## Python
