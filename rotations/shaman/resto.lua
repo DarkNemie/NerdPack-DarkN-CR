@@ -1,6 +1,6 @@
 local myCR 		= 'DarkNCR'									-- Change this to something Unique
 local myClass 	= 'Shaman'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
-local mySpec 	= 'Restoration'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+local mySpec 	= 'Restoration'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
@@ -103,7 +103,7 @@ local Oshit = {
 	{'157153'},  												-- Cloud Burst
 	{'108280'},													-- Healing Tide
 	{'79206'},													-- Spiritwalkers Grace
-	--{'#86125'},													-- Kafa Press
+	--{'#86125'},													-- Kafa Press for some reason no tracking cooldowns
 	{'61295', 'tank.buff(61295).duration < 3', 'tank'}, 		-- Riptide
 	{'8004',  'tank.health < 60', 'tank'},						-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	
@@ -143,6 +143,10 @@ local Keybinds = {
 	
 }
 
+local occRess = {
+	{' res spellID', 'friendly.dead','friendly'}
+}
+
 local outCombat = {
 	{Keybinds},
 	{Buffs},
@@ -159,7 +163,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Cooldowns,'modifier.cooldowns'},
 		{Oshit, {'tank.health < 30','toggle.Raidme'},'tank'},
 		{AoEH,{{'lowest.health > 60','player.mana > 50'},'toggle.AoE'}},
-		{Lowest, 'lowest.health < 100'},
+		{Lowest, {'lowest.health < 100','player.area(40).friendly > 2'}},
 		{STH},
 		{DPS,'toggle.healdps'},
 	}, outCombat, exeOnLoad)
