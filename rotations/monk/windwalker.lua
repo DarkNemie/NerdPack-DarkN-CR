@@ -34,7 +34,7 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-
+	{'116694', 'player.health < 50'},											-- Effuse
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -51,9 +51,8 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	
+	{'107079'} -- Quaking palm
 }
 
 local Buffs = {
@@ -81,6 +80,9 @@ local AoE = {
 
 local ST = {
 	-- Single target Rotation goes here
+	{'100784', 'chi >= 3'},
+	{'100780', 'player.energy >= 50'}, --Tiger Palm
+	{'100784'}, --Blackout Kick
 	
 }
 

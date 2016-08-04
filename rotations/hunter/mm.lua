@@ -71,9 +71,9 @@ local configupdate = {
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-	{'5384', {'player.aggro >= 100', 'modifier.party', '!player.moving'}}, 		-- Fake death
+	-- {'5384', {'player.aggro >= 100', 'modifier.party', '!player.moving'}}, 		-- Fake death
 	{'194291', 'player.health < 50'}, 											-- Exhilaration
-	{'186265', 'player.health < 10'}, 											-- Aspect of the turtle
+	--{'186265', 'player.health < 10'}, 											-- Aspect of the turtle
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -86,8 +86,8 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+--	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
+--	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
 }
 
 local Interrupts = {
@@ -135,7 +135,7 @@ local ST = {
 	{ "/targetenemy [noexists][dead]", { 'toggle.myat',(function() return myRcheck() end) } },	
 	-- Misdirect to focus target or pet when threat is above a certain threat
 {{
-	{ "34477", { "focus.exists", "!player.buff(35079)", "target.threat > 60" }, "focus" },
+	{ "34477", { "focus.exists", "!player.buff(35079)", "player.aggro > 60" }, "focus" },
 	{ "34477", { "pet.exists", "!pet.dead", "!player.buff(35079)", "!focus.exists", "target.threat > 85", "!talent(7,3)" }, "pet" },
 }, "toggle.md", },
 
@@ -160,6 +160,7 @@ local ST = {
 }
 
 local Keybinds = {
+		{'/focus [target=mouseover]', 'modifier.lalt'}, 						-- Mouseover Focus
 	{'pause', 'modifier.lshift'},												-- Pause
 	{'109248', 'modifier.lcontrol', 'mouseover.ground' }, 						-- Binding Shot
 }
