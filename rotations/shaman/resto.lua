@@ -144,7 +144,7 @@ local Keybinds = {
 }
 
 local occRess = {
-	{' res spellID', 'friendly.dead','friendly'}
+	--{' res spellID', 'friendly.dead','friendly'},
 }
 
 local outCombat = {

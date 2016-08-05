@@ -86,8 +86,15 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
---	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
+-- 	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
 --	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
+}
+
+local raidCooldowns = {
+	{'193526', 'player.time >= 121'}, 											-- TrueShot
+	{'193526', 'player.buff(187620)'},											-- TrueShot /w Ring
+	{'#109217', 'player.buff(187620)'},											-- Agi potion /w ring
+
 }
 
 local Interrupts = {
@@ -99,8 +106,10 @@ local Interrupts = {
 }
 
 local Buffs = {
-
-	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
+	--Put buffs that are applied out of combat below:     Example: {'skillid'},
+	{'#109153',{'!player.buff(156064)','toggle.Raidme'}},
+	{'#128482',{'!player.buff(175456)','toggle.Raidme'}},
+	{'#122343',{'!player.buff(180750)','!player.buff(160599)','!player.moving','toggle.Raidme'}}, 
 
 }
 --	{'982','pet'}, 
@@ -140,7 +149,8 @@ local ST = {
 }, "toggle.md", },
 
 ----		Rotation		----
-	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT	
+	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT
+	{'185901', 	'player.buff(223138)','target'},								-- Marked Shot	
 	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
 	{'214579', 	{'target.debuff(187131).duration < 2', 'toggle.AoE'}, 'target'},-- SideWinder
 	{'185358',	{'player.buff(193534).duration < 3','talent (1,2)'}, 'target'},	-- Arcane Shot /W Steady Focus
@@ -156,7 +166,9 @@ local ST = {
 	{'163485', 	'!player.moving', 'target'}, 									-- Focusing Shot // TALENT
 	{'19434', 	{'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	{'player.focus > 60', 'talent(2,3)'}, 'target'}, 				-- Aimed Shot
-	{'19434', 	'player.focus > 90', 'target'} 									-- Aimed Shot
+	{'19434', 	'player.focus > 90', 'target'},									-- Aimed Shot
+	{'185901',	'player.buff(223138)', 'target'},								-- Marked Shot if all else fails
+--  187620 dps ring
 }
 
 local Keybinds = {
@@ -167,8 +179,8 @@ local Keybinds = {
 
 local outCombat = {
 	{Keybinds},
-	{Buffs},
-	{Pet}
+	{Pet},
+	{Buffs}
 }
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
@@ -179,7 +191,8 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 			{Interrupts, 'target.interruptAt(15)'},
 		{{	
 			{Survival, 'player.health < 100'},
-			{Cooldowns, 'modifier.cooldowns'},
+			{raidCooldowns, 'toggle.Raidme' },
+			{Cooldowns, {'!toggle.Raidme','modifier.cooldowns'}},
 			{Pet_inCombat},
 			{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 			{ST}
