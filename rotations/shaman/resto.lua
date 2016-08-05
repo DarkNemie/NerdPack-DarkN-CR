@@ -104,8 +104,8 @@ local Oshit = {
 	{'108280'},													-- Healing Tide
 	{'79206'},													-- Spiritwalkers Grace
 	--{'#86125'},													-- Kafa Press for some reason no tracking cooldowns
-	{'61295', 'tank.buff(61295).duration < 3', 'tank'}, 		-- Riptide
-	{'8004',  'tank.health < 60', 'tank'},						-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
+	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'}, 		-- Riptide
+	{'8004',  'lowest.health < 60', 'lowest'},						-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	
 }
 
@@ -124,6 +124,7 @@ local Lowest = {
 	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'},									--Riptide placed on as many targets as possible. Provides Tidal Waves.
 	{'8004',  {'player.buff(53390)','lowest.health < 60'}, 'lowest'},						--Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	{'77472', {'player.buff(53390)','lowest.health < 100'}, 'lowest'},						--Healing Wave used to heal moderate to high damage. Consumes Tidal Waves.
+	{'77472', 'lowest.health < 100', 'lowest'},												--Healing Wave
 }
 
 local DPS = {
@@ -161,9 +162,9 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival},
 		{Cooldowns,'modifier.cooldowns'},
-		{Oshit, {'tank.health < 30','toggle.Raidme'},'tank'},
+		{Oshit, {'lowest.health < 30','toggle.Raidme'},'lowest'},
 		{AoEH,{{'lowest.health > 60','player.mana > 50'},'toggle.AoE'}},
-		{Lowest, {'lowest.health < 100','player.area(40).friendly > 2'}},
+		{Lowest, {'lowest.health < 100'}},
 		{STH},
 		{DPS,'toggle.healdps'},
 	}, outCombat, exeOnLoad)

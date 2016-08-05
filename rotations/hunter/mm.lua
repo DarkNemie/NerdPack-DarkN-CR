@@ -137,11 +137,11 @@ local AoE = {
 local ST = {
 	-- Single target Rotation goes here
 	-- DPS Timmer
-	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
+	--{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
 	--- my auto target
 	{ "/targetenemy [noexists]", { "toggle.myat", "!target.exists" } },
 	{ "/targetenemy [dead]", { "toggle.myat", "target.exists", "target.dead" } },
-	{ "/targetenemy [noexists][dead]", { 'toggle.myat',(function() return myRcheck() end) } },	
+	--{ "/targetenemy [noexists][dead]", { 'toggle.myat',(function() return myRcheck() end) } },	
 	-- Misdirect to focus target or pet when threat is above a certain threat
 {{
 	{ "34477", { "focus.exists", "!player.buff(35079)", "player.aggro > 60" }, "focus" },
