@@ -150,7 +150,7 @@ local ST = {
 
 ----		Rotation		----
 	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT
-	{'185901', 	'player.buff(223138)','target'},								-- Marked Shot	
+	{'185901', 	{'player.buff(223138)','target.debuff(187131)'},'target'},		-- Marked Shot	
 	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
 	{'214579', 	{'target.debuff(187131).duration < 2', 'toggle.AoE'}, 'target'},-- SideWinder
 	{'185358',	{'player.buff(193534).duration < 3','talent (1,2)'}, 'target'},	-- Arcane Shot /W Steady Focus
