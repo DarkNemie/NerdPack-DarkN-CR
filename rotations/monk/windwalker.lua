@@ -75,14 +75,14 @@ local Pet_inCombat = {
 
 local AoE = {
 	-- AoE Rotation goes here.
-	
+	{'115098'} 																	--Chi Wave
 }
 
 local ST = {
 	-- Single target Rotation goes here
-	{'100784', 'chi >= 3'},
-	{'100780', 'player.energy >= 50'}, --Tiger Palm
-	{'100784'}, --Blackout Kick
+	{'107428', 'player.chi >= 3'}, 												--Rising Sun Kick
+	{'100784', 'player.chi >= 3'}, 												--Blackout Kick
+	{'100780'},						 											--Tiger Palm
 	
 }
 

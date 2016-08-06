@@ -138,7 +138,7 @@ local DPS = {
 
 local Keybinds = {
 	{'98008', 'modifier.lcontrol', 'mouseover.ground' },						-- Spirit Link
-	{'192058','modifier.lshift', 'mouseover.ground'},							-- AoeStun
+	{'73920','modifier.lshift', 'mouseover.ground'},							-- Healing Rain
 	{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
 	--{'pause', 'modifier.alt'},													-- Pause
 	
@@ -151,6 +151,7 @@ local occRess = {
 local outCombat = {
 	{Keybinds},
 	{Buffs},
+	{'212048', {'friendly.dead','toggle.Raidme'}},
 	{Survival, 'player.health < 100'},
 	{'1064', 'lowest.health < 98', 'lowest'},
 }

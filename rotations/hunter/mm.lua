@@ -72,7 +72,7 @@ local configupdate = {
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 	-- {'5384', {'player.aggro >= 100', 'modifier.party', '!player.moving'}}, 		-- Fake death
-	{'194291', 'player.health < 50'}, 											-- Exhilaration
+	{'194291', 'player.health < 50','player'}, 											-- Exhilaration
 	--{'186265', 'player.health < 10'}, 											-- Aspect of the turtle
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
@@ -86,15 +86,15 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
--- 	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
---	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
+ 	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
+	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
 }
 
 local raidCooldowns = {
 	{'193526', 'player.time >= 121'}, 											-- TrueShot
 	{'193526', 'player.buff(187620)'},											-- TrueShot /w Ring
 	{'#109217', 'player.buff(187620)'},											-- Agi potion /w ring
-
+	{'193526'},																	-- TrueShot /w Ring
 }
 
 local Interrupts = {
@@ -150,7 +150,7 @@ local ST = {
 
 ----		Rotation		----
 	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT
-	{'185901', 	{'player.buff(223138)','target.debuff(187131)'},'target'},		-- Marked Shot	
+	--{'185901', 	{'player.buff(223138)','target.debuff(187131)'},'target'},		-- Marked Shot	
 	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
 	{'214579', 	{'target.debuff(187131).duration < 2', 'toggle.AoE'}, 'target'},-- SideWinder
 	{'185358',	{'player.buff(193534).duration < 3','talent (1,2)'}, 'target'},	-- Arcane Shot /W Steady Focus
@@ -167,12 +167,12 @@ local ST = {
 	{'19434', 	{'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	{'player.focus > 60', 'talent(2,3)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	'player.focus > 90', 'target'},									-- Aimed Shot
-	{'185901',	'player.buff(223138)', 'target'},								-- Marked Shot if all else fails
+--	{'185901',	{'player.buff(223138)','target.debuff(187131)'}, 'target'},								-- Marked Shot if all else fails
 --  187620 dps ring
 }
 
 local Keybinds = {
-		{'/focus [target=mouseover]', 'modifier.lalt'}, 						-- Mouseover Focus
+	{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
 	{'pause', 'modifier.lshift'},												-- Pause
 	{'109248', 'modifier.lcontrol', 'mouseover.ground' }, 						-- Binding Shot
 }
