@@ -1,4 +1,4 @@
-local myCR 		= 'DarkNCR'									-- Change this to something Unique
+local myCR 		= 'DNCR'									-- Change this to something Unique
 local myClass 	= 'Druid'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
 local mySpec 	= 'Guardian'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
