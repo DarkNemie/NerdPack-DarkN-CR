@@ -95,7 +95,7 @@ local ST = {
   	{ 'Blade Dance', 'modifier.multitarget' },
   
   	{ 'Chaos Strike', { 'player.fury >= 70' } },
-  	{ 'Demon's Bite', { '!talent(2, 2)', 'player.fury <= 80' } },--Not Demon Blades Talent(2,2)
+  	{ "Demon's Bite", { '!talent(2, 2)', 'player.fury <= 80' } },--Not Demon Blades Talent(2,2)
   	{ 'Throw Glaive' },
 
 }

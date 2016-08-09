@@ -115,13 +115,13 @@ local Buffs = {
 }
 
 local Oshit = {
-	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'}, 		-- Riptide
-	{'8004',  'lowest.health < 60', 'lowest'},						-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
+	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'}, 								-- Riptide
+	{'8004',  'lowest.health < 60', 'lowest'},												-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	
 }
 
 local AoEH = {
-	{'1064', {'player.buff(73920)','AoEHeal(90, 3)'}, 'lowest'},						-- Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
+	{'1064', {'player.buff(73920)','AoEHeal(90, 3)'}, 'lowest'},							-- Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
 }
 
 local STH = {
@@ -130,34 +130,32 @@ local STH = {
 
 local Lowest = {
 	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'},									--Riptide placed on as many targets as possible. Provides Tidal Waves.
-	{'8004',  {'player.buff(53390)','lowest.health < 60'}, 'lowest'},						--Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
+	{'8004',  {'player.buff(53390)','lowest.health < 35'}, 'lowest'},						--Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	{'77472', {'player.buff(53390)','lowest.health < 80'}, 'lowest'},						--Healing Wave used to heal moderate to high damage. Consumes Tidal Waves.
-	{'1064', { 'toggle.AoE',{'AoEHeal(95, 3)' ,'or','lowest.health < 98'} }, 'lowest'},		--Chain Heal
+	{'1064', { 'toggle.AoE',{'AoEHeal(99, 3)' ,'or','lowest.health < 99'} }, 'lowest'},		--Chain Heal
 }
 
 local DPS = {
 	{'188838', '!target.debuff(188838)', 'target'}, 										-- flame shock
 	{'51505', {'target.debuff(188838)','player.buff(77762)'},'target'}, 					-- lava burst
 	{'51505', {'target.debuff(188838)'},'target'},						 					-- lava burst
+	{'421','target.area(9).enemies > 3', 'target'}, 										-- Chain Lighting
 	{'403'}, 																				-- lighting bolt
-	{'421','target.area(9).enemies > 2', 'target'}, 										-- Chain Lighting
+	
 }
 
 local Tank = {
-	{'61295', 'tank.buff(Riptide).duration < 3', 'tank'},									--Riptide
-	{'77472', 'tank.health < 75', 'tank'},												--Healing Wave
-	{'8004', 'tank.health < 50', 'tank'},													--Healing Surge
+	{'61295', 'tank.buff(61295).duration < 3', 'tank'},										--Riptide
+	{'8004', 'tank.health < 60', 'tank'},													--Healing Surge
+	{'77472', 'tank.health < 75', 'tank'},													--Healing Wave
 	{{ --Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
-		{'1064', 'tank.health < 95',  'tank'}
+		{'1064', 'tank.health < 100',  'tank'}
 	}, {'toggle.AoE', 'AoEHeal(99, 2)'}}
 }
 
 
 local Keybinds = {
-	--{'98008', 'modifier.lcontrol', 'mouseover.ground' },						-- Spirit Link
-	--{'73920','modifier.lshift', 'mouseover.ground'},							-- Healing Rain
-	--{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
-	{'pause', 'modifier.lshift'},													-- Pause
+	
 	
 }
 
@@ -175,6 +173,7 @@ local outCombat = {
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
+		{'pause', 'modifier.lshift'},-- Pause
 		{myDispel, 'toggle.mydispel'},
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
