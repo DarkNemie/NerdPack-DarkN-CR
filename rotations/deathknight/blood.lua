@@ -45,7 +45,7 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local dpsCheck ={
 	-- DPS Timmer
-	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
+	{ '/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive', { 'player.time >= 300', 'toggle.dpstest' }},
 }
 
 local Survival = {
@@ -76,8 +76,8 @@ local AoE = {
 local ST = {
 	{dpsCheck},
 	--- my auto target
-	{ "/targetenemy [noexists]", { "toggle.myat", "!target.exists" } },
-	{ "/targetenemy [dead]", { "toggle.myat", "target.exists", "target.dead" } },
+	{ '/targetenemy [noexists]', { 'toggle.myat', '!target.exists' } },
+	{ '/targetenemy [dead]', { 'toggle.myat', 'target.exists', 'target.dead' } },
 
 	
 	{ '50842', '!target.debuff(55078)', 'target'},															-- BloodBoil

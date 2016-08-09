@@ -34,15 +34,21 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
+local Misc = {
+	{ 'Moonkin Form', '!player.buff(Moonkin Form)' },--Activate Moonkin Form
+	{ 'Solar Beam', 'target.interruptsAt(50)' },-- Solar Beam
+	{ 'Barkskin', 'player.health <= 50', 'player' },--Barkskin
+	{ 'Healing Touch', 'player.health <= 70' },	
+}
+
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	
+	{ 'Celestial Alignment', 'modifier.cooldowns' },	--Celestial Alignment
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -77,15 +83,28 @@ local Pet_inCombat = {
 local AoE = {
 	-- AoE Rotation goes here.
 	
+	{ 'Starsurge', { 'player.lunarpower >= 40', 'player.buff(164547).count < 3'} },--Cap Lunar Empowerment multi target
+	{ 'Starfall',  'player.lunarpower >= 60'  },
+	{ 'Sunfire',  'target.debuff(Stellar Empowerment)' },--DPS multi target when target debuffed
+	{ 'Lunar Strike',  'player.buff(164547)' },--Lunar Strike multi target with Lunar Empowerment buff
+	{ 'Solar Wrath',  'player.buff(164545).count = 3' },--Solar Strike multi target at 3 Solar Empowerment stacks
+	
 }
 
 local ST = {
 	-- Single target Rotation goes here
-	
+	{ 'Starsurge', { 'player.lunarpower >= 40', 'player.buff(164545).count < 3'} },--Cap Solar Empowerment single target
+	{ 'Moonfire',  'target.debuff(Stellar Empowerment)'  },--DPS single target when target debuffed
+	{ 'Solar Wrath',  'player.buff(164545)'  },--Solar Wrath single target with Solar Empowerment buff
+	{ 'Lunar Strike',  'player.buff(164547).count = 3' },--Lunar Strike single target at 3 Lunar Empowerment stacks
+	{ 'Moonfire', 'target.debuff(Moonfire).duration < 6.6' },--Debuff target
+	{ 'Sunfire', 'target.debuff(Sunfire).duration < 5.4' },--Debuff target
+	{ 'Solar Wrath'  },--Solar Wrath single target filler
 }
 
 local Keybinds = {
-
+	{ 'Typhoon', 'modifier.alt' },
+	{ 'Entangling Roots', 'modifier.shift' },
 	{'pause', 'modifier.alt'},													-- Pause
 	
 }
@@ -99,10 +118,11 @@ local outCombat = {
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
+		{Misc},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST}
+		{ST, 'player.area(8).enemies < 3'}
 	}, outCombat, exeOnLoad)

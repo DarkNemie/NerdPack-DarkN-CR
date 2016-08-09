@@ -36,13 +36,13 @@ local Survival = {
 }
 
 local Cooldowns = {
-    { "207349" , "player.runicpower >= 70" }, 														--Dark Artbiter with enough RP for Death Coil
-    { "49206" }, 																					--Summon Gargoyle
+    { '207349' , 'player.runicpower >= 70' }, 														--Dark Artbiter with enough RP for Death Coil
+    { '49206' }, 																					--Summon Gargoyle
 }
  
 local Healing = {
-    { "49998" , { "player.buff(101568)" , "player.health <= 80" }}, 								--Death Strike with Proc
-    { "49998", { "player.buff(101568).duration < 2" , "player.health <= 95" }}, 					--Death Strike anyway since proc is falling off.
+    { '49998' , { 'player.buff(101568)' , 'player.health <= 80' }}, 								--Death Strike with Proc
+    { '49998', { 'player.buff(101568).duration < 2' , 'player.health <= 95' }}, 					--Death Strike anyway since proc is falling off.
 }
 
 local Interrupts = {
@@ -70,19 +70,19 @@ local ST = {
 	{Healing},
 	-- SINGLE TARGET
     {{
-		{ "47541" , { "player.spell(207349).cooldown >= 3" , "player.runicpower >= 50" }}, 			--Death Coil if CD we wont have a Dark Arbiter soon.
-        { "47541" , { "player.runicpower >= 50" , "!modifier.cooldowns" }}, 						--Death Coil
-        { "47541" , "player.spell(207349).cooldown >= 165" },  						  				--Death Coil to increase the DPS from Dark Arbiter.
-	}, "talent(7, 1)" },				
-    { "47541" , "player.runicpower >= 50" }, 														--Death Coil
-    { "47541" , "player.buff(49530)"}, 																--Free Death Coil With Sudden Doom
-    { "63560", 'pet.exists' },																		--Dark Transformation
-    { "130736" , "target.debuff(194310).count >= 3" }, 												--Soul Reaper with Festering Wound (need a better check)
-    { "207311" , "target.debuff(194310).count >= 3" },										 		--Clawing Shadows
-    { "77575", "target.debuff(191587).duration <= 3" }, 											--Outbreak
-    { "85948" , "!target.debuff(194310)" }, 														--Festering Strike to gain Festering Wound
-    { "47541" , { "player.spell(207349).cooldown >= 1" , "talent(7, 1)"}}, 							--Death Coil filler 
-    { "47541" , "!modifier.cooldowns" }, 															--Death Coil filler if we dont plan to use Dark Arbiter
+		{ '47541' , { 'player.spell(207349).cooldown >= 3' , 'player.runicpower >= 50' }}, 			--Death Coil if CD we wont have a Dark Arbiter soon.
+        { '47541' , { 'player.runicpower >= 50' , '!modifier.cooldowns' }}, 						--Death Coil
+        { '47541' , 'player.spell(207349).cooldown >= 165' },  						  				--Death Coil to increase the DPS from Dark Arbiter.
+	}, 'talent(7, 1)' },				
+    { '47541' , 'player.runicpower >= 50' }, 														--Death Coil
+    { '47541' , 'player.buff(49530)'}, 																--Free Death Coil With Sudden Doom
+    { '63560', 'pet.exists' },																		--Dark Transformation
+    { '130736' , 'target.debuff(194310).count >= 3' }, 												--Soul Reaper with Festering Wound (need a better check)
+    { '207311' , 'target.debuff(194310).count >= 3' },										 		--Clawing Shadows
+    { '77575', 'target.debuff(191587).duration <= 3' }, 											--Outbreak
+    { '85948' , '!target.debuff(194310)' }, 														--Festering Strike to gain Festering Wound
+    { '47541' , { 'player.spell(207349).cooldown >= 1' , 'talent(7, 1)'}}, 							--Death Coil filler 
+    { '47541' , '!modifier.cooldowns' }, 															--Death Coil filler if we dont plan to use Dark Arbiter
 }
 
 local Keybinds = {

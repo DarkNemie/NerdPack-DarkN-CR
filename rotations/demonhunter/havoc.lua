@@ -31,7 +31,10 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-
+	-- Defence
+  	{ 'Netherwalk', { 'talent(4,1)',  'modifier.rcontrol' } },--104 Talent(4,1)
+  	{ 'Blur', { 'modifier.rcontrol' } },--104
+  	{ 'Chaos Nova', 'modifier.ralt' },
 
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
@@ -40,7 +43,8 @@ local Survival = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	
+	{ 'Metamorphosis', 'modifier.cooldowns' },
+  	{ 'Darkness', 'modifier.cooldowns' },
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -49,33 +53,22 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	
+	{ 'Consume Magic', 'modifier.interrupts' },
 }
 
 local Buffs = {
-
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
 
 }
 
 local Pet = {
-
 	--Put skills in here that apply to your pet needs while out of combat! 
-	--[[
-	Here is an example from Hunter CR.
-	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
-  	{{ 																			-- Pet Dead
-		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
-		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
-	]]--
+
 
 }
 
 local Pet_inCombat = {
-
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
 
 }
@@ -85,11 +78,29 @@ local AoE = {
 }
 
 local ST = {
+	--{ 'Anguish' },--Artifact
+  	--{ 'Felblade', 'talent(3,1)' },--102 Talent(3,1)
+  	--{ 'Fel Eruption', 'talent(5,2)' },--106 Talent(5,2)
+  	--{ 'Nemesis', 'talent(5,3)' },--106 Talent(5,3)
+  	--{ 'Chaos Blades', 'talent(7,1)' },--110 Talent(7,1)
+  	--{ 'Fel Barrage', 'talent(7,2)' },--110 Talent(7,2)
+  
+  	{ 'Vengeful Retreat', { 'talent(2, 1)', 'player.fury <= 85' } },--Prepared Talent(2,1)
+  	{ 'Fel Rush', { 'talent(1, 1)', 'player.fury <= 70' } },--1st time Fel Mastery Talent(1,1)
+  	{ 'Fel Rush' },--2nd time
+
+  	{ 'Eye Beam', 'modifier.multitarget' },
+  	{ 'Annihilation', { 'player.buff(Metamorphosis)' } },--Metamorphosis Buff
+  	{ 'Chaos Strike', { 'talent(1, 2)', 'modifier.multitarget' } },--Chaos Cleave Talent(1,2)
+  	{ 'Blade Dance', 'modifier.multitarget' },
+  
+  	{ 'Chaos Strike', { 'player.fury >= 70' } },
+  	{ 'Demon's Bite', { '!talent(2, 2)', 'player.fury <= 80' } },--Not Demon Blades Talent(2,2)
+  	{ 'Throw Glaive' },
 
 }
 
 local Keybinds = {
-
 	{'pause', 'modifier.alt'},													-- Pause
 	
 }

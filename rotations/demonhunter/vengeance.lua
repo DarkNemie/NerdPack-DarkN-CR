@@ -31,8 +31,9 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-
-
+  	{ 'Demon Spikes', { '!player.buff(Demon Spikes)', 'player.health <= 85' } },
+  	{ 'Empower Wards', 'player.health <= 75' },
+  	{ 'Fiery Brand', 'player.health <= 65' },
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -40,7 +41,9 @@ local Survival = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	
+	{ 'Infernal Strike', { 'modifier.rcontrol', 'modifier.cooldowns' } },
+  	{ 'Metamorphosis', 'modifier.cooldowns' },
+  	{ 'Darkness', 'modifier.cooldowns' },
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -49,13 +52,11 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	
+	{ 'Consume Magic', 'modifier.interrupts' },
 }
 
 local Buffs = {
-
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
 
 }
@@ -85,13 +86,30 @@ local AoE = {
 }
 
 local ST = {
-
+  --{ 'Soul Carver' },--Artifact
+  --{ 'Felblade', 'talent(3,1)' },--102 Talent(3,1)
+  --{ 'Fracture', 'talent(4,2)' },--104 Talent(4,2)
+  --{ 'Fel Eruption', 'talent(5,2)' },--106 Talent(5,2)
+  --{ 'Fel Devastation', 'talent(6,1)' },--108 Talent(6,1)
+  --{ 'Spirit Bomb', 'talent(6,3)' },--108 Talent(6,3)
+  --{ 'Nether Bond', 'talent(7,2)' },--110 Talent(7,2)
+  --{ 'Soul Barrier', 'talent(7,3)' },--110 Talent(7,3)
+  
+  { 'Soul Cleave', 'player.pain >= 60' },
+  { 'Immolation Aura' },
+  { 'Sigil of Flame', 'modifier.multitarget' },
+  { 'Fiery Brand', { 'talent(2,3)', 'modifier.multitarget' } },
+  { 'Shear' },
 }
 
 local Keybinds = {
-
 	{'pause', 'modifier.alt'},													-- Pause
-	
+
+}
+
+local Taunt = {
+	{ 'Throw Glaive', 'modifier.ralt' },--Taunt
+	{ 'Torment', 'modifier.rshift' },--Taunt
 }
 
 local outCombat = {

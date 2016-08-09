@@ -21,6 +21,7 @@ local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	DarkNCR.ClassSetting(mKey)
+	
 end
 ----------	END of do not change area ----------
 
