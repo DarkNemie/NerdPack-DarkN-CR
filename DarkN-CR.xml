@@ -35,6 +35,7 @@
   <Script file="rotations\mage\arcane.lua" />
   <Script file="rotations\mage\frost.lua" />
   <Script file="rotations\mage\fire.lua" />
+  <Script file="rotations\shaman\base_shaman.lua" />
   <Script file="rotations\shaman\resto.lua" />
   <Script file="rotations\shaman\ele.lua" />
   <Script file="rotations\shaman\enh.lua" />
