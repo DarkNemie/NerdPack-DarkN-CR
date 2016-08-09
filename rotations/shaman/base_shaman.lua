@@ -1,7 +1,7 @@
 -- Class ID 7 - The Naturalist
 local myCR 		= 'DNCR'									-- Change this to something Unique
 local myClass 	= 'Shaman'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
-local mySpec 	= '1 to 10'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
+local mySpec 	= '1to10'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR  ..myClass	..mySpec				-- Do not change unless you know what your doing
 local Sidnum 	= 7	                -- This is the class ID for Shaman
