@@ -42,6 +42,24 @@ end
 local healthstn = function() 
 	return E('player.health <= ' .. F('Healthstone')) 
 end
+
+----------------------------------------------------------
+--Test--   these are called via /run DarkNCR.HR() macros ingame
+DarkNCR.HR = function()
+	NeP.Engine.CastGround(73920, mouseover) 	-- mouseover healing Rain
+end
+DarkNCR.SL = function()
+	NeP.Engine.CastGround(98008, mouseover) 	-- Spirit Link
+end
+DarkNCR.ES = function() 
+	NeP.Engine.CastGround(198838, mouseover) 	-- Earthen Sheild
+end
+DarkNCR.LST = function()
+	NeP.Engine.CastGround('Lightning Surge Totem', mouseover) 	-- Lighting surge
+end
+-- End Test section , IT IS RECOMENDED NOT TO USE THIS!!
+----------------------------------------------------------
+
 --------------- END of do not change area ----------------
 --
 --	Notes:
@@ -53,15 +71,13 @@ local Survival = {
 		'!player.buff(53390)', -- Tidal Waves
 		'!player.buff(61295)', -- Riptide
 		'player.health <= 60',
-		'!lowest.health <= 50' -- Dont use it on sealf if someone needs it more!
+		'!lowest.health <= 50' -- Dont use it on self if someone needs it more!
 	}, 'player'},
 	{'59547', 'player.health <= 70', 'player'},		 							-- Gift of the Naaru // Draenei Racial
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'108271', 'player.health <= 50'},											-- Astral Shift
-	--{'98008', 'player.health <= 50', 'mouseover.ground'},  						-- Spirit Link
-	{'77130', 'dispellAll(77130)'},      --Disspell
 }
 
 local myDispel = {
@@ -69,9 +85,9 @@ local myDispel = {
 }
 
 local Cooldowns = {
-	{'5394',	{'!totem(157153)','!totem(108280)','lowest.health < 95'}},  	-- healing stream
-	{'157153',	{'!totem(5394)','!totem(108280)','lowest.health < 95'}},  		-- Cloud Burst
-	{'108280',	{'!totem(157153)','!totem(5394)','lowest.health < 95'}},		-- Healing Tide
+	{'5394',	{'!totem(157153)','AoEHeal(100, 3)'}},  			-- healing stream
+	{'157153',	{'!player.buff(157504)','AoEHeal(100, 3)'}},  		-- Cloud Burst
+	{'108280', 'player.buff(98007)'},								-- Healing Tide / W Spirit Link
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -99,19 +115,13 @@ local Buffs = {
 }
 
 local Oshit = {
-	{'5394'},  													-- healing stream
-	{'157153'},  												-- Cloud Burst
-	{'108280'},													-- Healing Tide
-	{'79206'},													-- Spiritwalkers Grace
-	--{'#86125'},													-- Kafa Press for some reason no tracking cooldowns
 	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'}, 		-- Riptide
 	{'8004',  'lowest.health < 60', 'lowest'},						-- Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	
 }
 
 local AoEH = {
-	{'73920',{'!player.buff(73920)','player.area(25).friendly >= 2','lowest.health < 99'},'mouseover.ground'},				-- Healing Rain
-	{'1064', {'player.buff(73920)','player.area(25).friendly >= 2','lowest.health < 95'}, 'lowest'},						-- Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
+	{'1064', {'player.buff(73920)','AoEHeal(90, 3)'}, 'lowest'},						-- Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
 }
 
 local STH = {
@@ -119,16 +129,13 @@ local STH = {
 }
 
 local Lowest = {
-	{'61295', {'!player.buff(53390)','lowest.health < 100','lowest.buff(61295).duration < 3'}, 'lowest'},						--Riptide placed on as many targets as possible. Provides Tidal Waves.
-	{'1064',  {'!player.buff(53390)','!lowest.health <= 61','lowest.health < 95'}, 'lowest'},					-- Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
 	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'},									--Riptide placed on as many targets as possible. Provides Tidal Waves.
 	{'8004',  {'player.buff(53390)','lowest.health < 60'}, 'lowest'},						--Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
-	{'77472', {'player.buff(53390)','lowest.health < 100'}, 'lowest'},						--Healing Wave used to heal moderate to high damage. Consumes Tidal Waves.
-	{'77472', 'lowest.health < 100', 'lowest'},												--Healing Wave
+	{'77472', {'player.buff(53390)','lowest.health < 80'}, 'lowest'},						--Healing Wave used to heal moderate to high damage. Consumes Tidal Waves.
+	{'1064', { 'toggle.AoE',{'AoEHeal(95, 3)' ,'or','lowest.health < 98'} }, 'lowest'},		--Chain Heal
 }
 
 local DPS = {
-
 	{'188838', '!target.debuff(188838)', 'target'}, 										-- flame shock
 	{'51505', {'target.debuff(188838)','player.buff(77762)'},'target'}, 					-- lava burst
 	{'51505', {'target.debuff(188838)'},'target'},						 					-- lava burst
@@ -136,24 +143,34 @@ local DPS = {
 	{'421','target.area(9).enemies > 2', 'target'}, 										-- Chain Lighting
 }
 
+local Tank = {
+	{'61295', 'tank.buff(Riptide).duration < 3', 'tank'},									--Riptide
+	{'77472', 'tank.health < 75', 'tank'},												--Healing Wave
+	{'8004', 'tank.health < 50', 'tank'},													--Healing Surge
+	{{ --Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
+		{'1064', 'tank.health < 95',  'tank'}
+	}, {'toggle.AoE', 'AoEHeal(99, 2)'}}
+}
+
+
 local Keybinds = {
-	{'98008', 'modifier.lcontrol', 'mouseover.ground' },						-- Spirit Link
-	{'73920','modifier.lshift', 'mouseover.ground'},							-- Healing Rain
-	{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
-	--{'pause', 'modifier.alt'},													-- Pause
+	--{'98008', 'modifier.lcontrol', 'mouseover.ground' },						-- Spirit Link
+	--{'73920','modifier.lshift', 'mouseover.ground'},							-- Healing Rain
+	--{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
+	{'pause', 'modifier.lshift'},													-- Pause
 	
 }
 
 local occRess = {
-	--{' res spellID', 'friendly.dead','friendly'},
+	{'212048', 'friend.dead'},
 }
 
 local outCombat = {
+	{occRess},
 	{Keybinds},
 	{Buffs},
-	{'212048', {'friendly.dead','toggle.Raidme'}},
 	{Survival, 'player.health < 100'},
-	{'1064', 'lowest.health < 98', 'lowest'},
+	{'1064', 'AoEHeal(90, 3)', 'lowest'},
 }
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
@@ -163,9 +180,10 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival},
 		{Cooldowns,'modifier.cooldowns'},
-		{Oshit, {'lowest.health < 30','toggle.Raidme'},'lowest'},
-		{AoEH,{{'lowest.health > 60','player.mana > 50'},'toggle.AoE'}},
-		{Lowest, {'lowest.health < 100'}},
-		{STH},
-		{DPS,'toggle.healdps'},
+		{Tank, {'tank.exists', 'tank.health < 100'}},
+		--{Oshit,'lowest.health < 30','lowest'},
+		--{AoEH,'player.mana > 10','toggle.AoE'},
+		{Lowest, 'lowest.health < 100','lowest'},
+		--{STH},
+		{DPS,{'toggle.healdps','target.range < 30', 'target.infront'}},
 	}, outCombat, exeOnLoad)

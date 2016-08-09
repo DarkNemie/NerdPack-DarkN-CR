@@ -34,15 +34,18 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-
+ 	{ 'Earth Elemental', 'player.health <= 55' },
+  	{ 'Astral Shift', 'player.health <= 75' },
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	{ 'Healing Surge', 'player.health < 70' },
 }
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	
+
+  	{ 'Elemental Mastery', 'modifier.cooldowns' },
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -51,25 +54,21 @@ local Cooldowns = {
 }
 
 local Interrupts = {
-	
-	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	
+		-- Place skills that interrupt casts below:		Example: {'skillid'},
+	{ 'Wind Shear'},
 }
 
 local Buffs = {
-
 	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
 
 }
 
 local Pet = {
-
 	--Put skills in here that apply to your pet needs, while out of combat! 
 
 }
 
 local Pet_inCombat = {
-
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
 
 }
@@ -81,12 +80,28 @@ local AoE = {
 
 local ST = {
 	-- Single target Rotation goes here
-	
+	{ 'Totem Mastery', 'player.totem.duration < 10' },
+  	{ 'Flame Shock', 'target.debuff(Flame Shock).duration <= 3' },
+  	{ 'Earth Shock', { 'player.maelstorm > 92', '!toggle.AoE' } },
+
+  	{ 'Lava Burst', 'player.buff(Lava Surge)' },
+  	{ 'Lava Burst' },
+  
+  	{ 'Flame Shock', { 'target.debuff(Flame Shock).duration < 10.5', 'player.maelstorm >= 20' } },
+ 
+  	{ 'Earthquake Totem', 'toggle.AoE', 'ground' },
+  	{ 'Earth Shock', { 'player.maelstorm > 86', '!toggle.AoE' } },
+
+  	{ 'Chain Lightning', 'toggle.AoE' },
+  	{ 'Lightning Bolt', '!toggle.AoE' },
+
 }
 
 local Keybinds = {
-
-	{'pause', 'modifier.alt'},													-- Pause
+	{ 'Bloodlust', 'modifier.ralt' },
+  	{ 'Fire Elemental',  'modifier.rcontrol' },
+  	{ 'Ascendance', { 'modifier.rshift', '!player.buff(Ascendance)' } },
+	{'pause', 'modifier.lalt'},													-- Pause
 	
 }
 

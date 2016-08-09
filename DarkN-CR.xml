@@ -5,8 +5,7 @@
   <Script file="lib\custom_functions_lib.lua" />
   <Script file="lib\specid_lib.lua" />
   <Script file="lib\classmenu_lib.lua" />
-  <Script file="lib\sbtest.lua" />
-  
+
   <!-- Rotations -->
   <Script file="rotations\paladin\retribution.lua" />
   <Script file="rotations\paladin\protection.lua" />
