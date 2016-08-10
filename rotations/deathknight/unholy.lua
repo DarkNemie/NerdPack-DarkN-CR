@@ -14,12 +14,13 @@ local config 	= {
 	height 	 = 500,
 	config 	 = DarkNCR.menuConfig[Sidnum]
 }
-NeP.Interface.buildGUI(config)
+
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 end
 ----------	END of do not change area ----------

@@ -14,12 +14,13 @@ local config 	= {
 	height 	 = 500,
 	config 	 = DarkNCR.menuConfig[Sidnum]
 }
-NeP.Interface.buildGUI(config)
+
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 	NeP.Interface.CreateToggle('md', 'Interface\\Icons\\ability_hunter_misdirection', 'Auto Misdirect', 'Automatially Misdirect when necessary')
 	NeP.Interface.CreateToggle('ressPet', 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 'Pet Ress', 'Automatically ress your pet when it dies.')

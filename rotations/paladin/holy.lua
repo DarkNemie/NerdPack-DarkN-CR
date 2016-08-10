@@ -29,12 +29,13 @@ local config 	= {
 		}
 }
 
-NeP.Interface.buildGUI(config)
+
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 end
 

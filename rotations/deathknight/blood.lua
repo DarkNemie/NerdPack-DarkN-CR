@@ -14,12 +14,13 @@ local config 	= {
 	height 	 = 500,
 	config 	 = DarkNCR.menuConfig[Sidnum]
 }
-NeP.Interface.buildGUI(config)
+
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 	NeP.Interface.CreateToggle('saveDS','Interface\\Icons\\spell_deathknight_butcher2.png','Save a Death Strike','Saving Runic.')
 	NeP.Interface.CreateToggle('dpstest', 'Interface\\Icons\\inv_misc_pocketwatch_01', 'DPS Test', 'Stop combat after 5 minutes in order to do a controlled DPS test')

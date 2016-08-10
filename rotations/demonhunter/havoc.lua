@@ -14,12 +14,13 @@ local config 	= {
 	height 	 = 500,
 	config 	 = DarkNCR.menuConfig[Sidnum]
 }
-NeP.Interface.buildGUI(config)
+
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 end
 
@@ -31,11 +32,8 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-	-- Defence
-  	{ 'Netherwalk', { 'talent(4,1)',  'modifier.rcontrol' } },--104 Talent(4,1)
-  	{ 'Blur', { 'modifier.rcontrol' } },--104
-  	{ 'Chaos Nova', 'modifier.ralt' },
-
+	--{ 'Darkness', },
+	--{ 'Darkness', 'modifier.cooldowns' },
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -43,18 +41,18 @@ local Survival = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	{ 'Metamorphosis', 'modifier.cooldowns' },
-  	{ 'Darkness', 'modifier.cooldowns' },
+	{ 'Metamorphosis', nil ,'mouseover.ground' },
+  	
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+--	{'#trinket1', (function() return F('trink1') end)},
+--	{'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	{ 'Consume Magic', 'modifier.interrupts' },
+	{ 'Consume Magic'},
 }
 
 local Buffs = {
@@ -70,11 +68,14 @@ local Pet = {
 
 local Pet_inCombat = {
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
-
+	
 }
 
 local AoE = {
-
+	{ 'Eye Beam' },
+	{ 'Chaos Strike', 'talent(1, 2)' },			--Chaos Cleave Talent(1,2)
+  	{ 'Blade Dance' },
+	{ 'Throw Glaive' },
 }
 
 local ST = {
@@ -85,24 +86,24 @@ local ST = {
   	--{ 'Chaos Blades', 'talent(7,1)' },--110 Talent(7,1)
   	--{ 'Fel Barrage', 'talent(7,2)' },--110 Talent(7,2)
   
-  	{ 'Vengeful Retreat', { 'talent(2, 1)', 'player.fury <= 85' } },--Prepared Talent(2,1)
-  	{ 'Fel Rush', { 'talent(1, 1)', 'player.fury <= 70' } },--1st time Fel Mastery Talent(1,1)
-  	{ 'Fel Rush' },--2nd time
+  	--{ 'Vengeful Retreat', { 'talent(2, 1)', 'player.fury <= 85' } },--Prepared Talent(2,1)
+  	--{ 'Fel Rush', { 'talent(1, 1)', 'player.fury <= 70' } },--1st time Fel Mastery Talent(1,1)
+  	--{ 'Fel Rush' },--2nd time
 
-  	{ 'Eye Beam', 'modifier.multitarget' },
   	{ 'Annihilation', { 'player.buff(Metamorphosis)' } },--Metamorphosis Buff
-  	{ 'Chaos Strike', { 'talent(1, 2)', 'modifier.multitarget' } },--Chaos Cleave Talent(1,2)
-  	{ 'Blade Dance', 'modifier.multitarget' },
-  
   	{ 'Chaos Strike', { 'player.fury >= 70' } },
   	{ "Demon's Bite", { '!talent(2, 2)', 'player.fury <= 80' } },--Not Demon Blades Talent(2,2)
   	{ 'Throw Glaive' },
+	{ 'Blade Dance',{'player.fury >= 70' ,'toggle.AoE'}, 'target' },
 
 }
 
 local Keybinds = {
 	{'pause', 'modifier.alt'},													-- Pause
-	
+		-- Defence
+  	--{ 'Netherwalk', { 'talent(4,1)',  'modifier.rcontrol' } },--104 Talent(4,1)
+  	--{ 'Blur', { 'modifier.rcontrol' } },--104
+  	{ 'Chaos Nova', 'modifier.lshift' },
 }
 
 local outCombat = {

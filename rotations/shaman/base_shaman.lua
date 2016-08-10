@@ -27,15 +27,15 @@ local config 	= {
 			{type = 'header', text = 'Spec Specific Settings', align = 'center'},
     }         --DarkNCR.menuConfig[Sidnum]  --this is used for unified class menus
 }
-NeP.Interface.buildGUI(config)
-
 local E = DarkNCR.dynEval
 local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
+	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
 end
+
 
 local healthstn = function() 
 	return E('player.health <= ' .. F('Healthstone')) 
