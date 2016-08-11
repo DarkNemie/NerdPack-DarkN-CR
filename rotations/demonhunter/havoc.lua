@@ -41,7 +41,7 @@ local Survival = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	{ 'Metamorphosis', nil ,'mouseover.ground' },
+	
   	
 	{'Lifeblood'},
 	{'Berserking'},
@@ -73,7 +73,7 @@ local Pet_inCombat = {
 
 local AoE = {
 	{ 'Eye Beam' },
-	{ 'Chaos Strike', 'talent(1, 2)' },			--Chaos Cleave Talent(1,2)
+	{ 'Chaos Strike', 'talent(1, 2)' },											--Chaos Cleave Talent(1,2)
   	{ 'Blade Dance' },
 	{ 'Throw Glaive' },
 }
@@ -86,24 +86,26 @@ local ST = {
   	--{ 'Chaos Blades', 'talent(7,1)' },--110 Talent(7,1)
   	--{ 'Fel Barrage', 'talent(7,2)' },--110 Talent(7,2)
   
-  	--{ 'Vengeful Retreat', { 'talent(2, 1)', 'player.fury <= 85' } },--Prepared Talent(2,1)
+  	{ 'Vengeful Retreat', 'player.fury >= 80' },
   	--{ 'Fel Rush', { 'talent(1, 1)', 'player.fury <= 70' } },--1st time Fel Mastery Talent(1,1)
   	--{ 'Fel Rush' },--2nd time
 
-  	{ 'Annihilation', { 'player.buff(Metamorphosis)' } },--Metamorphosis Buff
+  	{ 'Annihilation', { 'player.buff(Metamorphosis)' } },						--Metamorphosis Buff
   	{ 'Chaos Strike', { 'player.fury >= 70' } },
-  	{ "Demon's Bite", { '!talent(2, 2)', 'player.fury <= 80' } },--Not Demon Blades Talent(2,2)
+  	{ '162243', { '!talent(2, 2)', 'player.fury <= 80' } },						--Not Demon Blades Talent(2,2)
   	{ 'Throw Glaive' },
 	{ 'Blade Dance',{'player.fury >= 70' ,'toggle.AoE'}, 'target' },
 
 }
 
 local Keybinds = {
+	{ '!Metamorphosis', 'modifier.lshift' ,'mouseover.ground' },
 	{'pause', 'modifier.alt'},													-- Pause
+	{ '!Chaos Nova', 'modifier.lcontrol' },
 		-- Defence
   	--{ 'Netherwalk', { 'talent(4,1)',  'modifier.rcontrol' } },--104 Talent(4,1)
   	--{ 'Blur', { 'modifier.rcontrol' } },--104
-  	{ 'Chaos Nova', 'modifier.lshift' },
+  	
 }
 
 local outCombat = {
@@ -115,10 +117,10 @@ local outCombat = {
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
-		{Interrupts, 'target.interruptAt(15)'},
+		{Interrupts, 'target.interruptAt(15)', 'target.infront'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST}
+		{AoE, {'player.area(8).enemies >= 2','toggle.AoE'}, 'target.infront'},
+		{ST,'target.range < 40', 'target.infront'}
 	}, outCombat, exeOnLoad)
