@@ -46,8 +46,8 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
---	{'#trinket1', (function() return F('trink1') end)},
---	{'#trinket2', (function() return F('trink2') end)},
+	{'#trinket1', (function() return F('trink1') end)},
+	{'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
@@ -70,32 +70,64 @@ local Pet_inCombat = {
 	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
 	
 }
-
+--[[ --------------- Currently not using this.
 local AoE = {
-	{ 'Eye Beam' },
-	{ 'Chaos Strike', 'talent(1, 2)' },											--Chaos Cleave Talent(1,2)
-  	{ 'Blade Dance' },
-	{ 'Throw Glaive' },
+	{ 'Eye Beam',{ 
+		  'target.range <= 8', 
+		  'player.area(8).enemies >= 2'}, 'target' },
+	{ 'Chaos Strike', { 
+		  'target.range <= 8',
+		  'talent(1, 2)',
+		  'player.area(8).enemies >= 2',
+		  'toggle.AoE' 
+		}, 'target' }, 											--Chaos Cleave Talent(1,2)
+  	{ 'Blade Dance', {
+		  {'player.fury >= 70' , 'target.range <= 8'}, 
+		  {'player.area(8).enemies >= 2','toggle.AoE'},
+		}, 'target' },
+	{ 'Throw Glaive', {'target.range >= 15','target.area(8).enemies >= 2'}, 'target' },
 }
+]]--
+--[[------------ to be added later
 
-local ST = {
 	--{ 'Anguish' },--Artifact
   	--{ 'Felblade', 'talent(3,1)' },--102 Talent(3,1)
   	--{ 'Fel Eruption', 'talent(5,2)' },--106 Talent(5,2)
   	--{ 'Nemesis', 'talent(5,3)' },--106 Talent(5,3)
   	--{ 'Chaos Blades', 'talent(7,1)' },--110 Talent(7,1)
   	--{ 'Fel Barrage', 'talent(7,2)' },--110 Talent(7,2)
-  
-  	{ 'Vengeful Retreat', 'player.fury >= 80' },
-  	--{ 'Fel Rush', { 'talent(1, 1)', 'player.fury <= 70' } },--1st time Fel Mastery Talent(1,1)
-  	--{ 'Fel Rush' },--2nd time
+	--{ 'Fel Rush' },--2nd time
+	-- {'Death Sweep'}
 
-  	{ 'Annihilation', { 'player.buff(Metamorphosis)' } },						--Metamorphosis Buff
-  	{ 'Chaos Strike', { 'player.fury >= 70' } },
-  	{ '162243', { '!talent(2, 2)', 'player.fury <= 80' } },						--Not Demon Blades Talent(2,2)
-  	{ 'Throw Glaive' },
-	{ 'Blade Dance',{'player.fury >= 70' ,'toggle.AoE'}, 'target' },
+]]--
 
+local ST = {
+	{ 'Eye Beam',{ 
+		  'target.range <= 8', 
+		  'player.area(10).enemies >= 2'}, 'target' },
+	{ 'Vengeful Retreat', {
+		'!last.spell(188499)','!last.spell(210152)', 
+		'player.fury <= 45', 'target.range <= 6',
+		'toggle.AoE','!toggle.Raidme'},'target' },
+	{'Throw Glaive', 'target.range >= 15','target'},												-- glave toss out of melee range
+  	{ 'Fel Rush', {
+		'target.range >= 10', 'target.range <= 25',
+		'toggle.AoE','!toggle.Raidme'  
+		} , 'target'},
+																				--1st time Fel rush after vengeful Retreat
+	{ 'Blade Dance', {
+		  'player.fury >= 40' , 'target.range <= 10', 
+		  'player.area(10).enemies >= 2','toggle.AoE','!toggle.Raidme'
+		}, 'target' },
+	{ 'Death Sweep', {																		-- Death Seep with Metamorphosis
+		  'player.buff(Metamorphosis)',
+		  'player.fury >= 70' , 'target.range <= 8', 
+		  'player.area(10).enemies >= 2','toggle.AoE',
+		}, 'target' },
+  	{ 'Annihilation', { 'player.buff(Metamorphosis)', 'target.range <= 6' }, 'target' },		--Metamorphosis Buff
+  	{ 'Chaos Strike', { 'player.fury >= 45','target.range <= 6' }, 'target' },									--Chaos Strike
+	{ '162243', { '!talent(2, 2)', 'player.fury <= 75', 'target.range <= 6' }, 'target' },	--Demon bite Not Demon Blades Talent(2,2)
+  	{ 'Throw Glaive' },																		--cd filler
 }
 
 local Keybinds = {
@@ -121,6 +153,6 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 2','toggle.AoE'}, 'target.infront'},
-		{ST,'target.range < 40', 'target.infront'}
+		--{AoE, 'player.infront' },
+		{ST, 'player.infront'},
 	}, outCombat, exeOnLoad)

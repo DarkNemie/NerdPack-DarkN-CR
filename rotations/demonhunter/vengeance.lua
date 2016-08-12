@@ -42,19 +42,18 @@ local Survival = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	{ 'Infernal Strike', { 'modifier.rcontrol', 'modifier.cooldowns' } },
-  	{ 'Metamorphosis', 'modifier.cooldowns' },
-  	{ 'Darkness', 'modifier.cooldowns' },
+	{ 'Metamorphosis' },
+  	{ 'Darkness' },
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+	--{'#trinket1', (function() return F('trink1') end)},
+	--{'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
 	-- Place skills that interrupt casts below:		Example: {'skillid'},
-	{ 'Consume Magic', 'modifier.interrupts' },
+	{ 'Consume Magic'},
 }
 
 local Buffs = {
@@ -95,22 +94,23 @@ local ST = {
   --{ 'Spirit Bomb', 'talent(6,3)' },--108 Talent(6,3)
   --{ 'Nether Bond', 'talent(7,2)' },--110 Talent(7,2)
   --{ 'Soul Barrier', 'talent(7,3)' },--110 Talent(7,3)
-  
-  { 'Soul Cleave', 'player.pain >= 60' },
+  {'Throw Glaive', 'target.range >= 6', 'target.range <= 30','target'},
+  { 'Soul Cleave', 'player.pain >= 50' },
   { 'Immolation Aura' },
-  { 'Sigil of Flame', 'modifier.multitarget' },
-  { 'Fiery Brand', { 'talent(2,3)', 'modifier.multitarget' } },
+  { 'Sigil of Flame' },
+  { 'Fiery Brand',  'talent(2,3)' },
   { 'Shear' },
 }
 
 local Keybinds = {
 	{'pause', 'modifier.alt'},													-- Pause
+	{ 'Infernal Strike',  'modifier.lshift', 'mouseover.ground'  },
 
 }
 
 local Taunt = {
-	{ 'Throw Glaive', 'modifier.ralt' },--Taunt
-	{ 'Torment', 'modifier.rshift' },--Taunt
+--	{ 'Throw Glaive', 'modifier.lshift' },--Taunt
+	--{ 'Torment', 'modifier.lcontrol' },--Taunt
 }
 
 local outCombat = {
