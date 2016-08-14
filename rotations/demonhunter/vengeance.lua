@@ -28,61 +28,70 @@ local healthstn = function()
 	return E('player.health <= ' .. F('Healthstone')) 
 end
 --------------- END of do not change area ----------------
-
+----------------------------------------------------------
+--Test--   these are called via /run DarkNCR.HR() macros ingame
+DarkNCR.IStrike = function()
+	NeP.Engine.forcePause = true,
+	NeP.Engine.clear_Cast_Queue()
+	NeP.Engine.Cast_Queue(189110, 'mouseover.ground') 	-- mouseover Infernal Strike
+	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	NeP.Engine.forcePause = false
+end
+DarkNCR.SFlame = function()
+	NeP.Engine.forcePause = true,
+	NeP.Engine.clear_Cast_Queue()
+	NeP.Engine.Cast_Queue(204596, 'mouseover.ground') 	-- Sigil Flame
+	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	NeP.Engine.forcePause = false
+end
+DarkNCR.SMisery = function()
+	NeP.Engine.forcePause = true,
+	NeP.Engine.clear_Cast_Queue()
+	NeP.Engine.Cast_Queue(207684, 'mouseover.ground') 	-- Sigil Misery
+	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	NeP.Engine.forcePause = false
+end
+DarkNCR.SSilent = function()
+	NeP.Engine.forcePause = true,
+	NeP.Engine.clear_Cast_Queue()
+	NeP.Engine.Cast_Queue(202137, 'mouseover.ground') 	-- Sigil Silent
+	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	NeP.Engine.forcePause = false
+end
+-- End Test section , IT IS RECOMENDED NOT TO USE THIS!!
+----------------------------------------------------------
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
-  	{ 'Demon Spikes', { '!player.buff(Demon Spikes)', 'player.health <= 85' } },
-  	{ 'Empower Wards', 'player.health <= 75' },
-  	{ 'Fiery Brand', 'player.health <= 65' },
-	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+  	{ 'Demon Spikes', { '!player.buff(Demon Spikes)', 'player.health <= 95' } },
+  	{ 'Fiery Brand', 'player.health <= 75' },
+	{'#109223', 'player.health < 65'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	--Put items you want used on CD below:     Example: {'skillid'},  
-	{ 'Metamorphosis' },
-  	{ 'Darkness' },
+	{'Metamorphosis'},
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	--{'#trinket1', (function() return F('trink1') end)},
-	--{'#trinket2', (function() return F('trink2') end)},
+  --{'#trinket1', (function() return F('trink1') end)},
+  --{'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
-	-- Place skills that interrupt casts below:		Example: {'skillid'},
 	{ 'Consume Magic'},
 }
 
 local Buffs = {
-	--Put buffs that are applied out of combat below:     Example: {'skillid'}, 
-
 }
 
 local Pet = {
-
-	--Put skills in here that apply to your pet needs while out of combat! 
-	--[[
-	Here is an example from Hunter CR.
-	{'/cast Call Pet 1', '!pet.exists'},										-- Summon Pet
-  	{{ 																			-- Pet Dead
-		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
-		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
-	]]--
-
 }
 
 local Pet_inCombat = {
-
-	-- Place your pets combat rotation here if it has one! 	Example: {'skillID'},
-
 }
 
 local AoE = {
-
 }
 
 local ST = {
@@ -94,12 +103,12 @@ local ST = {
   --{ 'Spirit Bomb', 'talent(6,3)' },--108 Talent(6,3)
   --{ 'Nether Bond', 'talent(7,2)' },--110 Talent(7,2)
   --{ 'Soul Barrier', 'talent(7,3)' },--110 Talent(7,3)
-  {'Throw Glaive', 'target.range >= 6', 'target.range <= 30','target'},
-  { 'Soul Cleave', 'player.pain >= 50' },
+  {'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},
+  { 'Soul Cleave', {'player.pain >= 50','target.range <= 6'}, 'target' },
   { 'Immolation Aura' },
-  { 'Sigil of Flame' },
+  { 'Sigil of Flame', '!toggle.Raidme' , 'mouseover.ground' },
   { 'Fiery Brand',  'talent(2,3)' },
-  { 'Shear' },
+  { 'Shear','target.range <= 6', 'target'},
 }
 
 local Keybinds = {
@@ -109,8 +118,6 @@ local Keybinds = {
 }
 
 local Taunt = {
---	{ 'Throw Glaive', 'modifier.lshift' },--Taunt
-	--{ 'Torment', 'modifier.lcontrol' },--Taunt
 }
 
 local outCombat = {
@@ -122,7 +129,7 @@ local outCombat = {
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
-		{Interrupts, 'target.interruptAt(15)'},
+		{Interrupts, 'target.interruptAt(15)', 'target.infront'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},

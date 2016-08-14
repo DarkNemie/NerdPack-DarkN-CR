@@ -1,0 +1,6 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "lualinter.enable": true,
+    "lualinter.warnOnSave": false,
+    "lualinter.interpreter": "luac"
+}
