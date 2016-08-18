@@ -29,57 +29,88 @@ local healthstn = function()
 end
 --------------- END of do not change area ----------------
 ----------------------------------------------------------
---Test--   these are called via /run DarkNCR.HR() macros ingame
+--Test--   these are called via /run DarkNCR.IStrike() macro ingame
 DarkNCR.IStrike = function()
 	NeP.Engine.forcePause = true,
 	NeP.Engine.clear_Cast_Queue()
-	NeP.Engine.Cast_Queue(189110, 'mouseover.ground') 	-- mouseover Infernal Strike
+	NeP.Engine.Cast_Queue('189110', 'mouseover.ground') 	-- mouseover Infernal Strike
 	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SFlame = function()
 	NeP.Engine.forcePause = true,
 	NeP.Engine.clear_Cast_Queue()
-	NeP.Engine.Cast_Queue(204596, 'mouseover.ground') 	-- Sigil Flame
+	NeP.Engine.Cast_Queue('204596', 'mouseover.ground') 	-- Sigil Flame
 	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SMisery = function()
 	NeP.Engine.forcePause = true,
 	NeP.Engine.clear_Cast_Queue()
-	NeP.Engine.Cast_Queue(207684, 'mouseover.ground') 	-- Sigil Misery
+	NeP.Engine.Cast_Queue('207684', 'mouseover.ground') 	-- Sigil Misery
 	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SSilent = function()
 	NeP.Engine.forcePause = true,
 	NeP.Engine.clear_Cast_Queue()
-	NeP.Engine.Cast_Queue(202137, 'mouseover.ground') 	-- Sigil Silent
+	NeP.Engine.Cast_Queue('202137', 'mouseover.ground') 	-- Sigil Silent
 	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 -- End Test section , IT IS RECOMENDED NOT TO USE THIS!!
 ----------------------------------------------------------
+-- Test Function for Soul Cleave max up time -------------
+--[[  refrence
+	RegisterConditon('pain', function(target, spell)
+	return UnitPower(target, SPELL_POWER_PAIN)
+end)
+
+-- Returns the number of fury you have left till max (e.g. you have a max of 100 fury and 80 fury now, so it will return 20)
+RegisterConditon('furydiff', function(target, spell)
+    local max = UnitPowerMax(target, SPELL_POWER_FURY)
+    local curr = UnitPower(target, SPELL_POWER_FURY)
+    return (max - curr)
+end)
+]]--
+
+DarkNCR.mySC = function ()
+	local maxP = UnitPowerMax('player', SPELL_POWER_PAIN)
+	local currP = UnitPower('player', SPELL_POWER_PAIN)
+	local diffP = (maxP - currP)
+	local maxH = UnitHealthMax('player')
+	local currH = UnitHealth('player')
+	local diffH = (maxH - currH)
+	if diffP < 40 then
+		return true
+	elseif diffH > 78847 then 
+		return true
+	end	
+end
+
+local mySC = DarkNCR.mySC
+-- End Test Function for Soul Cleave max up time ---------
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-  	{ 'Demon Spikes', { '!player.buff(Demon Spikes)', 'player.health <= 95' } },
-  	{ 'Fiery Brand', 'player.health <= 75' },
+  	{'Demon Spikes',  {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
+  	{'Empower Wards', {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
+	{'Fiery Brand',   {'!player.buff(Demon Spikes)', '!player.buff(Empower Wards)' ,'player.health <= 98' } },	
 	{'#109223', 'player.health < 65'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
-	{'Metamorphosis'},
+	{'Metamorphosis'}, --- unidirectional
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-  --{'#trinket1', (function() return F('trink1') end)},
-  --{'#trinket2', (function() return F('trink2') end)},
+    {'#trinket1', (function() return F('trink1') end)},
+    {'#trinket2', (function() return F('trink2') end)},
 }
 
 local Interrupts = {
-	{ 'Consume Magic'},
+	{ 'Consume Magic'},   --melee
 }
 
 local Buffs = {
@@ -103,12 +134,12 @@ local ST = {
   --{ 'Spirit Bomb', 'talent(6,3)' },--108 Talent(6,3)
   --{ 'Nether Bond', 'talent(7,2)' },--110 Talent(7,2)
   --{ 'Soul Barrier', 'talent(7,3)' },--110 Talent(7,3)
-  {'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},
-  { 'Soul Cleave', {'player.pain >= 50','target.range <= 6'}, 'target' },
-  { 'Immolation Aura' },
-  { 'Sigil of Flame', '!toggle.Raidme' , 'mouseover.ground' },
-  { 'Fiery Brand',  'talent(2,3)' },
-  { 'Shear','target.range <= 6', 'target'},
+  {'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},  -- melle
+  { 'Soul Cleave', {mySC,'target.range <= 6'}, 'target' },  --melee
+  { 'Immolation Aura' }, ---- unidirectional
+  { 'Sigil of Flame', '!toggle.Raidme' , 'mouseover.ground' },  --- mouseover target
+  { 'Fiery Brand',  'talent(2,3)' },     --unidirectional
+  { 'Shear','target.range <= 6', 'target'}, -- melee
 }
 
 local Keybinds = {
@@ -126,13 +157,16 @@ local outCombat = {
 	{Pet}
 }
 
+
+
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
-		{Interrupts, 'target.interruptAt(15)', 'target.infront'},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{ST}
+		{ST,'target.infront'},
+		{girlsgonewild}
 	}, outCombat, exeOnLoad)
