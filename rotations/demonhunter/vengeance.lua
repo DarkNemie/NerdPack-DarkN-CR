@@ -32,30 +32,30 @@ end
 --Test--   these are called via /run DarkNCR.IStrike() macro ingame
 DarkNCR.IStrike = function()
 	NeP.Engine.forcePause = true,
-	NeP.Engine.clear_Cast_Queue()
+	--NeP.Engine.clear_Cast_Queue()
 	NeP.Engine.Cast_Queue('189110', 'mouseover.ground') 	-- mouseover Infernal Strike
-	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	--C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SFlame = function()
 	NeP.Engine.forcePause = true,
-	NeP.Engine.clear_Cast_Queue()
+	--NeP.Engine.clear_Cast_Queue()
 	NeP.Engine.Cast_Queue('204596', 'mouseover.ground') 	-- Sigil Flame
-	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	--C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SMisery = function()
 	NeP.Engine.forcePause = true,
-	NeP.Engine.clear_Cast_Queue()
+	--NeP.Engine.clear_Cast_Queue()
 	NeP.Engine.Cast_Queue('207684', 'mouseover.ground') 	-- Sigil Misery
-	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	--C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 DarkNCR.SSilent = function()
 	NeP.Engine.forcePause = true,
-	NeP.Engine.clear_Cast_Queue()
+	--NeP.Engine.clear_Cast_Queue()
 	NeP.Engine.Cast_Queue('202137', 'mouseover.ground') 	-- Sigil Silent
-	C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
+	--C_Timer.After(0.8 , function() NeP.Engine.clear_Cast_Queue() end )
 	NeP.Engine.forcePause = false
 end
 -- End Test section , IT IS RECOMENDED NOT TO USE THIS!!

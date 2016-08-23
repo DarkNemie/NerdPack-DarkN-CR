@@ -53,7 +53,7 @@ local _All = {
 	{'114158', 'modifier.shift', 'target.ground'}, -- Light´s Hammer
 	{'!/focus [target=mouseover]', 'modifier.alt'}, -- Mouseover Focus
 	-- Hand of Freedom
-	{'1044', 'player.state.root'},
+--	{'1044', 'player.state.root'},
 	-- Buffs
 	{'20217', {-- Blessing of Kings
 		'!player.buffs.stats',

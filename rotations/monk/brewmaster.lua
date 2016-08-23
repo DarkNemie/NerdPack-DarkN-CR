@@ -48,13 +48,13 @@ local Survival = {
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
 	-- Nimble Brew if pvp talent taken
-	{'137648', 'player.state.disorient'},
-	{'137648', 'player.state.stun'}, 
-	{'137648', 'player.state.fear'},
-	{'137648', 'player.state.horror'},
+--	{'137648', 'player.state.disorient'},
+--	{'137648', 'player.state.stun'}, 
+--	{'137648', 'player.state.fear'},
+--	{'137648', 'player.state.horror'},
 	-- Tiger's Lust if cd taken
-	{'116841', 'player.state.root'},
-	{'116841', 'player.state.snare'},
+--	{'116841', 'player.state.root'},
+--	{'116841', 'player.state.snare'},
 
 	{'Lifeblood'},
 	{'Berserking'},

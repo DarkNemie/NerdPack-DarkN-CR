@@ -22,12 +22,24 @@ local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
+
 end
 
 local healthstn = function() 
 	return E('player.health <= ' .. F('Healthstone')) 
 end
 --------------- END of do not change area ----------------
+--------------- Testing Zone -----------------------------
+	
+DarkNCR.GcD = function()
+local  start, duration = GetSpellCooldown(61304)
+	if start ~= nil and debugprofilestop() - (start*1000 ) < (duration*1000) then
+		local GcDRemain = (debugprofilestop() - (start*1000 ))
+		print('Remaing GCD: '..string.format("%.3f",(GcDRemain/1000))..'s' )
+		return string.format("%.3f",(GcDRemain/1000))
+	end
+end
+--------------- End Testing Zone--------------------------
 
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
@@ -103,30 +115,30 @@ local AoE = {
 
 local ST = {
 	{ 'Eye Beam',{ 
-		  'target.range <= 8', 
-		  'player.area(10).enemies >= 2'}, 'target' },
+		  'target.range <= 18', 
+		  'player.area(15).enemies >= 2'}, 'target' },
 	{ 'Vengeful Retreat', {
 		'!last.spell(188499)','!last.spell(210152)', 
-		'player.fury <= 45', 'target.range <= 6',
-		'toggle.AoE','!toggle.Raidme'},'target' },
-	{'Throw Glaive', 'target.range >= 15','target'},												-- glave toss out of melee range
-  	{ 'Fel Rush', {
+		'player.fury <= 45', 'player.area(6).enemies >= 2',
+		'toggle.AoE','!toggle.Raidme'},'target' }, 
+	{ 'Fel Rush', {
 		'target.range >= 10', 'target.range <= 25',
 		'toggle.AoE','!toggle.Raidme'  
-		} , 'target'},
-																				--1st time Fel rush after vengeful Retreat
+		} , 'target'},																		--1st time Fel rush after vengeful Retreat
+													
+	{'Throw Glaive', 'target.area(15).enemies >= 2'},												-- glave toss out of melee range																				
 	{ 'Blade Dance', {
 		  'player.fury >= 40' , 'target.range <= 10', 
-		  'player.area(10).enemies >= 2','toggle.AoE','!toggle.Raidme'
+		  'player.area(15).enemies >= 4','toggle.AoE'
 		}, 'target' },
 	{ 'Death Sweep', {																		-- Death Seep with Metamorphosis
 		  'player.buff(Metamorphosis)',
-		  'player.fury >= 70' , 'target.range <= 8', 
-		  'player.area(10).enemies >= 2','toggle.AoE',
+		  'player.fury >= 40' , 'target.range <= 10', 
+		  'player.area(15).enemies >= 3','toggle.AoE',
 		}, 'target' },
-  	{ 'Annihilation', { 'player.buff(Metamorphosis)', 'target.range <= 6' }, 'target' },		--Metamorphosis Buff
-  	{ 'Chaos Strike', { 'player.fury >= 45','target.range <= 6' }, 'target' },									--Chaos Strike
-	{ '162243', { '!talent(2, 2)', 'player.fury <= 75', 'target.range <= 6' }, 'target' },	--Demon bite Not Demon Blades Talent(2,2)
+  	{ 'Annihilation', 'player.buff(Metamorphosis)', 'target' },		--Metamorphosis Buff
+  	{ 'Chaos Strike', 'player.fury >= 15', 'target' },									--Chaos Strike
+	{ '162243', { '!talent(2, 2)', 'player.fury <= 95'}, 'target' },	--Demon bite Not Demon Blades Talent(2,2)
   	{ 'Throw Glaive' },																		--cd filler
 }
 
@@ -148,6 +160,7 @@ local outCombat = {
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
+		--{DarkNCR.GcD},
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
