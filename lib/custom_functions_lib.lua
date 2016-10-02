@@ -53,6 +53,8 @@ function DarkNCR.dynEval(condition, spell)
 	return Parse(condition, spell or '')
 end
 
+
+
 NeP.library.register('DarkNCR', {
 
 	HolyNova = function(units)

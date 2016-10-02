@@ -81,9 +81,23 @@ local AoE = {
 }
 
 local ST = {
-	-- Single target Rotation goes here
-	
+	-- Remove Blade Flurry
+	{'Blade Flurry', {
+		'!player.buff(Blade Flurry)',
+		'!player.area(8).enemies >= 3'
+	}},
+	--Roll the Bones with >= 5 Combo Points to maintain the random buffs.
+	{'Roll the Bones', 'player.combopoints >= 5'},
+	--Run Through to dump excess Combo Points.
+	{'Roll the Bones', 'player.combopoints >= 5'},
+	--Pistol Shot when buffed from Saber Slash.
+	{'Pistol Shot', 'player.buff(Opportunity)'},
+	--Ambush when possible to generate Combo Points.
+	{'Ambush'},
+	--Saber Slash or to build Combo Points.
+	{'Saber Slash'}
 }
+
 
 local Keybinds = {
 

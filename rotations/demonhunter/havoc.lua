@@ -22,14 +22,14 @@ local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
-
+--	NeP.Interface.CreateToggle('dpstest', 'Interface\\Icons\\inv_misc_pocketwatch_01', 'DPS Test', 'Stop combat after 5 minutes in order to do a controlled DPS test')
 end
 
 local healthstn = function() 
 	return E('player.health <= ' .. F('Healthstone')) 
 end
 --------------- END of do not change area ----------------
---------------- Testing Zone -----------------------------
+--[[--------------- Testing Zone -----------------------------
 	
 DarkNCR.GcD = function()
 local  start, duration = GetSpellCooldown(61304)
@@ -40,26 +40,38 @@ local  start, duration = GetSpellCooldown(61304)
 	end
 end
 --------------- End Testing Zone--------------------------
+DarkNCR.strinket1 = function()
+	start, duration, enabled = GetItemCooldown(137486)  -- Bubble trinket
+	cdtime = (start + duration - GetTime())  
+	if not start then return false end
+	if cdtime <= 93 then return true end	
 
+end
+
+local stupidtrink1 = DarkNCR.strinket1
+]]
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 	--{ 'Darkness', },
 	--{ 'Darkness', 'modifier.cooldowns' },
-	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	--{'#127834', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
-	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
+	--{'#109223', 'player.health < 40'}, 											-- Healing Tonic 201633
 }
 
 local Cooldowns = {
-	--Put items you want used on CD below:     Example: {'skillid'},  
-	
-  	
+	--Put items you want used on CD below:     Example: {'skillid'},
+	{'Fury of the Illidari', {'target.range <= 6','player.buff(208628)'}, 'target'}, 
+	{'Fury of the Illidari', {'target.range <= 6','!talent(5,1)'}, 'target'},  
+  	{ 'Chaos Blades', 'talent(7,1)' },--110 Talent(7,1)
+  	{ 'Nemesis', 'talent(5,3)','target' },--106 Talent(5,3)
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+	{'#trinket1', {(function() return F('trink1') end), stupidtrink1 }},
+--	{'#trinket2', {(function() return F('trink2') end), '!player.buff(215956)'  }},
+--	{'#trinket2'},
 }
 
 local Interrupts = {
@@ -111,12 +123,32 @@ local AoE = {
 	--{ 'Fel Rush' },--2nd time
 	-- {'Death Sweep'}
 
-]]--
+]]--208628
+local meta = {
+--	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
+	{ 'Eye Beam',{ 
+		  'target.range <= 8', 
+		  'player.area(15).enemies >= 2','player.buff(208628)'}, 'target' },
+	{ 'Eye Beam',{ 
+		  'target.range <= 8', 
+		  'player.area(15).enemies >= 2','!talent(5,1)'}, 'target' },
+  	{ 'Death Sweep', {  'target.range <= 10', 
+		  'player.area(15).enemies >= 2','toggle.AoE',
+		}, 'target' },
+	{'Throw Glaive', 'target.range <= 30', 'target' },	
+	{ 'Annihilation', 'player.fury >= 15', 'target' },							--Metamorphosis Buff
+  	{ '162243', 'player.fury <= 99', 'target' },
+}
 
 local ST = {
+--	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
+	{ 'Felblade', 'talent(3,1)' },										--102 Talent(3,1)
 	{ 'Eye Beam',{ 
-		  'target.range <= 18', 
-		  'player.area(15).enemies >= 2'}, 'target' },
+		  'target.range <= 8', 
+		  'player.area(15).enemies >= 2','player.buff(208628)'}, 'target' },
+	{ 'Eye Beam',{ 
+		  'target.range <= 8', 
+		  'player.area(15).enemies >= 2','!talent(5,1)'}, 'target' },	  
 	{ 'Vengeful Retreat', {
 		'!last.spell(188499)','!last.spell(210152)', 
 		'player.fury <= 45', 'player.area(6).enemies >= 2',
@@ -124,25 +156,21 @@ local ST = {
 	{ 'Fel Rush', {
 		'target.range >= 10', 'target.range <= 25',
 		'toggle.AoE','!toggle.Raidme'  
-		} , 'target'},																		--1st time Fel rush after vengeful Retreat
-													
-	{'Throw Glaive', 'target.area(15).enemies >= 2'},												-- glave toss out of melee range																				
+		} , 'target'},																		--1st time Fel rush after vengeful Retreat				
 	{ 'Blade Dance', {
-		  'player.fury >= 40' , 'target.range <= 10', 
-		  'player.area(15).enemies >= 4','toggle.AoE'
+		 'target.range <= 10', 
+		  'player.area(8).enemies >= 2','toggle.AoE'
 		}, 'target' },
-	{ 'Death Sweep', {																		-- Death Seep with Metamorphosis
-		  'player.buff(Metamorphosis)',
-		  'player.fury >= 40' , 'target.range <= 10', 
-		  'player.area(15).enemies >= 3','toggle.AoE',
-		}, 'target' },
-  	{ 'Annihilation', 'player.buff(Metamorphosis)', 'target' },		--Metamorphosis Buff
-  	{ 'Chaos Strike', 'player.fury >= 15', 'target' },									--Chaos Strike
-	{ '162243', { '!talent(2, 2)', 'player.fury <= 95'}, 'target' },	--Demon bite Not Demon Blades Talent(2,2)
-  	{ 'Throw Glaive' },																		--cd filler
+	{ 'Throw Glaive', 'target.range <= 30', 'target' },			    	-- glave toss out of melee range																				
+	{ 'Chaos Strike', 'player.fury >= 15', 'target' },					--Chaos Strike
+	{ '162243', 'player.fury <= 99', 'target' },						--Demon bite 
+ 	{ 'Fel Eruption', 'talent(5,2)' },									--106 Talent(5,2)
+  	{ 'Fel Barrage', 'talent(7,2)' },									--110 Talent(7,2)
+  	--{ 'Throw Glaive' },												--cd filler
 }
 
 local Keybinds = {
+--	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
 	{ '!Metamorphosis', 'modifier.lshift' ,'mouseover.ground' },
 	{'pause', 'modifier.alt'},													-- Pause
 	{ '!Chaos Nova', 'modifier.lcontrol' },
@@ -160,12 +188,10 @@ local outCombat = {
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		--{DarkNCR.GcD},
 		{Keybinds},
-		{Interrupts, 'target.interruptAt(15)'},
+		{Interrupts, 'target.interruptAt(25)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'modifier.cooldowns'},
-		{Pet_inCombat},
-		--{AoE, 'player.infront' },
+		{meta,'player.buff(Metamorphosis)'},
 		{ST, 'player.infront'},
 	}, outCombat, exeOnLoad)

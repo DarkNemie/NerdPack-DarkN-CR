@@ -88,7 +88,7 @@ local Cooldowns = {
 	{'Berserking'},
 	{'Blood Fury'},
  	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
-	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
+	{'#trinket2'},
 }
 
 local raidCooldowns = {
@@ -150,6 +150,7 @@ local ST = {
 }, "toggle.md", },
 
 ----		Rotation		----
+	{'204147','!player.moving', 'target'},												-- Windburst
 	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT
 	--{'185901', 	{'player.buff(223138)','target.debuff(187131)'},'target'},		-- Marked Shot	
 	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
@@ -167,7 +168,7 @@ local ST = {
 	{'163485', 	'!player.moving', 'target'}, 									-- Focusing Shot // TALENT
 	{'19434', 	{'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	{'player.focus > 60', 'talent(2,3)'}, 'target'}, 				-- Aimed Shot
-	{'19434', 	'player.focus > 90', 'target'},									-- Aimed Shot
+	{'19434', 	'player.focus > 75', 'target'},									-- Aimed Shot
 --	{'185901',	{'player.buff(223138)','target.debuff(187131)'}, 'target'},								-- Marked Shot if all else fails
 --  187620 dps ring
 }
