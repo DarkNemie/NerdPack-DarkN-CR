@@ -50,8 +50,8 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local _All = {
 	-- keybinds
-	{'114158', 'modifier.shift', 'target.ground'}, -- Light´s Hammer
-	{'!/focus [target=mouseover]', 'modifier.alt'}, -- Mouseover Focus
+	{'114158', 'keybind(shift)', 'target.ground'}, -- Light´s Hammer
+	{'!/focus [target=mouseover]', 'keybind(alt)'}, -- Mouseover Focus
 	-- Hand of Freedom
 --	{'1044', 'player.state.root'},
 	-- Buffs
@@ -106,7 +106,7 @@ local _InfusionOfLight = {
 			'@coreHealing.needsHealing(80, 3)', 
 			'!player.moving'
 		}, 'lowest'}, 
-	}, 'modifier.multitarget'}, 
+	}, 'toggle(AoE)'}, 
 	{'82326', {-- Holy Light
 		(function() return E('lowest.health <= '..F('HolyLightIL')) end),
 		'!player.moving' 
@@ -356,7 +356,7 @@ local outCombat = {
 			'!player.moving', 
 			'modifier.raid', 
 		}, 'lowest'},
-	}, 'modifier.multitarget'},
+	}, 'toggle(AoE)'},
 	-- Holy Light
 	{'82326', {
 		(function() return E('lowest.health < '..F('HolyLightOCC')) end),
@@ -377,8 +377,8 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{_InfusionOfLight, 'player.buff(54149)'},
 		{_DivinePurpose, 'player.buff(86172)'},
 		{_SelflessHealer, 'talent(3, 1)'},
-		{_Cooldowns, 'modifier.cooldowns'},
-		{_AoE, 'modifier.multitarget'},
+		{_Cooldowns, 'toggle(cooldowns)'},
+		{_AoE, 'toggle(AoE)'},
 		{_Tank},
 		{_Focus},
 		{_Player},

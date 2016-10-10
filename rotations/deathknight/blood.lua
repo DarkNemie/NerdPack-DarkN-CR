@@ -93,9 +93,9 @@ local ST = {
 }
 
 local Keybinds = {
-	{'pause', 'modifier.alt'},																				-- Pause
-	{'43265', 'modifier.lcontrol', 'target.ground' },														-- DnD
-	{'108199', 'modifier.lshift'}																			-- GGrasp
+	{'pause', 'keybind(alt)'},																				-- Pause
+	{'43265', 'keybind(lcontrol)', 'target.ground' },														-- DnD
+	{'108199', 'keybind(lshift)'}																			-- GGrasp
 }
 
 local outCombat = {
@@ -108,7 +108,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Survival, 'player.health < 100'},
 		{Interrupts, 'target.interruptAt(15)'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		--{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}
 	}, outCombat, exeOnLoad)

@@ -81,27 +81,13 @@ local AoE = {
 }
 
 local ST = {
-	-- Remove Blade Flurry
-	{'Blade Flurry', {
-		'!player.buff(Blade Flurry)',
-		'!player.area(8).enemies >= 3'
-	}},
-	--Roll the Bones with >= 5 Combo Points to maintain the random buffs.
-	{'Roll the Bones', 'player.combopoints >= 5'},
-	--Run Through to dump excess Combo Points.
-	{'Roll the Bones', 'player.combopoints >= 5'},
-	--Pistol Shot when buffed from Saber Slash.
-	{'Pistol Shot', 'player.buff(Opportunity)'},
-	--Ambush when possible to generate Combo Points.
-	{'Ambush'},
-	--Saber Slash or to build Combo Points.
-	{'Saber Slash'}
+	-- Single target Rotation goes here
+	
 }
-
 
 local Keybinds = {
 
-	{'pause', 'modifier.alt'},													-- Pause
+	{'pause', 'keybind(alt)'},													-- Pause
 	
 }
 
@@ -116,7 +102,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}

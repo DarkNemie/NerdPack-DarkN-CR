@@ -36,7 +36,7 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-	{'Shadow Mend', 'player.health < 60', 'player'},
+
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -81,70 +81,30 @@ local AoE = {
 	
 }
 
-local Voidform = {
-		--Void Bolt on cooldown.
-	{'!Void Eruption'},
-	--Shadow Word: Death when available on targets with <= 20% health.
-	{'Shadow Word: Death', 'target.health <= 20'},
-	--Mind Blast on cooldown.
-	{'Mind Blast'},
-	--Mind Flay as a filler.
-	{'Mind Flay'}
-}
-
 local ST = {
 	-- Single target Rotation goes here
-		--Void Eruption at 100 Insanity to activate Voidform.
-	{'Void Eruption', 'player.insanity >= 100'},
-	--Shadow Word: Pain maintained at all times.
-	{'Shadow Word: Pain', 'target.debuff(Shadow Word: Pain).duration < 5'},
-	--Vampiric Touch maintained at all times.
-	{'Vampiric Touch', 'target.debuff(Vampiric Touch).duration < 5'},
-	--Shadow Word: Death when available on targets with <= 20% health.
-	{'Shadow Word: Death', 'target.health <= 20'},
-	--Mind Blast on cooldown to build Insanity.
-	{'Mind Blast'},
-	--Mind Flay as a filler to build Insanity.
-	{'Mind Flay'}
+	
 }
 
 local Keybinds = {
 
-	{'pause', 'modifier.alt'},													-- Pause
+	{'pause', 'keybind(alt)'},													-- Pause
 	
 }
-local dotitall = function()
-	CastSpellByName("Vampiric Touch")
-	CastSpellByName("Shadow Word: Pain")
-	TargetNearestEnemy()
-	CastSpellByName("Vampiric Touch")
-	CastSpellByName("Shadow Word: Pain")
-end
---[[
-{
-	{'Shadow Word: Pain','!target.debuff(Shadow Word: Pain)','target' },
-	{ "/targetenemy", 'target.debuff(Shadow Word: Pain).duration > 5'  },
-	{ "/targetenemy [noexists]"},
-	
-}
-]]--
 
 local outCombat = {
 	{Keybinds},
 	{Buffs},
-	{Pet},
-	{dotitall, 'toggle.ADots' },
+	{Pet}
 }
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		--{dotitall,'toggle.ADots'},
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
-		{Voidform, 'player.buff(Voidform)'},
-		{ST, '!player.buff(Voidform)'}
+		{ST}
 	}, outCombat, exeOnLoad)

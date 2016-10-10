@@ -84,9 +84,11 @@ local Buffs = {
 
 }
 
-local Pet = {
+local STStrike = {
 	--Put skills in here that apply to your pet needs while out of combat! 
-
+	{ 'Annihilation' },
+	{ 'Chaos Strike' },
+	{ 'Throw Glaive' },
 
 }
 
@@ -133,10 +135,10 @@ local meta = {
 		  'target.range <= 8', 
 		  'player.area(15).enemies >= 2','!talent(5,1)'}, 'target' },
   	{ 'Death Sweep', {  'target.range <= 10', 
-		  'player.area(15).enemies >= 2','toggle.AoE',
+		  'player.area(15).enemies >= 3','toggle.AoE',
 		}, 'target' },
-	{'Throw Glaive', 'target.range <= 30', 'target' },	
-	{ 'Annihilation', 'player.fury >= 15', 'target' },							--Metamorphosis Buff
+	{ 'Throw Glaive', 'target.range <= 30', 'target' },	
+	{ 'Annihilation', 'target.range <= 30', 'target' },							--Metamorphosis Buff
   	{ '162243', 'player.fury <= 99', 'target' },
 }
 
@@ -162,7 +164,7 @@ local ST = {
 		  'player.area(8).enemies >= 2','toggle.AoE'
 		}, 'target' },
 	{ 'Throw Glaive', 'target.range <= 30', 'target' },			    	-- glave toss out of melee range																				
-	{ 'Chaos Strike', 'player.fury >= 15', 'target' },					--Chaos Strike
+	{ 'Chaos Strike', 'target.range <= 30', 'target' },					--Chaos Strike
 	{ '162243', 'player.fury <= 99', 'target' },						--Demon bite 
  	{ 'Fel Eruption', 'talent(5,2)' },									--106 Talent(5,2)
   	{ 'Fel Barrage', 'talent(7,2)' },									--110 Talent(7,2)
@@ -171,10 +173,10 @@ local ST = {
 
 local Keybinds = {
 --	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
-	{ '!Metamorphosis', 'modifier.lshift' ,'mouseover.ground' },
-	{'pause', 'modifier.alt'},													-- Pause
-	{ '!Chaos Nova', 'modifier.lcontrol' },
-		-- Defence
+	{ '!Metamorphosis', 'keybind(lshift)' ,'mouseover.ground' },
+	{'pause', 'keybind(alt)'},													-- Pause
+	{ '!Chaos Nova', 'keybind(lcontrol)' },
+	-- Defence
   	--{ 'Netherwalk', { 'talent(4,1)',  'modifier.rcontrol' } },--104 Talent(4,1)
   	--{ 'Blur', { 'modifier.rcontrol' } },--104
   	
@@ -191,7 +193,8 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(25)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
-		{meta,'player.buff(Metamorphosis)'},
-		{ST, 'player.infront'},
+		{Cooldowns, 'toggle(cooldowns)'},
+		{STStrike},
+		{meta,'player.buff(162264)'},
+		{ST, '!player.buff(162264)'},
 	}, outCombat, exeOnLoad)

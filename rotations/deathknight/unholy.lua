@@ -72,7 +72,7 @@ local ST = {
 	-- SINGLE TARGET
     {{
 		{ '47541' , { 'player.spell(207349).cooldown >= 3' , 'player.runicpower >= 50' }}, 			--Death Coil if CD we wont have a Dark Arbiter soon.
-        { '47541' , { 'player.runicpower >= 50' , '!modifier.cooldowns' }}, 						--Death Coil
+        { '47541' , { 'player.runicpower >= 50' , '!toggle(cooldowns)' }}, 						--Death Coil
         { '47541' , 'player.spell(207349).cooldown >= 165' },  						  				--Death Coil to increase the DPS from Dark Arbiter.
 	}, 'talent(7, 1)' },				
     { '47541' , 'player.runicpower >= 50' }, 														--Death Coil
@@ -83,14 +83,14 @@ local ST = {
     { '77575', 'target.debuff(191587).duration <= 3' }, 											--Outbreak
     { '85948' , '!target.debuff(194310)' }, 														--Festering Strike to gain Festering Wound
     { '47541' , { 'player.spell(207349).cooldown >= 1' , 'talent(7, 1)'}}, 							--Death Coil filler 
-    { '47541' , '!modifier.cooldowns' }, 															--Death Coil filler if we dont plan to use Dark Arbiter
+    { '47541' , '!toggle(cooldowns)' }, 															--Death Coil filler if we dont plan to use Dark Arbiter
 }
 
 local Keybinds = {
 	-- Pause
-	{'pause', 'modifier.alt'},
-	{'43265', 'modifier.lcontrol', 'mouseover.ground' },														-- DnD
-	{'42650', 'modifier.lshift'},
+	{'pause', 'keybind(alt)'},
+	{'43265', 'keybind(lcontrol)', 'mouseover.ground' },														-- DnD
+	{'42650', 'keybind(lshift)'},
 }
 
 local outCombat = {
@@ -101,7 +101,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 	{-- In-Combat
 		{Keybinds},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet},
 		{Pet_inCombat},
 		{AoE, 'player.area(8).enemies >= 3'},

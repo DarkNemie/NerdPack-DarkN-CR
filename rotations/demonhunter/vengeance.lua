@@ -113,9 +113,9 @@ local stupidtrink1 = DarkNCR.strinket1
 -- End Test Function for Soul Cleave max up time ---------
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-  	{'Demon Spikes',  {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
+  	{'Demon Spikes', '!player.buff(Demon Spikes)' },
   --	{'Empower Wards', {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
-	{'Fiery Brand',   {'!player.buff(Demon Spikes)', '!player.buff(Empower Wards)' ,'player.health <= 98' } },	
+	{'Fiery Brand', '!player.buff(Demon Spikes)' },	
 	{'#109223', 'player.health < 65'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
@@ -132,9 +132,9 @@ local Cooldowns = {
 
 
 local Interrupts = {
-	{ 'Consume Magic'},   --melee
-	{'Sigil of Silence'},
-	{'Sigil of Misery'},
+	{ 'Consume Magic' },   --melee
+	{'Sigil of Silence','target.range <= 12', 'target'},
+	{'Sigil of Misery','target.range <= 12', 'target'},
 }
 
 local Buffs = {
@@ -151,30 +151,29 @@ local AoE = {
 
 local ST = {
 	{ 'Fel Devastation', { 'target.range <= 10','player.health <= 75' } },
+	{ 'Spirit Bomb', {'!target.debuff(224509)','player.buff(203981)'}, 'target' },											-- 108 Talent(6,3)
 	{ 'Immolation Aura','target.range <= 8', 'target' },
   	{ 'Soul Carver', '!player.buff(203981)' },      								-- Artifact
   	{ 'Soul Cleave', 'player.buff(203981).count >= 3', 'target' },
-  	{ 'Soul Cleave', 'player.fury >= 50', 'target' },
-  	{ 'Soul Cleave', {mySC,'target.range <= 6'}, 'target' },  					-- melee
-  	{ 'Shear', 'player.pain <= 95', 'target'},
+  	{ 'Soul Cleave', 'player.pain >= 60', 'target' },
+  	{ 'Soul Cleave', {'player.health <= 45','target.range <= 8'}, 'target' },  					-- melee
+  	{ 'Shear', 'target.range <= 8', 'target'},
   	{ 'Felblade', 'talent(3,1)' },												-- 102 Talent(3,1)
   	{ 'Fracture', 'talent(4,2)' },												-- 104 Talent(4,2)
   	{ 'Fel Eruption', 'talent(3,3)' },											-- 106 Talent(5,2)
-  		-- 108 Talent(6,1)
-  	{ 'Spirit Bomb', 'talent(6,3)' },												-- 108 Talent(6,3)
- -- { 'Nether Bond', 'talent(7,2)' },											-- 110 Talent(7,2)
+   -- { 'Nether Bond', 'talent(7,2)' },											-- 110 Talent(7,2)
   	{ 'Soul Barrier', 'talent(7,3)' },											-- 110 Talent(7,3)
- -- { 'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},  	-- melle
+  	{ 'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},  	-- melle
   	 						-- unidirectional
   	{ 'Sigil of Flame' ,'player.area(10).enemies >= 2' },  						-- mouseover target
-  	{ 'Fiery Brand',  'talent(2,3)' },     										-- unidirectional
+  --	{ 'Fiery Brand',  'talent(2,3)' },     										-- unidirectional
   	{ 'Shear', 'player.pain <= 95', 'target'}, 									-- melee
 }
 
 local Keybinds = {
-	{'pause', 'modifier.alt'},													-- Pause
-	{ 'Infernal Strike',  'modifier.lshift', 'mouseover.ground'  },
-	{ '!Metamorphosis', 'modifier.lcontrol' },
+	{'pause', 'keybind(alt)'},													-- Pause
+	{ 'Infernal Strike',  'keybind(lshift)', 'mouseover.ground'  },
+	{ '!Metamorphosis', 'keybind(lcontrol)' },
 }
 
 local Taunt = {
@@ -193,7 +192,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(25)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST,'target.infront'},

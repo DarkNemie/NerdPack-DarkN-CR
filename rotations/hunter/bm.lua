@@ -146,8 +146,8 @@ local ST = {
 }
 
 local Keybinds = {
-	{'pause', 'modifier.lshift'},												-- Pause
-	{ '109248' , 'modifier.lcontrol', 'player.ground' }, 						-- Binding Shot
+	{'pause', 'keybind(lshift)'},												-- Pause
+	{ '109248' , 'keybind(lcontrol)', 'player.ground' }, 						-- Binding Shot
 }
 
 local outCombat = {
@@ -162,7 +162,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}

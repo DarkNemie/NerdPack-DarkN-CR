@@ -130,8 +130,8 @@ local mytotems = {
 }
 
 local Keybinds = {
-	{ 'Totemic Projection', 'modifier.shift', 'ground' },						-- totemic projection
-	{ 'pause', 'modifier.alt'},													-- Pause
+	{ 'Totemic Projection', 'keybind(shift)', 'ground' },						-- totemic projection
+	{ 'pause', 'keybind(alt)'},													-- Pause
 	
 }
 
@@ -147,7 +147,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{mytotems},
 		{Pet_inCombat},
 		{Healing},

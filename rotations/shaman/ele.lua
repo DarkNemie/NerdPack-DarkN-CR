@@ -46,7 +46,7 @@ local Survival = {
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
 
-  	{ 'Elemental Mastery', 'modifier.cooldowns' },
+  	{ 'Elemental Mastery', 'toggle(cooldowns)' },
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -99,10 +99,10 @@ local ST = {
 }
 
 local Keybinds = {
-	{ 'Bloodlust', 'modifier.ralt' },
-  	{ 'Fire Elemental',  'modifier.rcontrol' },
-  	{ 'Ascendance', { 'modifier.rshift', '!player.buff(Ascendance)' } },
-	{'pause', 'modifier.lalt'},													-- Pause
+	{ 'Bloodlust', 'keybind(ralt)' },
+  	{ 'Fire Elemental',  'keybind(rcontrol)' },
+  	{ 'Ascendance', { 'keybind(rshift)', '!player.buff(Ascendance)' } },
+	{'pause', 'keybind(lalt)'},													-- Pause
 	
 }
 
@@ -117,7 +117,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}

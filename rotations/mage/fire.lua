@@ -92,7 +92,7 @@ local ST = {
 
 local Keybinds = {
 
-	{'pause', 'modifier.alt'},													-- Pause
+	{'pause', 'keybind(alt)'},													-- Pause
 	
 }
 

@@ -174,12 +174,12 @@ local outCombat = {
 
 NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
-		{'pause', 'modifier.lshift'},-- Pause
+		{'pause', 'keybind(lshift)'},-- Pause
 		{myDispel, 'toggle.mydispel'},
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival},
-		{Cooldowns,'modifier.cooldowns'},
+		{Cooldowns,'toggle(cooldowns)'},
 		{Tank, {'tank.exists', 'tank.health < 100'}},
 		--{Oshit,'lowest.health < 30','lowest'},
 		--{AoEH,'player.mana > 10','toggle.AoE'},

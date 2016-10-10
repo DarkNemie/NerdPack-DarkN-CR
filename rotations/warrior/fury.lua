@@ -93,7 +93,7 @@ local ST = {
 
 local Keybinds = {
 
-	{'pause', 'modifier.alt'},													-- Pause
+	{'pause', 'keybind(alt)'},													-- Pause
 	
 }
 
@@ -108,7 +108,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST}

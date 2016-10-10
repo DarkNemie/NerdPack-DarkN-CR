@@ -88,7 +88,7 @@ local Cooldowns = {
 	{'Berserking'},
 	{'Blood Fury'},
  	{'#trinket1', {'player.health <= 0',(function() return F('trink1') end)}},
-	{'#trinket2'},
+	{'#trinket2', {'player.health <= 0',(function() return F('trink2') end)}},
 }
 
 local raidCooldowns = {
@@ -150,7 +150,6 @@ local ST = {
 }, "toggle.md", },
 
 ----		Rotation		----
-	{'204147','!player.moving', 'target'},												-- Windburst
 	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT
 	--{'185901', 	{'player.buff(223138)','target.debuff(187131)'},'target'},		-- Marked Shot	
 	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
@@ -168,15 +167,15 @@ local ST = {
 	{'163485', 	'!player.moving', 'target'}, 									-- Focusing Shot // TALENT
 	{'19434', 	{'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	{'player.focus > 60', 'talent(2,3)'}, 'target'}, 				-- Aimed Shot
-	{'19434', 	'player.focus > 75', 'target'},									-- Aimed Shot
+	{'19434', 	'player.focus > 90', 'target'},									-- Aimed Shot
 --	{'185901',	{'player.buff(223138)','target.debuff(187131)'}, 'target'},								-- Marked Shot if all else fails
 --  187620 dps ring
 }
 
 local Keybinds = {
-	{'/focus [target=mouseover]', 'modifier.lalt'}, 							-- Mouseover Focus
-	{'pause', 'modifier.lshift'},												-- Pause
-	{'109248', 'modifier.lcontrol', 'mouseover.ground' }, 						-- Binding Shot
+	{'/focus [target=mouseover]', 'keybind(lalt)'}, 							-- Mouseover Focus
+	{'pause', 'keybind(lshift)'},												-- Pause
+	{'109248', 'keybind(lcontrol)', 'mouseover.ground' }, 						-- Binding Shot
 }
 
 local outCombat = {
@@ -194,7 +193,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{{	
 			{Survival, 'player.health < 100'},
 			{raidCooldowns, 'toggle.Raidme' },
-			{Cooldowns, {'!toggle.Raidme','modifier.cooldowns'}},
+			{Cooldowns, {'!toggle.Raidme','toggle(cooldowns)'}},
 			{Pet_inCombat},
 			{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 			{ST}

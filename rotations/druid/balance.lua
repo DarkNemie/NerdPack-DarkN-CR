@@ -49,7 +49,7 @@ local Misc = {
 
 local Cooldowns = {
 	--Put items you want used on CD below:     Example: {'skillid'},  
-	{ 'Celestial Alignment', 'modifier.cooldowns' },	--Celestial Alignment
+	{ 'Celestial Alignment', 'toggle(cooldowns)' },	--Celestial Alignment
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
@@ -104,9 +104,9 @@ local ST = {
 }
 
 local Keybinds = {
-	{ 'Typhoon', 'modifier.alt' },
-	{ 'Entangling Roots', 'modifier.shift' },
-	{'pause', 'modifier.alt'},													-- Pause
+	{ 'Typhoon', 'keybind(alt)' },
+	{ 'Entangling Roots', 'keybind(shift)' },
+	{'pause', 'keybind(alt)'},													-- Pause
 	
 }
 
@@ -122,7 +122,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Misc},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'modifier.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST, 'player.area(8).enemies < 3'}
