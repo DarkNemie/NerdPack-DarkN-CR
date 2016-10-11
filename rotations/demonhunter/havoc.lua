@@ -86,9 +86,10 @@ local Buffs = {
 
 local STStrike = {
 	--Put skills in here that apply to your pet needs while out of combat! 
+	{ 'Throw Glaive' },
 	{ 'Annihilation' },
 	{ 'Chaos Strike' },
-	{ 'Throw Glaive' },
+	--{ 'Throw Glaive' },
 
 }
 
@@ -194,7 +195,7 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Interrupts, 'target.interruptAt(25)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
-		{STStrike},
+		{STStrike, 'player.area(15).enemies <= 2'},
 		{meta,'player.buff(162264)'},
 		{ST, '!player.buff(162264)'},
 	}, outCombat, exeOnLoad)

@@ -196,5 +196,5 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
 		{ST,'target.infront'},
-		{girlsgonewild}
+		--{girlsgonewild}
 	}, outCombat, exeOnLoad)
