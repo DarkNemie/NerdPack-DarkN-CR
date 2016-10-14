@@ -18,11 +18,11 @@ end
 local Survival = {
 	-- Put skills or items here that are used to keep you alive!  Example: {'skillid'}, or {'#itemid'},
 
-	{'115072', 'player.health <= UI(ExpelHarm)},			-- Expel Harm
-	{'115098', 'player.health <= UI(ChiWave)},			-- Chi Wave
-	{'115203', 'player.health <= UI(FortifyingBrew)},	-- Fortifying Brew
-	{'115308', {'player.buff(215479).duration <= 1', 'player.debuff(124275)','player.health <= UI(IronskinBrew)}},-- Ironskin Brew
-	{'119582', {'player.debuff(124274)','player.health <= UI(PurifyingBrew)}},-- Purifying Brew
+	{'115072', 'player.health <= UI(ExpelHarm)'},			-- Expel Harm
+	{'115098', 'player.health <= UI(ChiWave)'},			-- Chi Wave
+	{'115203', 'player.health <= UI(FortifyingBrew)'},	-- Fortifying Brew
+	{'115308', {'player.buff(215479).duration <= 1', 'player.debuff(124275)','player.health <= UI(IronskinBrew)'}},-- Ironskin Brew
+	{'119582', {'player.debuff(124274)','player.health <= UI(PurifyingBrew)'}},-- Purifying Brew
 	{'#109223', 'player.health < 40'}, 													-- Healing Tonic
 	{'#5512', 'player.health <= UI(Healthstone)'}, 																-- Health stone
 	{'#109223', 'player.health < 40'}, 													-- Healing Tonic
@@ -116,5 +116,5 @@ NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec
 		{Pet_inCombat},
 		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST, {'target.range <= 8', 'target.infront'}},
-		{Taunts,UI(canTaunt') end)}
+		{Taunts, 'UI(canTaunt)'}
 	}, outCombat, exeOnLoad)

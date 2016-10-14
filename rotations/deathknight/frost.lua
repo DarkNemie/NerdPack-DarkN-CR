@@ -15,7 +15,7 @@ end
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	
-	{'55233',UI(vampB)'}, -- Vampiric Blood
+	{'55233', 'UI(vampB)'}, -- Vampiric Blood
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},

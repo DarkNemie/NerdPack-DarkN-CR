@@ -11,11 +11,24 @@ local F = function(key) return NeP.Interface.fetchKey(mKey, key) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.buildGUI(config)
-	DarkNCR.ClassSetting(mKey)
-	NeP.DSL:AddToggle({'saveDS','Interface\\Icons\\spell_deathknight_butcher2.png','Save a Death Strike','Saving Runic.')
-	NeP.DSL:AddToggle({'dpstest', 'Interface\\Icons\\inv_misc_pocketwatch_01', 'DPS Test', 'Stop combat after 5 minutes in order to do a controlled DPS test')
-	NeP.DSL:AddToggle({'myat', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Target', 'Automatically target the nearest enemy when target dies or does not exist')
+	NeP.DSL:AddToggle({
+		'saveDS',
+		'Interface\\Icons\\spell_deathknight_butcher2.png',
+		'Save a Death Strike',
+		'Saving Runic.'
+	})
+	NeP.DSL:AddToggle({
+		'dpstest', 
+		'Interface\\Icons\\inv_misc_pocketwatch_01', 
+		'DPS Test', 
+		'Stop combat after 5 minutes in order to do a controlled DPS test'
+	})
+	NeP.DSL:AddToggle({
+		'myat', 
+		'Interface\\Icons\\ability_hunter_snipershot', 
+		'Auto Target', 
+		'Automatically target the nearest enemy when target dies or does not exist'
+	})
 end
 ----------	END of do not change area ----------
 ----- try my own range check----
@@ -30,10 +43,6 @@ local myRcheck = function ()
 	end
 end
 
------ 
-local healthstn = function()  
-	return E('player.health <= ' .. F('Healthstone'))
-end
 ---------- This Starts the Area of your Rotaion ----------
 local dpsCheck ={
 	-- DPS Timmer
@@ -44,15 +53,15 @@ local Survival = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#5512', healthstn}, 																					-- Health stone
+	{'#5512', 'player.health <= UI(Healthstone)'}, 																					-- Health stone
 	{'#109223','player.health <= 50'},																		-- Healing Tonic
 }
 
 local Cooldowns = {
 	{'49028'}, 																								-- Dancing RuneWeapon
 	{'55233', 'player.health <= 50'}, 																		-- Vampiric Blood
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},   
+	{'#trinket1', 'UI(trink1)'},
+	{'#trinket2', 'UI(trink2)'},   
 }
 
 local Interrupts = {

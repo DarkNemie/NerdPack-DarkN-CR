@@ -75,7 +75,7 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#133585','player.mana < 97' ,'target'},				---UI(trink1') end)  --- I need to fix this
+	{'#133585','player.mana < 97' ,'target'},				---UI(trink1)'  --- I need to fix this
 	--{'#trinket2', 'UI(trink2)'},
 }
 

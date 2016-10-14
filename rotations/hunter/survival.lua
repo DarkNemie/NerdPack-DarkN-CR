@@ -7,32 +7,33 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.DSL:AddToggle({'md', 'Interface\\Icons\\ability_hunter_misdirection', 'Auto Misdirect', 'Automatially Misdirect when necessary')
-	NeP.DSL:AddToggle({'ressPet', 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 'Pet Ress', 'Automatically ress your pet when it dies.')
+	DarkNCR.Splash()
+	NeP.DSL:AddToggle({
+		'md', 
+		'Interface\\Icons\\ability_hunter_misdirection', 
+		'Auto Misdirect', 
+		'Automatially Misdirect when necessary'
+	})
+	NeP.DSL:AddToggle({
+		'ressPet', 
+		'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
+		'Pet Ress', 
+		'Automatically ress your pet when it dies.'
+	})
 end
 
 
 
 ---------- Special function for pet summon ----------
-local petnum = function()
-	return F('ptsltnum',1)
-end 
 
 local petT = {
-    [1] = (function() CastSpellByName(GetSpellInfo(883)) end)',
-    [2] = (function() CastSpellByName(GetSpellInfo(83242)) end)',
-    [3] = (function() CastSpellByName(GetSpellInfo(83243)) end)',
-    [4] = (function() CastSpellByName(GetSpellInfo(83244)) end)',
-    [5] = (function() CastSpellByName(GetSpellInfo(83245)) end)',
+    [1] = (function() CastSpellByName(GetSpellInfo(883)) end),
+    [2] = (function() CastSpellByName(GetSpellInfo(83242)) end),
+    [3] = (function() CastSpellByName(GetSpellInfo(83243)) end),
+    [4] = (function() CastSpellByName(GetSpellInfo(83244)) end),
+    [5] = (function() CastSpellByName(GetSpellInfo(83245)) end),
 }
 
-local petcallnum = function() 
-	return petT[petnum()]() 
-end
-
-local configupdate = {
-	{petcallnum},
-}
 ---------- End section for pet summon ----------
 --------------- END of do not change area ----------------
 --
