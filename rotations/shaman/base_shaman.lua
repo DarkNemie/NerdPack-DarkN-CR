@@ -5,15 +5,7 @@ local mySpec 	= '1to10'									-- Change this to the spec your using DO NOT ABR
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR  ..myClass	..mySpec				-- Do not change unless you know what your doing
 local Sidnum 	= 7	                -- This is the class ID for Shaman
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = {
+local config = {
         	-- General
 			{type = 'rule'},
 			{type = 'header', text = 'General:', align = 'center'},
@@ -25,7 +17,6 @@ local config 	= {
 			--Spec Specific settings
 			{type = 'spacer'},{ type = 'rule'},
 			{type = 'header', text = 'Spec Specific Settings', align = 'center'},
-    }         --DarkNCR.menuConfig[Sidnum]  --this is used for unified class menus
 }
 local exeOnLoad = function()
 	DarkNCR.Splash()

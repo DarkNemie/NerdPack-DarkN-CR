@@ -4,14 +4,6 @@ local mySpec 	= 'Arcane'									-- Change this to the spec your using DO NOT AB
 ----------	Do not change unless you know what your doing ----------
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
 local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = {
 		-- General
 		{type = 'rule'},
 		{type = 'header', text = 'General:', align = 'center'},
@@ -23,9 +15,6 @@ local config 	= {
 		--Spec Specific settings
 		{type = 'spacer'},{ type = 'rule'},
 		{type = 'header', text = 'Class Specific Settings', align = 'center'},
-			
-
-		}
 }
 
 

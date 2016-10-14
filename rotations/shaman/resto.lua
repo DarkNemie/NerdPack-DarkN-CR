@@ -12,17 +12,20 @@ local exeOnLoad = function()
   		'Ghost_Wolf', 
   		'Interface\\Icons\\Spell_nature_spiritwolf.png', 
   		'Use Ghost Wolf', 
-  		'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.')
+  		'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.'
+  	})
 	NeP.DSL:AddToggle({
   		'healdps', 
   		'Interface\\Icons\\Spell_shaman_stormearthfire.png‎', 
   		'Some DPS', 
-  		'Do some damage while healing in party/raid.')
+  		'Do some damage while healing in party/raid.'
+  	})
 	NeP.DSL:AddToggle({
 		'mydispel',
 		'Interface\\Icons\\Ability_shaman_cleansespirit.png‎',
 		'Dispel',
-		'Turn on or off auto dispelling!')
+		'Turn on or off auto dispelling!'
+	})
 end
 
 
