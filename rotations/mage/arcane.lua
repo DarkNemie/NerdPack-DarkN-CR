@@ -30,9 +30,6 @@ local config 	= {
 }
 
 
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
-
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
@@ -85,7 +82,7 @@ local Pet = {
   	{{ 																			-- Pet Dead
 		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
 		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
+	}, {'pet.dead', 'toggle(ressPet)'}},	
 	]]--
 
 }
@@ -116,13 +113,13 @@ local outCombat = {
 	{Pet}
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
-		{Cooldowns, 'toggle.cooldowns'},
+		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST}
 	}, outCombat, exeOnLoad)

@@ -4,19 +4,7 @@ local mySpec 	= 'Elemental'									-- Change this to the spec your using DO NOT
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
-
+local config 	= DarkNCR.menuConfig[Sidnum]
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
@@ -83,18 +71,18 @@ local ST = {
 	-- Single target Rotation goes here
 	{ 'Totem Mastery', 'player.totem.duration < 10' },
   	{ 'Flame Shock', 'target.debuff(Flame Shock).duration <= 3' },
-  	{ 'Earth Shock', { 'player.maelstorm > 92', '!toggle.AoE' } },
+  	{ 'Earth Shock', { 'player.maelstorm > 92', '!toggle(AoE)' } },
 
   	{ 'Lava Burst', 'player.buff(Lava Surge)' },
   	{ 'Lava Burst' },
   
   	{ 'Flame Shock', { 'target.debuff(Flame Shock).duration < 10.5', 'player.maelstorm >= 20' } },
  
-  	{ 'Earthquake Totem', 'toggle.AoE', 'ground' },
-  	{ 'Earth Shock', { 'player.maelstorm > 86', '!toggle.AoE' } },
+  	{ 'Earthquake Totem', 'toggle(AoE)', 'ground' },
+  	{ 'Earth Shock', { 'player.maelstorm > 86', '!toggle(AoE)' } },
 
-  	{ 'Chain Lightning', 'toggle.AoE' },
-  	{ 'Lightning Bolt', '!toggle.AoE' },
+  	{ 'Chain Lightning', 'toggle(AoE)' },
+  	{ 'Lightning Bolt', '!toggle(AoE)' },
 
 }
 
@@ -112,13 +100,13 @@ local outCombat = {
 	{Pet}
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST}
 	}, outCombat, exeOnLoad)

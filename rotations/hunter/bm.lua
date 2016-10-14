@@ -4,26 +4,14 @@ local mySpec 	= 'BeastMastery'							-- Change this to the spec your using DO NO
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
-
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
+local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
-	NeP.Interface.CreateToggle('md', 'Interface\\Icons\\ability_hunter_misdirection', 'Auto Misdirect', 'Automatially Misdirect when necessary')
-	NeP.Interface.CreateToggle('ressPet', 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 'Pet Ress', 'Automatically ress your pet when it dies.')
+	NeP.DSL:AddToggle({'md', 'Interface\\Icons\\ability_hunter_misdirection', 'Auto Misdirect', 'Automatially Misdirect when necessary')
+	NeP.DSL:AddToggle({'ressPet', 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 'Pet Ress', 'Automatically ress your pet when it dies.')
 end
 
 local healthstn = function() 
@@ -97,7 +85,7 @@ local Pet = {
 	{{ 																			-- Pet Dead
 		{'55709', '!player.debuff(55711)'}, 									-- Heart of the Phoenix
 		{'982'} 																-- Revive Pet
-	}, {'pet.dead', 'toggle.ressPet'}},	
+	}, {'pet.dead', 'toggle(ressPet)'}},	
 	{petcallnum, '!pet.exists'},												-- Summon Pet
 	{'/petassist'}
 }
@@ -114,31 +102,31 @@ local AoE = {
 local ST = {
 	-- Single target Rotation goes here
 	-- DPS Timmer
-	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle.dpstest" }},
+	{ "/stopcasting\n/stopattack\n/cleartarget\n/stopattack\n/cleartarget\n/petpassive", { "player.time >= 300", "toggle(dps)test" }},
 	--- my auto target
-	{ "/targetenemy [noexists]", { "toggle.myat", "!target.exists" } },
-	{ "/targetenemy [dead]", { "toggle.myat", "target.exists", "target.dead" } },
-	{ "/targetenemy [noexists][dead]", { 'toggle.myat',(function() return myRcheck() end) } },	
+	{ "/targetenemy [noexists]", { "toggle(myat)", "!target.exists" } },
+	{ "/targetenemy [dead]", { "toggle(myat)", "target.exists", "target.dead" } },
+	{ "/targetenemy [noexists][dead]", { 'toggle(myat)',(function() return myRcheck() end) } },	
 	-- Misdirect to focus target or pet when threat is above a certain threat
 {{
 	{ "34477", { "focus.exists", "!player.buff(35079)", "target.threat > 60" }, "focus" },
 	{ "34477", { "pet.exists", "!pet.dead", "!player.buff(35079)", "!focus.exists", "target.threat > 85", "!talent(7,3)" }, "pet" },
-}, "toggle.md", },
+}, "toggle(md)", },
 
 ----		Rotation		----
-	{'120360', 	'toggle.AoE','target'},											-- Barrage // TALENT	
-	{'214579', 	{'player.buff(223138)', 'toggle.AoE'}, 'target'},				-- SideWinder
-	{'214579', 	{'target.debuff(187131).duration < 2', 'toggle.AoE'}, 'target'},-- SideWinder
+	{'120360', 	'toggle(AoE)','target'},											-- Barrage // TALENT	
+	{'214579', 	{'player.buff(223138)', 'toggle(AoE)'}, 'target'},				-- SideWinder
+	{'214579', 	{'target.debuff(187131).duration < 2', 'toggle(AoE)'}, 'target'},-- SideWinder
 	{'185358',	{'player.buff(193534).duration < 3','talent (1,2)'}, 'target'},	-- Arcane Shot /W Steady Focus
 	{'19434', 	'player.buff(194594)', 'target'},  								-- Aimed shot /w lnl
 	{'185901', 	'target.debuff(187131)'},										-- Marked Shot
 	{'19434', 	'target.debuff(187131)', 'target'},  							-- Aimed shot /w Vulnerable
-	{'214579', 	{'player.focus < 60','toggle.AoE'}, 'target'},					-- sidewinder focus pool
+	{'214579', 	{'player.focus < 60','toggle(AoE)'}, 'target'},					-- sidewinder focus pool
 	{'198670', 	'player.focus > 30'},											-- Piercing Shot
 	{'194599'}, 																-- Black Arrow	
 	{'206817'},																	-- Sentinel
 	{'185358', 	'!talent(7,1)'},												-- Arcane Shot
-	{'2643', 	{'player.focus > 60', 'player.area(40).enemies >= 3','toggle.AoE'}, 'target'}, 	-- Multi-Shot
+	{'2643', 	{'player.focus > 60', 'player.area(40).enemies >= 3','toggle(AoE)'}, 'target'}, 	-- Multi-Shot
 	{'163485', 	'!player.moving', 'target'}, 									-- Focusing Shot // TALENT
 	{'19434', 	{'player.focus > 60', '!talent(7,1)'}, 'target'}, 				-- Aimed Shot
 	{'19434', 	{'player.focus > 60', 'talent(2,3)'}, 'target'}, 				-- Aimed Shot
@@ -156,7 +144,7 @@ local outCombat = {
 	{Pet}
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{'pause', 'player.buff(5384)'},											-- Pause for Feign Death
 		{Keybinds},
@@ -164,6 +152,6 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST}
 	}, outCombat, exeOnLoad)

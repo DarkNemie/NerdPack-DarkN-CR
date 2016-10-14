@@ -4,19 +4,7 @@ local mySpec 	= 'Balance'									-- Change this to the spec your using DO NOT A
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
-
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
+local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
@@ -42,7 +30,7 @@ local Survival = {
 
 local Misc = {
 	{ 'Moonkin Form', '!player.buff(Moonkin Form)' },--Activate Moonkin Form
-	{ 'Solar Beam', 'target.interruptsAt(50)' },-- Solar Beam
+	{ 'Solar Beam', 'target.interruptAt(50)' },-- Solar Beam
 	{ 'Barkskin', 'player.health <= 50', 'player' },--Barkskin
 	{ 'Healing Touch', 'player.health <= 70' },	
 }
@@ -116,7 +104,7 @@ local outCombat = {
 	{Pet}
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
 		{Misc},
@@ -124,6 +112,6 @@ NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST, 'player.area(8).enemies < 3'}
 	}, outCombat, exeOnLoad)

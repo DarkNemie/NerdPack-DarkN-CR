@@ -14,20 +14,8 @@ local mySpec 	= 'Fire'									-- Change this to the spec your using DO NOT ABRE
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
+local config 	= DarkNCR.menuConfig[Sidnum]
 NeP.Interface.buildGUI(config)
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
-
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	DarkNCR.ClassSetting(mKey)
@@ -106,13 +94,13 @@ local outCombat = {
 	{Pet}
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST}
 	}, outCombat, exeOnLoad)

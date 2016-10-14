@@ -4,36 +4,24 @@ local mySpec 	= 'Restoration'								-- Change this to the spec your using DO NO
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
-
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
+local config 	= DarkNCR.menuConfig[Sidnum]
 	
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface.buildGUI(config)
 	DarkNCR.ClassSetting(mKey)
-	NeP.Interface.CreateToggle(
+	NeP.DSL:AddToggle({
   		'Ghost_Wolf', 
   		'Interface\\Icons\\Spell_nature_spiritwolf.png', 
   		'Use Ghost Wolf', 
   		'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.')
-	NeP.Interface.CreateToggle(
+	NeP.DSL:AddToggle({
   		'healdps', 
   		'Interface\\Icons\\Spell_shaman_stormearthfire.png‎', 
   		'Some DPS', 
   		'Do some damage while healing in party/raid.')
-	NeP.Interface.CreateToggle(
+	NeP.DSL:AddToggle({
 		'mydispel',
 		'Interface\\Icons\\Ability_shaman_cleansespirit.png‎',
 		'Dispel',
@@ -82,7 +70,7 @@ local Survival = {
 }
 
 local myDispel = {
-	{'77130', 'dispellAll(77130)'},     										 --Disspell
+	{'%dispellAll'},     										 --Disspell
 }
 
 local Cooldowns = {
@@ -112,7 +100,7 @@ local Buffs = {
 			'!player.buff(79206)',
 			'!player.buff(2645)'
 		}},
-	}, 'toggle.Ghost_Wolf'},
+	}, 'toggle(Ghost_Wolf)'},
 }
 
 local Oshit = {
@@ -133,7 +121,7 @@ local Lowest = {
 	{'61295', 'lowest.buff(61295).duration < 3', 'lowest'},									--Riptide placed on as many targets as possible. Provides Tidal Waves.
 	{'8004',  {'player.buff(53390)','lowest.health < 35'}, 'lowest'},						--Healing Surge is an emergency heal to save players facing death. Consumes Tidal Waves.
 	{'77472', {'player.buff(53390)','lowest.health < 80'}, 'lowest'},						--Healing Wave used to heal moderate to high damage. Consumes Tidal Waves.
-	{'1064', { 'toggle.AoE',{'AoEHeal(99, 3)' ,'or','lowest.health < 99'} }, 'lowest'},		--Chain Heal
+	{'1064', { 'toggle(AoE)',{'AoEHeal(99, 3)' ,'or','lowest.health < 99'} }, 'lowest'},		--Chain Heal
 }
 
 local DPS = {
@@ -151,7 +139,7 @@ local Tank = {
 	{'77472', 'tank.health < 75', 'tank'},													--Healing Wave
 	{{ --Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
 		{'1064', 'tank.health < 100',  'tank'}
-	}, {'toggle.AoE', 'AoEHeal(99, 2)'}}
+	}, {'toggle(AoE)', 'AoEHeal(99, 2)'}}
 }
 
 
@@ -172,18 +160,18 @@ local outCombat = {
 	{'1064', 'AoEHeal(90, 3)', 'lowest'},
 }
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{'pause', 'keybind(lshift)'},-- Pause
-		{myDispel, 'toggle.mydispel'},
+		{myDispel, 'toggle(mydispel)'},
 		{Keybinds},
 		{Interrupts, 'target.interruptAt(15)'},
 		{Survival},
 		{Cooldowns,'toggle(cooldowns)'},
 		{Tank, {'tank.exists', 'tank.health < 100'}},
 		--{Oshit,'lowest.health < 30','lowest'},
-		--{AoEH,'player.mana > 10','toggle.AoE'},
+		--{AoEH,'player.mana > 10','toggle(AoE)'},
 		{Lowest, 'lowest.health < 100','lowest'},
 		--{STH},
-		{DPS,{'toggle.healdps','target.range < 30', 'target.infront'}},
+		{DPS,{'toggle(healdps)','target.range < 30', 'target.infront'}},
 	}, outCombat, exeOnLoad)

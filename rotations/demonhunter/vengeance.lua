@@ -4,19 +4,7 @@ local mySpec 	= 'Vengeance'								-- Change this to the spec your using DO NOT 
 ----------	Do not change unless you know what your doing ----------
 local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
-local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = DarkNCR.menuConfig[Sidnum]
-}
-
-local E = DarkNCR.dynEval
-local F = function(key) return NeP.Interface.fetchKey(mKey, key, 100) end
+local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
@@ -88,53 +76,29 @@ DarkNCR.mySC = function ()
 	end	
 end
 
-DarkNCR.strinket1 = function()
-	start, duration, enabled = GetItemCooldown(137486)  -- Bubble trinket
-	cdtime = (start + duration - GetTime())  
-	if not start then return false end
-	if cdtime <= 93 then return true end	
-
-end
---[[
-DarkNCR.strinket2 = function()
-	local start, duration, enabled = GetItemCooldown(133642)	-- Horn of valor cd
-	if not start then return false end
-	if duration <= 30 then return true end	
---	if start ~= 0 then
---		return (start + duration - GetTime())
---	end
-	return 0
-end
-]]
-
 local mySC = DarkNCR.mySC
-local stupidtrink1 = DarkNCR.strinket1
---local stupidtrink2 = DarkNCR.strinket2
 -- End Test Function for Soul Cleave max up time ---------
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
-  	{'Demon Spikes', '!player.buff(Demon Spikes)' },
-  --	{'Empower Wards', {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
-	{'Fiery Brand', '!player.buff(Demon Spikes)' },	
+  	{'Demon Spikes',  {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
+  	{'Empower Wards', {'!player.buff(Demon Spikes)', '!target.debuff(Fiery Brand)', 'player.health <= 98' } },
+	{'Fiery Brand',   {'!player.buff(Demon Spikes)', '!player.buff(Empower Wards)' ,'player.health <= 98' } },	
 	{'#109223', 'player.health < 65'}, 											-- Healing Tonic
 	{'#5512', healthstn}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
 local Cooldowns = {
---	{'Metamorphosis','player.health <= 85' }, --- unidirectional
+	{'Metamorphosis'}, --- unidirectional
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end) },
-	{'#trinket2', (function() return F('trink2') end) },
+    {'#trinket1', (function() return F('trink1') end)},
+    {'#trinket2', (function() return F('trink2') end)},
 }
 
-
 local Interrupts = {
-	{ 'Consume Magic' },   --melee
-	{'Sigil of Silence','target.range <= 12', 'target'},
-	{'Sigil of Misery','target.range <= 12', 'target'},
+	{ 'Consume Magic'},   --melee
 }
 
 local Buffs = {
@@ -150,30 +114,26 @@ local AoE = {
 }
 
 local ST = {
-	{ 'Fel Devastation', { 'target.range <= 10','player.health <= 75' } },
-	{ 'Spirit Bomb', {'!target.debuff(224509)','player.buff(203981)'}, 'target' },											-- 108 Talent(6,3)
-	{ 'Immolation Aura','target.range <= 8', 'target' },
-  	{ 'Soul Carver', '!player.buff(203981)' },      								-- Artifact
-  	{ 'Soul Cleave', 'player.buff(203981).count >= 3', 'target' },
-  	{ 'Soul Cleave', 'player.pain >= 60', 'target' },
-  	{ 'Soul Cleave', {'player.health <= 45','target.range <= 8'}, 'target' },  					-- melee
-  	{ 'Shear', 'target.range <= 8', 'target'},
-  	{ 'Felblade', 'talent(3,1)' },												-- 102 Talent(3,1)
-  	{ 'Fracture', 'talent(4,2)' },												-- 104 Talent(4,2)
-  	{ 'Fel Eruption', 'talent(3,3)' },											-- 106 Talent(5,2)
-   -- { 'Nether Bond', 'talent(7,2)' },											-- 110 Talent(7,2)
-  	{ 'Soul Barrier', 'talent(7,3)' },											-- 110 Talent(7,3)
-  	{ 'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},  	-- melle
-  	 						-- unidirectional
-  	{ 'Sigil of Flame' ,'player.area(10).enemies >= 2' },  						-- mouseover target
-  --	{ 'Fiery Brand',  'talent(2,3)' },     										-- unidirectional
-  	{ 'Shear', 'player.pain <= 95', 'target'}, 									-- melee
+  --{ 'Soul Carver' },--Artifact
+  --{ 'Felblade', 'talent(3,1)' },--102 Talent(3,1)
+  --{ 'Fracture', 'talent(4,2)' },--104 Talent(4,2)
+  --{ 'Fel Eruption', 'talent(5,2)' },--106 Talent(5,2)
+  --{ 'Fel Devastation', 'talent(6,1)' },--108 Talent(6,1)
+  --{ 'Spirit Bomb', 'talent(6,3)' },--108 Talent(6,3)
+  --{ 'Nether Bond', 'talent(7,2)' },--110 Talent(7,2)
+  --{ 'Soul Barrier', 'talent(7,3)' },--110 Talent(7,3)
+  {'Throw Glaive', {'target.range >= 5', 'target.range <= 30'},'target'},  -- melle
+  { 'Soul Cleave', {mySC,'target.range <= 6'}, 'target' },  --melee
+  { 'Immolation Aura' }, ---- unidirectional
+  { 'Sigil of Flame', '!toggle(Raidme)' , 'mouseover.ground' },  --- mouseover target
+  { 'Fiery Brand',  'talent(2,3)' },     --unidirectional
+  { 'Shear','target.range <= 6', 'target'}, -- melee
 }
 
 local Keybinds = {
 	{'pause', 'keybind(alt)'},													-- Pause
 	{ 'Infernal Strike',  'keybind(lshift)', 'mouseover.ground'  },
-	{ '!Metamorphosis', 'keybind(lcontrol)' },
+
 }
 
 local Taunt = {
@@ -187,14 +147,14 @@ local outCombat = {
 
 
 
-NeP.Engine.registerRotation(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
+NeP.CR:Add(Sidnum, '[|cff'..DarkNCR.Interface.addonColor ..myCR..'|r]'  ..mySpec.. ' '..myClass, 
 	{-- In-Combat
 		{Keybinds},
-		{Interrupts, 'target.interruptAt(25)'},
+		{Interrupts, 'target.interruptAt(15)'},
 		{Survival, 'player.health < 100'},
 		{Cooldowns, 'toggle(cooldowns)'},
 		{Pet_inCombat},
-		{AoE, {'player.area(8).enemies >= 3','toggle.AoE'}},
+		{AoE, {'player.area(8).enemies >= 3','toggle(AoE)'}},
 		{ST,'target.infront'},
-		--{girlsgonewild}
+		{girlsgonewild}
 	}, outCombat, exeOnLoad)
