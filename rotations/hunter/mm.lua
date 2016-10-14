@@ -7,25 +7,25 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'md', 
 		'Interface\\Icons\\ability_hunter_misdirection', 
 		'Auto Misdirect', 
 		'Automatially Misdirect when necessary'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'myat', 
 		'Interface\\Icons\\ability_hunter_snipershot',
 		'Auto Target', 
 		'Automatically target the nearest enemy when target dies or does not exist'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'ressPet', 
 		'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
 		'Pet Ress', 
 		'Automatically ress your pet when it dies.'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'dpstest', 
 		'Interface\\Icons\\inv_misc_pocketwatch_01', 
 		'DPS Test', 

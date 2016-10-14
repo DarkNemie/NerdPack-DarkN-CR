@@ -11,19 +11,19 @@ local F = function(key) return NeP.Interface.fetchKey(mKey, key) end
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'saveDS',
 		'Interface\\Icons\\spell_deathknight_butcher2.png',
 		'Save a Death Strike',
 		'Saving Runic.'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'dpstest', 
 		'Interface\\Icons\\inv_misc_pocketwatch_01', 
 		'DPS Test', 
 		'Stop combat after 5 minutes in order to do a controlled DPS test'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'myat', 
 		'Interface\\Icons\\ability_hunter_snipershot', 
 		'Auto Target', 

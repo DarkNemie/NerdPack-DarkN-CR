@@ -38,12 +38,12 @@ local plugname = '|cff'..DarkNCR.Interface.addonColor..' '..DarkNCR.Info.Name..'
 
 -- DarkNCR wide added buttons
 function DarkNCR.Splash()
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'ADots',
 		'Interface\\Icons\\Ability_creature_cursed_05.png',
 		'Automated Dotting','Click here to dot all the things!'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'Raidme',
 		'Interface\\Icons\\Ability_rogue_findweakness.png',
 		'Raiding On Off',

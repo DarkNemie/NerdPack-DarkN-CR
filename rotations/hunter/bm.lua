@@ -7,13 +7,13 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'md', 
 		'Interface\\Icons\\ability_hunter_misdirection', 
 		'Auto Misdirect', 
 		'Automatially Misdirect when necessary'
 	})
-	NeP.DSL:AddToggle({
+	NeP.Interface:AddToggle({
 		'ressPet', 
 		'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
 		'Pet Ress', 
