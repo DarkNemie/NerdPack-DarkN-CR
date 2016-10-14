@@ -2,43 +2,27 @@ local myCR 		= 'DNCR'									-- Change this to something Unique
 local myClass 	= 'Paladin'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
 local mySpec 	= 'Holy'									-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
-local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
 local config 	= {
-	key 	 = mKey,
-	profiles = true,
-	title 	 = '|T'..DarkNCR.Interface.Logo..':10:10|t' ..myCR.. ' ',
-	subtitle = ' ' ..mySpec.. ' '..myClass.. ' Settings',
-	color 	 = NeP.Core.classColor('player'),	
-	width 	 = 250,
-	height 	 = 500,
-	config 	 = {
-		-- General
-		{type = 'rule'},
-		{type = 'header', text = 'General:', align = 'center'},
-			--Trinket usage settings:
-			{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
-			{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
-			{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 50},
+	-- General
+	{type = 'rule'},
+	{type = 'header', text = 'General:', align = 'center'},
+		--Trinket usage settings:
+		{type = 'checkbox', text = 'Use Trinket 1', key = 'trink1', default = true},
+		{type = 'checkbox', text = 'Use Trinket 2', key = 'trink2', default = true},
+		{type = 'spinner', text = 'Healthstone - HP', key = 'Healthstone', default = 50},
 			
-		--Spec Specific settings
-		{type = 'spacer'},{ type = 'rule'},
-		{type = 'header', text = 'Class Specific Settings', align = 'center'},
-			
-
-		}
+	--Spec Specific settings
+	{type = 'spacer'},{ type = 'rule'},
+	{type = 'header', text = 'Class Specific Settings', align = 'center'},
 }
 
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.buildGUI(config)
-	DarkNCR.ClassSetting(mKey)
 end
 
-local healthstn = function() 
-	return E('player.health <= ' .. F('Healthstone')) 
-end
+
 --------------- END of do not change area ----------------
 --
 --	The Fetch and dynaEval functions below have been updated, 
@@ -54,21 +38,21 @@ local _All = {
 	-- Buffs
 	{'20217', {-- Blessing of Kings
 		'!player.buffs.stats',
-		(function() return F('Buff') == 'Kings' end),
+		'UI(Buff) == Kings',
 	}, nil},
 	{'19740', {-- Blessing of Might
 		'!player.buffs.mastery',
-		(function() return F('Buff') == 'Might' end),
+		'UI(Buff) == Might',
 	}, nil}, 
 	
 	-- Seals
 	{'20165', {-- seal of Insigh
 		'player.seal != 2', 
-		(function() return F('seal') == 'Insight' end),
+		'UI(seal) == Insight',
 	}, nil}, 
 	{'105361', {-- seal of Command
 		'player.seal != 1',
-		(function() return F('seal') == 'Command' end),
+		'UI(seal) == Command',
 	}, nil},
 }
 
@@ -105,7 +89,7 @@ local _InfusionOfLight = {
 		}, 'lowest'}, 
 	}, 'toggle(AoE)'}, 
 	{'82326', {-- Holy Light
-		(function() return E('lowest.health <= '..F('HolyLightIL')) end),
+		'lowest.health <= UI(HolyLightIL)',
 		'!player.moving' 
 	}, 'lowest'},
 }
@@ -120,7 +104,7 @@ local _Fast = {
 
 local _Tank = {
 	{'633', {-- Lay on Hands
-		(function() return E('tank.health <= '..F('LayonHandsTank')) end),
+		'tank.health <= UI(LayonHandsTank)',
 		'tank.spell(633).range'
 	}, 'tank'},
 	{'53563', {-- Beacon of light
@@ -130,20 +114,20 @@ local _Tank = {
 	}, 'tank'},
 	{'6940', {-- Hand of Sacrifice
 		'tank.spell(6940).range',
-		(function() return E('tank.health <= '..F('HandofSacrifice')) end)
+		'tank.health <= UI(HandofSacrifice)'
 	}, 'tank'}, 
 	{'19750', {-- Flash of Light
-		(function() return E('tank.health <= '..F('FlashofLightTank')) end), 
+		'tank.health <= UI(FlashofLightTank)', 
 		'!player.moving',
 		'tank.spell(19750).range'
 	}, 'tank'},
 	{'114157', {-- Execution Sentence // Talent
-		(function() return E('tank.health <= '..F('ExecutionSentenceTank')) end),
+		'tank.health <= UI(ExecutionSentenceTank)',
 		'tank.spell(114157).range'
 	}, 'tank'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 1', 
-		(function() return E('tank.health <= '..F('SacredShieldTank')) end), 
+		'tank.health <= UI(SacredShieldTank)', 
 		'!tank.buff(148039)', -- SS
 		'tank.range < 40' 
 	}, 'tank'},
@@ -151,20 +135,20 @@ local _Tank = {
 			'player.holypower >= 3', 
 		'!tank.buff(114163)',
 		'focus.spell(114163).range',
-		(function() return E('lowest.health <= '..F('EternalFlameTank')) end)
+		'lowest.health <= UI(EternalFlameTank)'
 	}, 'tank'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3',
 		'focus.spell(85673).range',
-		(function() return E('lowest.health <= '..F('WordofGloryTank')) end)
+		'lowest.health <= UI(WordofGloryTank)'
 	}, 'tank' },
 	{'114165', {-- Holy Prism // Talent
-		(function() return E('tank.health <= '..F('HolyPrismTank')) end), 
+		'tank.health <= UI(HolyPrismTank)', 
 		'!player.moving',
 		'tank.spell(114165).range' 
 	}, 'tank'},
 	{'82326', {-- Holy Light
-		(function() return E('tank.health < '..F('HolyLightTank')) end),
+		'tank.health < UI(HolyLightTank)',
 		'!player.moving',
 		'focus.spell(82326).range' 
 	}, 'tank'},
@@ -172,25 +156,25 @@ local _Tank = {
 
 local _Focus = {
 	{'633', {-- Lay on Hands
-		(function() return E('focus.health <= '..F('LayonHandsTank')) end),
+		'focus.health <= UI(LayonHandsTank)',
 		'focus.spell(633).range'
 	}, 'focus'}, 
 	{'6940', {-- Hand of Sacrifice
 		'focus.spell(6940).range',
-		(function() return E('focus.health <= '..F('HandofSacrifice')) end)
+		'focus.health <= UI(HandofSacrifice)'
 	}, 'focus'},
 	{'19750', {-- Flash of Light
-		(function() return E('focus.health <= '..F('FlashofLightTank')) end), 
+		'focus.health <= UI(FlashofLightTank)', 
 		'!player.moving',
 		'focus.spell(19750).range'
 	}, 'focus'},
 	{'114157', {-- Execution Sentence // Talent
-		(function() return E('focus.health <= '..F('ExecutionSentenceTank')) end),
+		'focus.health <= UI(ExecutionSentenceTank)',
 		'focus.spell(114157).range'
 	}, 'focus'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 1', 
-		(function() return E('focus.health <= '..F('SacredShieldTank')) end), 
+		'focus.health <= UI(SacredShieldTank)', 
 		'!focus.buff(148039)', 
 		'focus.range < 40' 
 	}, 'focus'},
@@ -198,21 +182,21 @@ local _Focus = {
 		'player.holypower >= 3', 
 		'!focus.buff(114163)',
 		'focus.spell(114163).range',
-		(function() return E('lowest.health <= '..F('EternalFlameTank')) end)
+		'lowest.health <= UI(EternalFlameTank)'
 	}, 'focus'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3',
 		'focus.spell(85673).range',
-		(function() return E('lowest.health <= '..F('WordofGloryTank')) end) 
+		'lowest.health <= UI(WordofGloryTank) '
 	}, 'focus'},
 	{'114165', {-- Holy Prism // Talent
 		'player.holypower >= 3',
-		(function() return E('focus.health <= '..F('HolyPrismTank')) end), 
+		'focus.health <= UI(HolyPrismTank)', 
 		'!player.moving',
 		'focus.spell(114165).range' 
 	}, 'focus'},
 	{'82326', {-- Holy Light
-		(function() return E('focus.health < '..F('HolyLightTank')) end),
+		'focus.health < UI(HolyLightTank)',
 		'!player.moving',
 		'focus.spell(82326).range' 
 	}, 'focus'},
@@ -220,20 +204,20 @@ local _Focus = {
 
 local _Player = {
 	-- Items
-	{'#5512', healthstn}, 											-- Health stone
-	{'#trinket1', (function() return F('trink1') end)},				-- Trinket 1
-	{'#trinket2', (function() return F('trink2') end)}, 			-- Trinket 2
+	{'#5512', 'player.health <= UI(Healthstone)'}, 											-- Health stone
+	{'#trinket1', 'UI(trink1)'},				-- Trinket 1
+	{'#trinket2', 'UI(trink2)'}, 			-- Trinket 2
 	{{-- Beacon of Faith
 		{'156910', {
 			'!player.buff(53563)', -- Beacon of light
 			'!player.buff(156910)' -- Beacon of Faith
 		}, 'player'},
 	}, 'talent(7,1)'},
-	{'498', (function() return E('player.health <= '..F('DivineProtection')) end), nil}, -- Divine Protection
-	{'642', (function() return E('player.health <= '..F('DivineShield')) end), nil}, -- Divine Shield
+	{'498', 'player.health <= UI(DivineProtection)', nil}, -- Divine Protection
+	{'642', 'player.health <= UI(DivineShield)', nil}, -- Divine Shield
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 2', 
-		(function() return E('player.health <= '..F('SacredShield')) end), 
+		'player.health <= UI(SacredShield)', 
 		'!player.buff(148039)' 
 	}, 'player'},
 }
@@ -254,7 +238,7 @@ local inCombat = {
 	{'35395', {-- Crusader Strike
 		'target.range < 5',
 		'target.infront',
-		(function() return F('CrusaderStrike') end) 
+		'UI(CrusaderStrike' 
 	}, 'target'},
 }
 
@@ -276,10 +260,10 @@ local _DivinePurpose = {
 		'player.holypower >= 1',
 		'modifier.party' 
 	}},
-	{'85673', (function() return E('lowest.health <= '..F('WordofGloryDP')) end), 'lowest' }, -- Word of Glory
+	{'85673', 'lowest.health <= UI(WordofGloryDP)', 'lowest' }, -- Word of Glory
 	{'114163', {-- Eternal Flame
 		'!lowest.buff(114163)', 
-		(function() return E('lowest.health <= '..F('EternalFlameDP')) end) 
+		'lowest.health <= UI(EternalFlameDP)' 
 	}, 'lowest'},
 }
 
@@ -287,7 +271,7 @@ local _SelflessHealer = {
 	{'20271', 'target.spell(20271).range', 'target'}, -- Judgment
 	{{-- If got buff
 		{'19750', {-- Flash of light
-			(function() return E('lowest.health <= '..F('FlashofLightSH')) end),  
+			'lowest.health <= UI(FlashofLightSH)',  
 			'!player.moving' 
 		}, 'lowest'}, 
 	}, 'player.buff(114250).count = 3'}
@@ -295,33 +279,33 @@ local _SelflessHealer = {
 
 local _Raid = {
 	-- Lay on Hands
-	{'633', (function() return E('lowest.health <= '..F('LayonHands')) end), 'lowest'}, 
+	{'633', 'lowest.health <= UI(LayonHands)', 'lowest'}, 
 	{'19750', {-- Flash of Light
-		(function() return E('lowest.health <= '..F('FlashofLight')) end), 
+		'lowest.health <= UI(FlashofLight)', 
 		'!player.moving' 
 	}, 'lowest'},
 	-- Execution Sentence // Talent
-	{'114157', (function() return E('lowest.health <= '..F('ExecutionSentence')) end), 'lowest'},
+	{'114157', 'lowest.health <= UI(ExecutionSentence)', 'lowest'},
 	{'148039', {-- Sacred Shield // Talent
 		'player.spell(148039).charges >= 2', 
-		(function() return E('lowest.health <= '..F('SacredShield')) end), 
+		'lowest.health <= UI(SacredShield)', 
 		'!lowest.buff(148039)' 
 	}, 'lowest'},
 	{'114163', {-- Eternal Flame // talent
 		'player.holypower >= 1', 
 		'!lowest.buff(114163)', 
-		(function() return E('lowest.health <= '..F('EternalFlame')) end)
+		'lowest.health <= UI(EternalFlame)'
 	}, 'lowest'},
 	{'85673', {-- Word of Glory
 		'player.holypower >= 3', 
-		(function() return E('lowest.health <= '..F('WordofGlory')) end)
+		'lowest.health <= UI(WordofGlory)' 
 	}, 'lowest' },
 	{'114165', {-- Holy Prism // Talent
-		(function() return E('lowest.health <= '..F('HolyPrism')) end), 
+		'lowest.health <= UI(HolyPrism)', 
 		'!player.moving' 
 	}, 'lowest'},
 	{'82326', {-- Holy Light
-		(function() return E('lowest.health < '..F('HolyLight')) end),
+		'lowest.health < UI(HolyLight)',
 		'!player.moving' 
 	}, 'lowest'},
 }
@@ -356,7 +340,7 @@ local outCombat = {
 	}, 'toggle(AoE)'},
 	-- Holy Light
 	{'82326', {
-		(function() return E('lowest.health < '..F('HolyLightOCC')) end),
+		'lowest.health < UI(HolyLightOCC)',
 		'!player.moving' 
 	}, 'lowest'},
 }

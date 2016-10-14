@@ -8,20 +8,18 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.buildGUI(config)
-	DarkNCR.ClassSetting(mKey)
 end
 ----------	END of do not change area ----------
 
 ---------- This Starts the Area of your Rotaion ----------
 local Survival = {
 	
-	{'55233',(function() return F('vampB') end)}, -- Vampiric Blood
+	{'55233',UI(vampB)'}, -- Vampiric Blood
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+	{'#trinket1', 'UI(trink1)'},
+	{'#trinket2', 'UI(trink2)'},
 }
 
 local Cooldowns = {

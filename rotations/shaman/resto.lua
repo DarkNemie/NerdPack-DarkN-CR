@@ -2,15 +2,12 @@ local myCR 		= 'DNCR'									-- Change this to something Unique
 local myClass 	= 'Shaman'									-- Change to your Class Name DO NOT USE SPACES - This is Case Sensitive, see specid_lib.lua for proper class and spec usage
 local mySpec 	= 'Restoration'								-- Change this to the spec your using DO NOT ABREVIEATE OR USE SPACES
 ----------	Do not change unless you know what your doing ----------
-local mKey 		=  myCR ..mySpec ..myClass					-- Do not change unless you know what your doing
 local Sidnum 	= DarkNCR.classSpecNum[myClass..mySpec]	-- Do not change unless you know what your doing
 local config 	= DarkNCR.menuConfig[Sidnum]
 	
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.buildGUI(config)
-	DarkNCR.ClassSetting(mKey)
 	NeP.DSL:AddToggle({
   		'Ghost_Wolf', 
   		'Interface\\Icons\\Spell_nature_spiritwolf.png', 
@@ -28,9 +25,7 @@ local exeOnLoad = function()
 		'Turn on or off auto dispelling!')
 end
 
-local healthstn = function() 
-	return E('player.health <= ' .. F('Healthstone')) 
-end
+
 
 ----------------------------------------------------------
 --Test--   these are called via /run DarkNCR.HR() macros ingame
@@ -64,7 +59,7 @@ local Survival = {
 	}, 'player'},
 	{'59547', 'player.health <= 70', 'player'},		 							-- Gift of the Naaru // Draenei Racial
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
-	{'#5512', healthstn}, 														-- Health stone
+	{'#5512', 'player.health <= UI(Healthstone)'}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 	{'108271', 'player.health <= 50'},											-- Astral Shift
 }
@@ -80,8 +75,8 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#133585','player.mana < 97' ,'target'},				---(function() return F('trink1') end)  --- I need to fix this
-	--{'#trinket2', (function() return F('trink2') end)},
+	{'#133585','player.mana < 97' ,'target'},				---UI(trink1') end)  --- I need to fix this
+	--{'#trinket2', 'UI(trink2)'},
 }
 
 local Interrupts = {

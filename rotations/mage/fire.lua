@@ -8,13 +8,9 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 
 local exeOnLoad = function()
 	DarkNCR.Splash()
-	NeP.Interface.buildGUI(config)
-	DarkNCR.ClassSetting(mKey)
 end
 
-local healthstn = function() 
-	return E('player.health <= ' .. F('Healthstone')) 
-end
+
 ----------	END of do not change area ----------
 
 ---------- This Starts the Area of your Rotaion ----------
@@ -24,7 +20,7 @@ local Survival = {
 
 	{'#109223', 'player.health < 40'}, 				
 	-- Healing Tonic
-	{'#5512', healthstn}, 														-- Health stone
+	{'#5512', 'player.health <= UI(Healthstone)'}, 														-- Health stone
 	{'#109223', 'player.health < 40'}, 											-- Healing Tonic
 }
 
@@ -34,8 +30,8 @@ local Cooldowns = {
 	{'Lifeblood'},
 	{'Berserking'},
 	{'Blood Fury'},
-	{'#trinket1', (function() return F('trink1') end)},
-	{'#trinket2', (function() return F('trink2') end)},
+	{'#trinket1', 'UI(trink1)'},
+	{'#trinket2', 'UI(trink2)'},
 }
 
 local Interrupts = {
