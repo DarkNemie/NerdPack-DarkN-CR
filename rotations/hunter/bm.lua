@@ -8,16 +8,16 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface:AddToggle({
-		'md', 
-		'Interface\\Icons\\ability_hunter_misdirection', 
-		'Auto Misdirect', 
-		'Automatially Misdirect when necessary'
+		key = 'md', 
+		icon = 'Interface\\Icons\\ability_hunter_misdirection', 
+		name = 'Auto Misdirect', 
+		text = 'Automatially Misdirect when necessary'
 	})
 	NeP.Interface:AddToggle({
-		'ressPet', 
-		'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
-		'Pet Ress', 
-		'Automatically ress your pet when it dies.'
+		key = 'ressPet', 
+		icon = 'Interface\\Icons\\Inv_misc_head_tiger_01.png', 
+		name = 'Pet Ress', 
+		text = 'Automatically ress your pet when it dies.'
 	})
 end
 

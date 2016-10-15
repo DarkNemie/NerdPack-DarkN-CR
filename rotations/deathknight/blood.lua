@@ -12,22 +12,22 @@ local F = function(key) return NeP.Interface.fetchKey(mKey, key) end
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface:AddToggle({
-		'saveDS',
-		'Interface\\Icons\\spell_deathknight_butcher2.png',
-		'Save a Death Strike',
-		'Saving Runic.'
+		key = 'saveDS',
+		icon = 'Interface\\Icons\\spell_deathknight_butcher2.png',
+		name = 'Save a Death Strike',
+		text = 'Saving Runic.'
 	})
 	NeP.Interface:AddToggle({
-		'dpstest', 
-		'Interface\\Icons\\inv_misc_pocketwatch_01', 
-		'DPS Test', 
-		'Stop combat after 5 minutes in order to do a controlled DPS test'
+		key = 'dpstest', 
+		icon = 'Interface\\Icons\\inv_misc_pocketwatch_01', 
+		name = 'DPS Test', 
+		text = 'Stop combat after 5 minutes in order to do a controlled DPS test'
 	})
 	NeP.Interface:AddToggle({
-		'myat', 
-		'Interface\\Icons\\ability_hunter_snipershot', 
-		'Auto Target', 
-		'Automatically target the nearest enemy when target dies or does not exist'
+		key = 'myat', 
+		icon = 'Interface\\Icons\\ability_hunter_snipershot', 
+		name = 'Auto Target', 
+		text = 'Automatically target the nearest enemy when target dies or does not exist'
 	})
 end
 ----------	END of do not change area ----------

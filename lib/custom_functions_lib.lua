@@ -39,15 +39,15 @@ local plugname = '|cff'..DarkNCR.Interface.addonColor..' '..DarkNCR.Info.Name..'
 -- DarkNCR wide added buttons
 function DarkNCR.Splash()
 	NeP.Interface:AddToggle({
-		'ADots',
-		'Interface\\Icons\\Ability_creature_cursed_05.png',
-		'Automated Dotting','Click here to dot all the things!'
+		key = 'ADots',
+		icon = 'Interface\\Icons\\Ability_creature_cursed_05.png',
+		name = 'Automated Dotting','Click here to dot all the things!'
 	})
 	NeP.Interface:AddToggle({
-		'Raidme',
-		'Interface\\Icons\\Ability_rogue_findweakness.png',
-		'Raiding On Off',
-		'Turn on/off the use of Flask/Food/Rune'
+		key = 'Raidme',
+		icon = 'Interface\\Icons\\Ability_rogue_findweakness.png',
+		name = 'Raiding On Off',
+		text = 'Turn on/off the use of Flask/Food/Rune'
 	})		
 end
 

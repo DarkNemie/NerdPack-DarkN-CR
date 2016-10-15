@@ -9,22 +9,22 @@ local config 	= DarkNCR.menuConfig[Sidnum]
 local exeOnLoad = function()
 	DarkNCR.Splash()
 	NeP.Interface:AddToggle({
-  		'Ghost_Wolf', 
-  		'Interface\\Icons\\Spell_nature_spiritwolf.png', 
-  		'Use Ghost Wolf', 
-  		'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.'
+  		key = 'Ghost_Wolf', 
+  		icon = 'Interface\\Icons\\Spell_nature_spiritwolf.png', 
+  		name = 'Use Ghost Wolf', 
+  		text = 'Enable to use Ghost Worf while moving\nRequires player to move for 3 seconds or more.'
   	})
 	NeP.Interface:AddToggle({
-  		'healdps', 
-  		'Interface\\Icons\\Spell_shaman_stormearthfire.png‎', 
-  		'Some DPS', 
-  		'Do some damage while healing in party/raid.'
+  		key = 'healdps', 
+  		icon = 'Interface\\Icons\\Spell_shaman_stormearthfire.png‎', 
+  		name = 'Some DPS', 
+  		text = 'Do some damage while healing in party/raid.'
   	})
 	NeP.Interface:AddToggle({
-		'mydispel',
-		'Interface\\Icons\\Ability_shaman_cleansespirit.png‎',
-		'Dispel',
-		'Turn on or off auto dispelling!'
+		key = 'mydispel',
+		icon = 'Interface\\Icons\\Ability_shaman_cleansespirit.png‎',
+		name = 'Dispel',
+		text = 'Turn on or off auto dispelling!'
 	})
 end
 
