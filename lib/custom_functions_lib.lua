@@ -34,14 +34,21 @@ local config = {
 	}
 }
 local plugname = '|cff'..DarkNCR.Interface.addonColor..' '..DarkNCR.Info.Name..' |r|cffffc61a v.'..DarkNCR.Info.Version..' - '..DarkNCR.Info.Branch
-Interface.buildGUI(config)
-Interface.CreatePlugin(plugname, function() Interface.ShowGUI(mKey) end)
 
 
 -- DarkNCR wide added buttons
 function DarkNCR.Splash()
-	NeP.Interface.CreateToggle('ADots','Interface\\Icons\\Ability_creature_cursed_05.png','Automated Dotting','Click here to dot all the things!')
-	NeP.Interface.CreateToggle('Raidme','Interface\\Icons\\Ability_rogue_findweakness.png','Raiding On Off','Turn on/off the use of Flask/Food/Rune')		
+	NeP.Interface:AddToggle({
+		key = 'ADots',
+		icon = 'Interface\\Icons\\Ability_creature_cursed_05.png',
+		name = 'Automated Dotting','Click here to dot all the things!'
+	})
+	NeP.Interface:AddToggle({
+		key = 'Raidme',
+		icon = 'Interface\\Icons\\Ability_rogue_findweakness.png',
+		name = 'Raiding On Off',
+		text = 'Turn on/off the use of Flask/Food/Rune'
+	})		
 end
 
 function DarkNCR.ClassSetting(key)
@@ -53,7 +60,7 @@ function DarkNCR.dynEval(condition, spell)
 	return Parse(condition, spell or '')
 end
 
-NeP.library.register('DarkNCR', {
+NeP.Library.Add('DarkNCR', {
 
 	HolyNova = function(units)
 		local minHeal = GetSpellBonusDamage(2) * 1.125
@@ -204,7 +211,7 @@ NeP.library.register('DarkNCR', {
 
 })
 
-NeP.DSL.RegisterConditon("petinmelee", function(target)
+NeP.DSL:Register("petinmelee", function(target)
 	if target then
 		if IsHackEnabled then 
 			return NeP.Engine.Distance('pet', target) < (UnitCombatReach('pet') + UnitCombatReach(target) + 1.5)
@@ -216,24 +223,24 @@ NeP.DSL.RegisterConditon("petinmelee", function(target)
 	return 0
 end)
 
-NeP.DSL.RegisterConditon("inMelee", function(target)
+NeP.DSL:Register("inMelee", function(target)
 	return NeP.Core.UnitAttackRange('player', target, 'melee')
 end)
 
-NeP.DSL.RegisterConditon("inRanged", function(target)
+NeP.DSL:Register("inRanged", function(target)
 	return NeP.Core.UnitAttackRange('player', target, 'ranged')
 end)
 
-NeP.DSL.RegisterConditon("power.regen", function(target)
+NeP.DSL:Register("power.regen", function(target)
 	return select(2, GetPowerRegen(target))
 end)
 
-NeP.DSL.RegisterConditon("casttime", function(target, spell)
+NeP.DSL:Register("casttime", function(target, spell)
 	local name, rank, icon, cast_time, min_range, max_range = GetSpellInfo(spell)
 	return cast_time
 end)
 
-NeP.DSL.RegisterConditon("castwithin", function(target, spell)
+NeP.DSL:Register("castwithin", function(target, spell)
 	local SpellID = select(7, GetSpellInfo(spell))
 	for k, v in pairs( NeP.ActionLog.log ) do
 		local id = select(7, GetSpellInfo(v.description))
@@ -244,10 +251,10 @@ NeP.DSL.RegisterConditon("castwithin", function(target, spell)
 	return 20
 end)
 
-NeP.DSL.RegisterConditon('twohand', function(target)
+NeP.DSL:Register('twohand', function(target)
 	return IsEquippedItemType("Two-Hand")
 end)
 
-NeP.DSL.RegisterConditon('onehand', function(target)
+NeP.DSL:Register('onehand', function(target)
 	return IsEquippedItemType("One-Hand")
 end)
